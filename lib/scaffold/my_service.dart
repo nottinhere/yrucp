@@ -108,7 +108,7 @@ class _MyServiceState extends State<MyService> {
   }
 
   Widget showAppName() {
-    return Text('Somsak Pharma');
+    return Text('PTNPharma');
   }
 
   Widget showLogin() {

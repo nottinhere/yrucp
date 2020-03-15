@@ -8,6 +8,7 @@ import 'package:ptnsupplier/utility/my_style.dart';
 import 'package:ptnsupplier/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class Authen extends StatefulWidget {
   @override
   _AuthenState createState() => _AuthenState();
@@ -19,6 +20,9 @@ class _AuthenState extends State<Authen> {
   final formKey = GlobalKey<FormState>();
   UserModel userModel;
   bool remember = false; // false => unCheck      true = Check
+  bool status = true;
+
+
 
   // Method
   @override
@@ -36,6 +40,10 @@ class _AuthenState extends State<Authen> {
 
       if (user != null) {
         checkAuthen();
+      }else{
+        setState(() {
+          status = false;
+        });
       }
     } catch (e) {}
   }
@@ -43,15 +51,22 @@ class _AuthenState extends State<Authen> {
   Widget rememberCheckbox() {
     return Container(
       width: 250.0,
-      child: CheckboxListTile(
-        controlAffinity: ListTileControlAffinity.leading,
-        title: Text('Remember me'),
-        value: remember,
-        onChanged: (bool value) {
-          setState(() {
-            remember = value;
-          });
-        },
+      child: Theme(
+        data: Theme.of(context)
+            .copyWith(unselectedWidgetColor: MyStyle().textColor),
+        child: CheckboxListTile(
+          controlAffinity: ListTileControlAffinity.leading,
+          title: Text(
+            'Remember me',
+            style: TextStyle(color: MyStyle().textColor),
+          ),
+          value: remember,
+          onChanged: (bool value) {
+            setState(() {
+              remember = value;
+            });
+          },
+        ),
       ),
     );
   }
@@ -60,11 +75,15 @@ class _AuthenState extends State<Authen> {
   Widget loginButton() {
     return Container(
       width: 250.0,
-      child: OutlineButton(
-        child: Text(
-          'Login',
-          style: TextStyle(color: MyStyle().textColor),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
         ),
+        color: MyStyle().textColor,
+        child: Text('Login',
+            style: TextStyle(
+              color: Colors.white,
+            )),
         onPressed: () {
           formKey.currentState.save();
           print(
@@ -98,7 +117,6 @@ class _AuthenState extends State<Authen> {
         Map<String, dynamic> map = result['data'];
         print('map = $map');
         userModel = UserModel.fromJson(map);
-        print('userModel = $userModel');
 
         if (remember) {
           saveSharePreference();
@@ -133,32 +151,57 @@ class _AuthenState extends State<Authen> {
 
   Widget userForm() {
     return Container(
+      decoration: MyStyle().boxLightGray,
+      height: 35.0,
       width: 250.0,
       child: TextFormField(
+        style: TextStyle(color: Colors.grey[800]),
         initialValue: 'TS909090', // set default value
         onSaved: (String string) {
           user = string.trim();
         },
         decoration: InputDecoration(
-          labelText: 'User :',
-          labelStyle: TextStyle(color: MyStyle().textColor),
+          contentPadding: EdgeInsets.only(
+            top: 6.0,
+          ),
+          prefixIcon: Icon(Icons.account_box, color: Colors.grey[800]),
+          border: InputBorder.none,
+          hintText: 'User :',
+          hintStyle: TextStyle(color: Colors.grey[800]),
         ),
       ),
     );
   }
 
+  Widget mySizeBox() {
+    return SizedBox(
+      height: 10.0,
+    );
+  }
+
   Widget passwordForm() {
     return Container(
+      decoration: MyStyle().boxLightGray,
+      height: 35.0,
       width: 250.0,
       child: TextFormField(
+        style: TextStyle(color: Colors.grey[800]),
         initialValue: '0626293936', // set default value
         onSaved: (String string) {
           password = string.trim();
         },
         obscureText: true, // hide text key replace with
         decoration: InputDecoration(
-          labelText: 'Pass :',
-          labelStyle: TextStyle(color: MyStyle().textColor),
+          contentPadding: EdgeInsets.only(
+            top: 6.0,
+          ),
+          prefixIcon: Icon(
+            Icons.lock,
+            color: Colors.grey[800],
+          ),
+          border: InputBorder.none,
+          hintText: 'Pass :',
+          hintStyle: TextStyle(color: Colors.grey[800]),
         ),
       ),
     );
@@ -166,15 +209,15 @@ class _AuthenState extends State<Authen> {
 
   Widget showLogo() {
     return Container(
-      width: 120.0,
-      height: 120.0,
-      child: Image.asset('images/logo.png'),
+      width: 150.0,
+      height: 150.0,
+      child: Image.asset('images/logo_master.png'),
     );
   }
 
   Widget showAppName() {
     return Text(
-      'PTN Supplier',
+      'SUPPLIER',
       style: TextStyle(
         fontSize: MyStyle().h1,
         color: MyStyle().mainColor,
@@ -185,35 +228,52 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+  Widget showProcess() {
+    return Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              colors: [Colors.white, MyStyle().bgColor],
-              radius: 0.8,
-            ),
+        child: status ? showProcess() : mainContent(),
+      ),
+    );
+  }
+
+  Container mainContent() {
+    return Container(
+        decoration: BoxDecoration(
+          gradient: RadialGradient(
+            colors: [Colors.white, MyStyle().bgColor],
+            radius: 1.5,
           ),
-          child: Center(
-            child: Form(
-              key: formKey,
+        ),
+        child: Center(
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min, //
                 children: <Widget>[
                   showLogo(),
+                  mySizeBox(),
                   showAppName(),
+                  mySizeBox(),
                   userForm(),
+                  mySizeBox(),
                   passwordForm(),
+                  mySizeBox(),
                   rememberCheckbox(),
+                  mySizeBox(),
                   loginButton(),
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }

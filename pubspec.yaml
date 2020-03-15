@@ -48,6 +48,7 @@ flutter:
   assets:
     - images/logo.png
     - images/shopping_cart.png
+    - images/
   #  - images/a_dot_ham.jpeg
 
 

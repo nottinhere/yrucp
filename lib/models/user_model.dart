@@ -1,12 +1,12 @@
 class UserModel {
-  String id;
+  int id;
   String code;
   String user;
   String pass;
   String name;
   String subject;
   String contact;
-  String status;
+  int status;
 
   UserModel(
       {this.id,

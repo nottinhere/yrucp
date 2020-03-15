@@ -47,7 +47,7 @@ class _DetailCartState extends State<DetailCart> {
   Future<void> readCart() async {
     clearArray();
 
-    String memberId = myUserModel.id;
+    String memberId = myUserModel.id.toString();
     String url = '${MyStyle().loadMyCart}$memberId';
 
     Response response = await get(url);
@@ -203,9 +203,9 @@ class _DetailCartState extends State<DetailCart> {
   }
 
   Widget okButton(int index, String size) {
-    String productID = productAllModels[index].id;
+    String productID = productAllModels[index].id.toString();
     String unitSize = size;
-    String memberID = myUserModel.id;
+    String memberID = myUserModel.id.toString();
 
     return FlatButton(
       child: Text('OK'),
@@ -278,7 +278,7 @@ class _DetailCartState extends State<DetailCart> {
 
         String productID  = productAllModels[index].id;
         String unitSize   = size;
-        String memberID   = myUserModel.id; 
+        String memberID   = myUserModel.id.toString(); 
 
         print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
 
