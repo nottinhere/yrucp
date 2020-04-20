@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/scaffold/result_code.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
@@ -112,7 +112,7 @@ class _MyServiceState extends State<MyService> {
   }
 
   Widget showLogin() {
-    String login = myUserModel.name;
+    String login = myUserModel.subject;
     if (login == null) {
       login = '...';
     }

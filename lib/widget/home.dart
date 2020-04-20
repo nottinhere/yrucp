@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/promote_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
@@ -44,8 +44,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> readPromotion() async {
-    String url = 'http://www.somsakpharma.com/api/json_promotion.php';
-    Response response = await get(url);
+    String url = 'http://ptnpharma.com/apisupplier/json_promotion.php';
+    http.Response response = await http.get(url);
     var result = json.decode(response.body);
     var mapItemProduct =
         result['itemsProduct']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
@@ -67,8 +67,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> readSuggest() async {
-    String url = 'http://www.somsakpharma.com/api/json_promotion.php';
-    Response response = await get(url);
+    String url = 'http://ptnpharma.com/apisupplier/json_promotion.php';
+    http.Response response = await http.get(url);
     var result = json.decode(response.body);
     var mapItemProduct =
         result['itemsProduct']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
@@ -170,14 +170,14 @@ class _HomeState extends State<Home> {
         MaterialPageRoute(builder: (BuildContext buildContext) {
       return ListProduct(
         index: index,
-       // userModel: myUserModel,
+        userModel: myUserModel,
       );
     });
     Navigator.of(context).push(materialPageRoute);
   }
 
   Widget profileBox() {
-   String login = myUserModel.name;
+   String login = myUserModel.subject;
    return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       // height: 80.0,
@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
  
 
   Widget productBox() {
-   String login = myUserModel.name;
+   String login = myUserModel.subject;
    return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       // height: 80.0,
@@ -253,7 +253,7 @@ class _HomeState extends State<Home> {
   }
 
  Widget logoutBox() {
-   String login = myUserModel.name;
+   String login = myUserModel.subject;
    return Container(
       width: MediaQuery.of(context).size.width * 0.8,
       // height: 80.0,

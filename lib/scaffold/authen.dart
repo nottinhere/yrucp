@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/scaffold/my_service.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
@@ -103,7 +103,7 @@ class _AuthenState extends State<Authen> {
       // No space
       String url =
           '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';
-      Response response = await get(
+      http.Response response = await http.get(
           url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
       var result = json.decode(response.body);
 
@@ -156,7 +156,7 @@ class _AuthenState extends State<Authen> {
       width: 250.0,
       child: TextFormField(
         style: TextStyle(color: Colors.grey[800]),
-        initialValue: 'TS909090', // set default value
+        initialValue: 'nott', // set default value
         onSaved: (String string) {
           user = string.trim();
         },
@@ -186,7 +186,7 @@ class _AuthenState extends State<Authen> {
       width: 250.0,
       child: TextFormField(
         style: TextStyle(color: Colors.grey[800]),
-        initialValue: '0626293936', // set default value
+        initialValue: '909090', // set default value
         onSaved: (String string) {
           password = string.trim();
         },

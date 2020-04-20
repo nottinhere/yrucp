@@ -2,27 +2,36 @@ class ProductAllModel {
   String title;
   String productCode;
   String photo;
-  String price;
-  String unit;
-  String stock;
-  String id;
+  Null priceList;
+  String sumStock;
+  String cMin;
+  int subtract;
+  String percentStock;
+  String emotical;
+  int id;
 
   ProductAllModel(
       {this.title,
       this.productCode,
       this.photo,
-      this.price,
-      this.unit,
-      this.stock,
+      this.priceList,
+      this.sumStock,
+      this.cMin,
+      this.subtract,
+      this.percentStock,
+      this.emotical,
       this.id});
 
   ProductAllModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     productCode = json['product_code'];
     photo = json['photo'];
-    price = json['price'];
-    unit = json['unit'];
-    stock = json['stock'];
+    priceList = json['price_list'];
+    sumStock = json['sum_stock'];
+    cMin = json['c_min'];
+    subtract = json['subtract'];
+    percentStock = json['percentStock'];
+    emotical = json['emotical'];
     id = json['id'];
   }
 
@@ -31,9 +40,12 @@ class ProductAllModel {
     data['title'] = this.title;
     data['product_code'] = this.productCode;
     data['photo'] = this.photo;
-    data['price'] = this.price;
-    data['unit'] = this.unit;
-    data['stock'] = this.stock;
+    data['price_list'] = this.priceList;
+    data['sum_stock'] = this.sumStock;
+    data['c_min'] = this.cMin;
+    data['subtract'] = this.subtract;
+    data['percentStock'] = this.percentStock;
+    data['emotical'] = this.emotical;
     data['id'] = this.id;
     return data;
   }

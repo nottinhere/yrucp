@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/price_list_model.dart';
 import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
@@ -50,7 +50,7 @@ class _DetailCartState extends State<DetailCart> {
     String memberId = myUserModel.id.toString();
     String url = '${MyStyle().loadMyCart}$memberId';
 
-    Response response = await get(url);
+    http.Response response = await http.get(url);
     var result = json.decode(response.body);
     var cartList = result['cart'];
 
@@ -222,9 +222,9 @@ class _DetailCartState extends State<DetailCart> {
   Future<void> editDetailCart(
       String productID, String unitSize, String memberID) async {
     String url =
-        'http://ptnsupplier.com/api/json_updatemycart.php?productID=$productID&unitSize=$unitSize&newQTY=$newQTY&memberID=$memberID';
+        'http://ptnpharma.com/apisupplier/json_updatemycart.php?productID=$productID&unitSize=$unitSize&newQTY=$newQTY&memberID=$memberID';
 
-    await get(url).then((response) {
+    await http.get(url).then((response) {
       readCart();
     });
   }
@@ -276,15 +276,15 @@ class _DetailCartState extends State<DetailCart> {
 
   Future<void> deleteCart(int index, String size)async{
 
-        String productID  = productAllModels[index].id;
+        String productID  = productAllModels[index].id.toString();
         String unitSize   = size;
         String memberID   = myUserModel.id.toString(); 
 
         print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
 
-        String url = 'http://ptnsupplier.com/api/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
+        String url = 'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
 
-        await get(url).then((response) {
+        await http.get(url).then((response) {
           readCart();
         });
   }

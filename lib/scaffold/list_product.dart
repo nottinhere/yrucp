@@ -2,18 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
 
-
+import 'detail.dart';
+import 'detail_cart.dart';
 
 class ListProduct extends StatefulWidget {
   final int index;
-  ListProduct({Key key, this.index}) : super(key: key);
-
-  UserModel get userModel => null;
+  final UserModel userModel;
+  ListProduct({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
   _ListProductState createState() => _ListProductState();
@@ -45,8 +45,9 @@ class _ListProductState extends State<ListProduct> {
   List<ProductAllModel> filterProductAllModels = List();
   int amontCart = 0;
   UserModel myUserModel;
+  String searchString = '';
 
-  int amountListView = 6;
+  int amountListView = 6, page = 1;
   ScrollController scrollController = ScrollController();
   final Debouncer debouncer =
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
@@ -59,12 +60,12 @@ class _ListProductState extends State<ListProduct> {
     super.initState();
     myIndex = widget.index;
     myUserModel = widget.userModel;
-    print('myIndex : $myIndex');
 
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
       readData(); // read  ข้อมูลมาแสดง
+      readCart();
     });
   }
 
@@ -72,33 +73,36 @@ class _ListProductState extends State<ListProduct> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        print('in the end');
+        page++;
+        readData();
 
-        setState(() {
-          amountListView = amountListView + 2;
-          if (amountListView > filterProductAllModels.length) {
-            amountListView = filterProductAllModels.length;
-          }
-        });
+        // print('in the end');
+
+        // setState(() {
+        //   amountListView = amountListView + 2;
+        //   if (amountListView > filterProductAllModels.length) {
+        //     amountListView = filterProductAllModels.length;
+        //   }
+        // });
       }
     });
   }
 
-  Widget showContent() {
-    return filterProductAllModels.length == 0
-        ? showProgressIndicate()
-        : showProductItem();
-  }
-
   Future<void> readData() async {
-    String url = MyStyle().readAllProduct;
+    // String url = MyStyle().readAllProduct;
+    int memberId = myUserModel.id;
+    String url =
+        'http://ptnpharma.com/apisupplier/json_product.php?memberId=$memberId&searchKey=$searchString&page=$page';
     if (myIndex != 0) {
       url = '${MyStyle().readProductWhereMode}$myIndex';
     }
-    //print('myIndex : $myIndex');
-    Response response = await get(url);
+
+    http.Response response = await http.get(url);
+    print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    print('result = $result');
+    // print('result = $result');
+    // print('url ListProduct ====>>>> $url');
+    // print('result ListProduct ========>>>>> $result');
 
     var itemProducts = result['itemsProduct'];
 
@@ -111,43 +115,69 @@ class _ListProductState extends State<ListProduct> {
     }
   }
 
-  Widget showName(int index) {
-    return Text(
-      filterProductAllModels[index].title,
-      style: TextStyle(
-          fontSize: 15.0,
-          color: Colors.green.shade700,
-          fontWeight: FontWeight.bold),
+  Widget showPercentStock(int index) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7 - 50,
+          child: Text(
+            'In stock : ' + filterProductAllModels[index].percentStock + '%',
+            style:  TextStyle(
+              fontSize: 16.0,
+              // fontWeight: FontWeight.bold,
+              color: Color.fromARGB(0xff, 77, 0, 0),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  Widget showPrice(int index) {
-    return Text('ราคา : ' +
-        filterProductAllModels[index].price +
-        ' / ' +
-        filterProductAllModels[index].unit);
+  Widget showName(int index) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.7 - 50,
+          child: Text(
+            filterProductAllModels[index].title,
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget showStock(int index) {
-    return Text('Stock :' + filterProductAllModels[index].stock);
+    return Row(
+      children: <Widget>[
+        // Text(
+        // 'price : ${filterProductAllModels[index].sum_stock.toString()}/unit',style: MyStyle().h3Style,),
+      ],
+    );
+    // return Text('na');
   }
 
   Widget showText(int index) {
     return Container(
-      height: MediaQuery.of(context).size.width * 0.25,
-      width: MediaQuery.of(context).size.width * 0.5,
+      padding: EdgeInsets.only(left: 10.0, right: 5.0),
+      // height: MediaQuery.of(context).size.width * 0.5,
+      width: MediaQuery.of(context).size.width * 0.80,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[showName(index), showPrice(index), showStock(index)],
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          showPercentStock(index),
+          showName(index),
+          showStock(index)
+        ],
       ),
     );
   }
 
   Widget showImage(int index) {
     return Container(
-      padding: EdgeInsets.all(3.0),
-      width: MediaQuery.of(context).size.width * 0.3,
-      child: Image.network(filterProductAllModels[index].photo),
+      padding: EdgeInsets.all(5.0),
+      width: MediaQuery.of(context).size.width * 0.15,
+      child: Image.network(filterProductAllModels[index].emotical),
     );
   }
 
@@ -155,54 +185,34 @@ class _ListProductState extends State<ListProduct> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: amountListView,
+        itemCount: productAllModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
-          return Card(
-            child: Row(
-              children: <Widget>[
-                showImage(index),
-                showText(index),
-              ],
+          return GestureDetector(
+            child: Container(
+              padding: EdgeInsets.only(bottom: 4.0),
+              child: Card(
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 10.0,top: 10.0),
+                 child: Row(
+                    children: <Widget>[
+                      showImage(index),
+                      showText(index),
+                    ],
+                  ),
+                ),
+              ),
             ),
+            onTap: () {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return Detail(
+                  productAllModel: filterProductAllModels[index],
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            },
           );
-        },
-      ),
-    );
-  }
-
-
-  Widget myLayout() {
-    return Column(
-      children: <Widget>[
-        searchForm(),
-        showProductItem(),
-      ],
-    );
-  }
-
-
-  Widget searchForm() {
-    return Container(
-      // color: Colors.grey,
-      padding:
-          EdgeInsets.only(left: 40.0, right: 40.0, top: 20.0, bottom: 20.0),
-      child: TextField(
-        decoration: InputDecoration(hintText: 'Search'),
-        onChanged: (String string) {
-          print('textsearch : $string');
-          statusStart = false;
-          debouncer.run(() {
-            setState(() {
-              filterProductAllModels =
-                  productAllModels.where((ProductAllModel productAllModel) {
-                return (productAllModel.title
-                    .toLowerCase()
-                    .contains(string.toLowerCase()));
-              }).toList();
-              amountListView = filterProductAllModels.length;
-              // print('amountListView : $amountListView');
-            });
-          });
         },
       ),
     );
@@ -215,18 +225,80 @@ class _ListProductState extends State<ListProduct> {
     );
   }
 
+  /*
+  Widget myLayout() {
+    return Column(
+      children: <Widget>[
+        searchForm(),
+        showProductItem(),
+      ],
+    );
+  }
+  */
 
+  Widget searchForm() {
+    return Container(
+      decoration: MyStyle().boxLightGray,
+      // color: Colors.grey,
+      padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 2.0, bottom: 2.0),
+      child: ListTile(
+        trailing: IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              print('searchString ===>>> $searchString');
+
+              setState(() {
+                page = 1;
+                productAllModels.clear();
+                readData();
+              });
+            }),
+        title: TextField(
+          decoration:
+              InputDecoration(border: InputBorder.none, hintText: 'Search'),
+          onChanged: (String string) {
+            searchString = string.trim();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget showContent() {
+    return filterProductAllModels.length == 0
+        ? showProgressIndicate()
+        : showProductItem();
+  }
+
+  Future<void> readCart() async {
+    String memberId = myUserModel.id.toString();
+    print(memberId);
+    String url =
+        'http://ptnpharma.com/apisupplier/json_loadmycart.php?memberId=$memberId';
+
+    http.Response response = await http.get(url);
+    var result = json.decode(response.body);
+    var cartList = result['cart'];
+
+    for (var map in cartList) {
+      setState(() {
+        amontCart++;
+      });
+    }
+  }
 
   Widget showCart() {
     return GestureDetector(
+      onTap: () {
+        routeToDetailCart();
+      },
       child: Container(
         margin: EdgeInsets.only(top: 5.0, right: 5.0),
         width: 32.0,
         height: 32.0,
         child: Stack(
           children: <Widget>[
-            //Image.asset('images/shopping_cart.png'),
-           Image.asset('images/shopping_cart.png'),
+            Image.asset('images/shopping_cart.png'),
             Text(
               '$amontCart',
               style: TextStyle(
@@ -241,17 +313,30 @@ class _ListProductState extends State<ListProduct> {
     );
   }
 
+  void routeToDetailCart() {
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return DetailCart(
+        userModel: myUserModel,
+      );
+    });
+    Navigator.of(context).push(materialPageRoute);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColor,
-        title: Text('List product'),
+        title: Text('รายการสินค้า'),
         actions: <Widget>[
-          showCart(),
+          //  showCart(),
         ],
       ),
+      // body: filterProductAllModels.length == 0
+      //     ? showProgressIndicate()
+      //     : myLayout(),
+
       body: Column(
         children: <Widget>[
           searchForm(),
