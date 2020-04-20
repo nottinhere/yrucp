@@ -98,8 +98,6 @@ class _DetailState extends State<Detail> {
     return Text(productAllModel.title);
   }
 
-
-
   Widget showPackage(int index) {
     return Text(unitSizeModels[index].lable);
   }
@@ -251,7 +249,7 @@ class _DetailState extends State<Detail> {
         actions: <Widget>[
           showCart(),
         ],
-        backgroundColor: MyStyle().textColor,
+        backgroundColor: MyStyle().barColor,
         title: Text('Detail'),
       ),
       body: productAllModel == null ? showProgress() : showDetailList(),
@@ -336,7 +334,12 @@ class _DetailState extends State<Detail> {
     http.Response response = await http.get(url).then((response) {
       print('upload ok');
       readCart();
-      MaterialPageRoute materialPageRoute = MaterialPageRoute(builder: (BuildContext buildContext){return DetailCart(userModel: myUserModel,);});
+      MaterialPageRoute materialPageRoute =
+          MaterialPageRoute(builder: (BuildContext buildContext) {
+        return DetailCart(
+          userModel: myUserModel,
+        );
+      });
       Navigator.of(context).push(materialPageRoute);
     });
   }

@@ -119,14 +119,27 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.7 - 50,
-          child: Text(
-            'In stock : ' + filterProductAllModels[index].percentStock + '%',
-            style:  TextStyle(
-              fontSize: 16.0,
-              // fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 77, 0, 0),
-            ),
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Code : ' + filterProductAllModels[index].productCode,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 47, 255),
+                ),
+              ),Text(
+                'In stock : ' + filterProductAllModels[index].percentStock + '%',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -137,7 +150,7 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.7 - 50,
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
             filterProductAllModels[index].title,
             style: MyStyle().h3bStyle,
@@ -148,11 +161,34 @@ class _ListProductState extends State<ListProduct> {
   }
 
   Widget showStock(int index) {
+
     return Row(
-      children: <Widget>[
-        // Text(
-        // 'price : ${filterProductAllModels[index].sum_stock.toString()}/unit',style: MyStyle().h3Style,),
+      // padding: EdgeInsets.top(100),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('หน่วย'),
+            Text(filterProductAllModels[index].unitOrderShow),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.timer, color: Colors.green[500]),
+            Text('สต๊อก'),
+            Text(filterProductAllModels[index].sumStock),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('ขาย/เดือน'),
+            Text(filterProductAllModels[index].cMin),
+          ],
+        ),
       ],
+
     );
     // return Text('na');
   }
@@ -192,11 +228,11 @@ class _ListProductState extends State<ListProduct> {
               padding: EdgeInsets.only(bottom: 4.0),
               child: Card(
                 child: Container(
-                  padding: EdgeInsets.only(bottom: 10.0,top: 10.0),
-                 child: Row(
+                  padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                  child: Row(
                     children: <Widget>[
-                      showImage(index),
                       showText(index),
+                      showImage(index),
                     ],
                   ),
                 ),
