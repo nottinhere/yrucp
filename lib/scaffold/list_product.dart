@@ -119,14 +119,29 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.7 - 50,
-          child: Text(
-            'In stock : ' + filterProductAllModels[index].percentStock + '%',
-            style:  TextStyle(
-              fontSize: 16.0,
-              // fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 77, 0, 0),
-            ),
+          width: MediaQuery.of(context).size.width * 0.75,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                'Code : ' + filterProductAllModels[index].productCode,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 16, 149, 161),
+                ),
+              ),
+              Text(
+                'In stock : ' +
+                    filterProductAllModels[index].percentStock +
+                    '%',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -137,7 +152,7 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.7 - 50,
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
             filterProductAllModels[index].title,
             style: MyStyle().h3bStyle,
@@ -149,9 +164,51 @@ class _ListProductState extends State<ListProduct> {
 
   Widget showStock(int index) {
     return Row(
-      children: <Widget>[
-        // Text(
-        // 'price : ${filterProductAllModels[index].sum_stock.toString()}/unit',style: MyStyle().h3Style,),
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+      children: [
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('หน่วย'),
+            Text(
+              filterProductAllModels[index].unitOrderShow,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.timer, color: Colors.green[500]),
+            Text('สต๊อก'),
+            Text(
+              filterProductAllModels[index].sumStock,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('ขาย/เดือน'),
+            Text(
+              filterProductAllModels[index].cMin,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
       ],
     );
     // return Text('na');
@@ -181,6 +238,23 @@ class _ListProductState extends State<ListProduct> {
     );
   }
 
+  BoxDecoration myBoxDecoration() {
+    return BoxDecoration(
+      border: Border(
+        top: BorderSide(
+          //
+          color: Colors.blueGrey.shade100,
+          width: 2.0,
+        ),
+        bottom: BorderSide(
+          //
+          color: Colors.blueGrey.shade100,
+          width: 2.0,
+        ),
+      ),
+    );
+  }
+
   Widget showProductItem() {
     return Expanded(
       child: ListView.builder(
@@ -189,14 +263,18 @@ class _ListProductState extends State<ListProduct> {
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
-              padding: EdgeInsets.only(bottom: 4.0),
+              padding:
+                  EdgeInsets.only(top: 3.0, bottom: 3.0, left: 6.0, right: 6.0),
               child: Card(
+                // color: Color.fromRGBO(235, 254, 255, 1.0),
+
                 child: Container(
-                  padding: EdgeInsets.only(bottom: 10.0,top: 10.0),
-                 child: Row(
+                  decoration: myBoxDecoration(),
+                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  child: Row(
                     children: <Widget>[
-                      showImage(index),
                       showText(index),
+                      showImage(index),
                     ],
                   ),
                 ),
@@ -240,7 +318,7 @@ class _ListProductState extends State<ListProduct> {
     return Container(
       decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
-      padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 2.0, bottom: 2.0),
+      padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
       child: ListTile(
         trailing: IconButton(
             icon: Icon(Icons.search),

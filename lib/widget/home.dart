@@ -179,7 +179,7 @@ class _HomeState extends State<Home> {
   Widget profileBox() {
    String login = myUserModel.subject;
    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -195,7 +195,7 @@ class _HomeState extends State<Home> {
                   padding:EdgeInsets.all(8.0) ,
                 ),
                 Text(
-                  'ผู้แทน : $login',
+                  '$login', // 'ผู้แทน : $login',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -218,7 +218,7 @@ class _HomeState extends State<Home> {
   Widget productBox() {
    String login = myUserModel.subject;
    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> {
  Widget logoutBox() {
    String login = myUserModel.subject;
    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
+      width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
         child: Card(

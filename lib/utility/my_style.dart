@@ -23,7 +23,7 @@ class MyStyle {
   TextStyle h3bStyle = TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
-    color: Color.fromARGB(0xff, 0x00, 0x73, 0x26),
+    color: Color.fromARGB(0xff, 56, 80, 82),
   );
   TextStyle h3Style = TextStyle(
     fontSize: 16.0,

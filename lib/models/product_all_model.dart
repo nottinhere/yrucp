@@ -3,6 +3,7 @@ class ProductAllModel {
   String productCode;
   String photo;
   Null priceList;
+  String unitOrderShow;
   String sumStock;
   String cMin;
   int subtract;
@@ -15,6 +16,7 @@ class ProductAllModel {
       this.productCode,
       this.photo,
       this.priceList,
+      this.unitOrderShow,
       this.sumStock,
       this.cMin,
       this.subtract,
@@ -27,6 +29,7 @@ class ProductAllModel {
     productCode = json['product_code'];
     photo = json['photo'];
     priceList = json['price_list'];
+    unitOrderShow = json['unit_order_show'];
     sumStock = json['sum_stock'];
     cMin = json['c_min'];
     subtract = json['subtract'];
@@ -41,6 +44,7 @@ class ProductAllModel {
     data['product_code'] = this.productCode;
     data['photo'] = this.photo;
     data['price_list'] = this.priceList;
+    data['unit_order_show'] = this.unitOrderShow;
     data['sum_stock'] = this.sumStock;
     data['c_min'] = this.cMin;
     data['subtract'] = this.subtract;
