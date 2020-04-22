@@ -173,7 +173,7 @@ class _ListProductState extends State<ListProduct> {
             Text('หน่วย'),
             Text(
               filterProductAllModels[index].unitOrderShow,
-              style: TextStyle(
+              style: TextStyle( 
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(0xff, 0, 0, 0),

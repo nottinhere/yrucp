@@ -63,21 +63,21 @@ class _DetailState extends State<Detail> {
           Map<String, dynamic> priceListMap = map['price_list'];
           // print('priceListMap = $priceListMap');
 
-          Map<String, dynamic> sizeSmap = priceListMap['s'];
-          if (sizeSmap != null) {
-            UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeSmap);
-            unitSizeModels.add(unitSizeModel);
-          }
-          Map<String, dynamic> sizeMmap = priceListMap['m'];
-          if (sizeMmap != null) {
-            UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeMmap);
-            unitSizeModels.add(unitSizeModel);
-          }
-          Map<String, dynamic> sizeLmap = priceListMap['l'];
-          if (sizeLmap != null) {
-            UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeLmap);
-            unitSizeModels.add(unitSizeModel);
-          }
+          // Map<String, dynamic> sizeSmap = priceListMap['s'];
+          // if (sizeSmap != null) {
+          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeSmap);
+          //   unitSizeModels.add(unitSizeModel);
+          // }
+          // Map<String, dynamic> sizeMmap = priceListMap['m'];
+          // if (sizeMmap != null) {
+          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeMmap);
+          //   unitSizeModels.add(unitSizeModel);
+          // }
+          // Map<String, dynamic> sizeLmap = priceListMap['l'];
+          // if (sizeLmap != null) {
+          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeLmap);
+          //   unitSizeModels.add(unitSizeModel);
+          // }
           // print('sizeSmap = $sizeSmap');
           // print('sizeMmap = $sizeMmap');
           // print('sizeLmap = $sizeLmap');
@@ -90,7 +90,7 @@ class _DetailState extends State<Detail> {
   Widget showImage() {
     return Container(
       height: 180.0,
-      child: Image.network(productAllModel.photo),
+      child: Image.network(productAllModel.emotical),
     );
   }
 
@@ -99,12 +99,9 @@ class _DetailState extends State<Detail> {
   }
 
   Widget showPackage(int index) {
-    return Text(unitSizeModels[index].lable);
+    return Text(productAllModel.unitOrderShow);
   }
 
-  Widget showPricePackage(int index) {
-    return Text('${unitSizeModels[index].price} บาท/ ');
-  }
 
   Widget showChoosePricePackage(int index) {
     return Row(
@@ -120,7 +117,7 @@ class _DetailState extends State<Detail> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        showPricePackage(index),
+
         showPackage(index),
       ],
     );
@@ -181,7 +178,7 @@ class _DetailState extends State<Detail> {
       height: 150.0,
       // color: Colors.grey,
       child: ListView.builder(
-        itemCount: unitSizeModels.length,
+        // itemCount: unitSizeModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return showChoosePricePackage(index); // showDetailPrice(index);
         },
@@ -247,7 +244,7 @@ class _DetailState extends State<Detail> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          showCart(),
+          //showCart(),
         ],
         backgroundColor: MyStyle().barColor,
         title: Text('Detail'),
@@ -283,15 +280,15 @@ class _DetailState extends State<Detail> {
                   int index = 0;
                   List<bool> status = List();
 
-                  for (var object in unitSizeModels) {
-                    if (amounts[index] == 0) {
-                      status.add(true);
-                    } else {
-                      status.add(false);
-                    }
+                  // for (var object in unitSizeModels) {
+                  //   if (amounts[index] == 0) {
+                  //     status.add(true);
+                  //   } else {
+                  //     status.add(false);
+                  //   }
 
-                    index++;
-                  }
+                  //   index++;
+                  // }
 
                   bool sumStatus = true;
                   if (status.length == 1) {
@@ -305,17 +302,17 @@ class _DetailState extends State<Detail> {
                         context, 'Do not choose item', 'Please choose item');
                   } else {
                     int index = 0;
-                    for (var object in unitSizeModels) {
-                      String unitSize = unitSizeModels[index].unit;
-                      int qTY = amounts[index];
+                    // for (var object in unitSizeModels) {
+                    //   String unitSize = unitSizeModels[index].unit;
+                    //   int qTY = amounts[index];
 
-                      print(
-                          'productID = $productID, memberID=$memberID, unitSize=$unitSize, QTY=$qTY');
-                      if (qTY != 0) {
-                        addCart(productID, unitSize, qTY, memberID);
-                      }
-                      index++;
-                    }
+                    //   print(
+                    //       'productID = $productID, memberID=$memberID, unitSize=$unitSize, QTY=$qTY');
+                    //   if (qTY != 0) {
+                    //     addCart(productID, unitSize, qTY, memberID);
+                    //   }
+                    //   index++;
+                    // }
                   }
                 },
               ),
