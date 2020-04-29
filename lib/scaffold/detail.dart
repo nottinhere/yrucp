@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/unit_size_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/scaffold/detail_cart.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
@@ -23,15 +22,12 @@ class _DetailState extends State<Detail> {
   // Explicit
   ProductAllModel currentProductAllModel;
   ProductAllModel productAllModel;
-  List<UnitSizeModel> unitSizeModels = List();
-  List<int> amounts = [
-    0,
-    0,
-    0
-  ]; // amount[0] -> s,amount[1] -> m,amount[2] -> l;
   int amontCart = 0;
   UserModel myUserModel;
   String id; // productID
+
+  String txtdeal = '', txtfree = '', txtprice = '', txtnote = '';
+  String memberID;
 
   // Method
   @override
@@ -61,54 +57,351 @@ class _DetailState extends State<Detail> {
           productAllModel = ProductAllModel.fromJson(map);
 
           Map<String, dynamic> priceListMap = map['price_list'];
-          // print('priceListMap = $priceListMap');
-
-          // Map<String, dynamic> sizeSmap = priceListMap['s'];
-          // if (sizeSmap != null) {
-          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeSmap);
-          //   unitSizeModels.add(unitSizeModel);
-          // }
-          // Map<String, dynamic> sizeMmap = priceListMap['m'];
-          // if (sizeMmap != null) {
-          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeMmap);
-          //   unitSizeModels.add(unitSizeModel);
-          // }
-          // Map<String, dynamic> sizeLmap = priceListMap['l'];
-          // if (sizeLmap != null) {
-          //   UnitSizeModel unitSizeModel = UnitSizeModel.fromJson(sizeLmap);
-          //   unitSizeModels.add(unitSizeModel);
-          // }
-          // print('sizeSmap = $sizeSmap');
-          // print('sizeMmap = $sizeMmap');
-          // print('sizeLmap = $sizeLmap');
-          print('unitSizeModel = ${unitSizeModels[0].lable}');
         });
       } // for
     }
   }
 
-  Widget showImage() {
-    return Container(
-      height: 180.0,
-      child: Image.network(productAllModel.emotical),
+  Widget showTitle() {
+    return Text(
+      productAllModel.title,
+      style: TextStyle(
+        fontSize: 19.0,
+        fontWeight: FontWeight.bold,
+        color: Color.fromARGB(0xff, 56, 80, 82),
+      ),
     );
   }
 
-  Widget showTitle() {
-    return Text(productAllModel.title);
+  Widget showImage() {
+    return Card(
+      child: Container(
+        // width: MediaQuery.of(context).size.width * 1.00,
+        padding: new EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Text(
+                  'Code :' + productAllModel.productCode,
+                  style: TextStyle(
+                    fontSize: 26.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 16, 149, 161),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: <Widget>[
+                Text(
+                  'Stock : ',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Color.fromARGB(0xff, 16, 149, 161),
+                  ),
+                ),
+                Text(
+                  productAllModel.percentStock + '%',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    // color: Color.fromARGB(0xff, 16, 149, 161),
+                  ),
+                ),
+              ],
+            ),
+            Image.network(
+              productAllModel.emotical,
+              width: MediaQuery.of(context).size.width * 0.16,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget showStock() {
+    return Card(
+      child: Container(
+        // width: MediaQuery.of(context).size.width * 1.00,
+        padding: new EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              children: [
+                // Icon(Icons.restaurant, color: Colors.green[500]),
+                Text('ขาย/เดือน'),
+                Text(
+                  productAllModel.cMin,
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 0, 0, 0),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                // Icon(Icons.timer, color: Colors.green[500]),
+                Text('สต๊อก'),
+                Text(
+                  productAllModel.sumStock,
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 0, 0, 0),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                // Icon(Icons.kitchen, color: Colors.green[500]),
+                Text('หน่วย'),
+                Text(
+                  productAllModel.unitOrderShow,
+                  style: TextStyle(
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 0, 0, 0),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget dealBox() {
+    return Container(
+      // decoration: MyStyle().boxLightGreen,
+      // height: 35.0,
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.only(left: 10.0, right: 20.0),
+      child: Column(
+        children: <Widget>[
+          Text('ดึล :'),
+          TextFormField(
+            style: TextStyle(color: Colors.black),
+            initialValue:
+                productAllModel.dealOrder.toString(), // set default value
+            keyboardType: TextInputType.number,
+            onChanged: (string) {
+              txtdeal = string.trim();
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(
+                top: 6.0,
+              ),
+              prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+              //border: InputBorder.none,
+              hintText: 'ดึล',
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget freeBox() {
+    return Container(
+      // decoration: MyStyle().boxLightGreen,
+      // height: 35.0,
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.only(left: 20.0, right: 10.0),
+      child: Column(
+        children: <Widget>[
+          Text('แถม :'),
+          TextFormField(
+            style: TextStyle(color: Colors.black),
+            initialValue:
+                productAllModel.freeOrder.toString(), // set default value
+            keyboardType: TextInputType.number,
+            onChanged: (string) {
+              txtfree = string.trim();
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(
+                top: 6.0,
+              ),
+              prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+              // border: InputBorder.none,
+              hintText: 'แถม',
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget priceBox() {
+    return Container(
+      // decoration: MyStyle().boxLightGreen,
+      // height: 35.0,
+      width: MediaQuery.of(context).size.width * 0.45,
+      padding: EdgeInsets.only(left: 10.0, right: 20.0),
+      child: Column(
+        children: <Widget>[
+          Text('ราคา :'),
+          TextFormField(
+            style: TextStyle(color: Colors.black),
+            initialValue: productAllModel.priceOrder, // set default value
+            keyboardType: TextInputType.number,
+            onChanged: (string) {
+              txtprice = string.trim();
+            },
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(
+                top: 6.0,
+              ),
+              prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+              // border: InputBorder.none,
+              hintText: 'ราคา',
+              hintStyle: TextStyle(color: Colors.grey),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget noteBox() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: TextField(
+        onChanged: (value) {
+          txtnote = value.trim();
+        },
+        keyboardType: TextInputType.multiline,
+        maxLines: 2,
+        decoration: InputDecoration(
+            prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+            labelText: 'Note :'),
+      ),
+    );
+  }
+
+  Widget showFormDeal() {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              dealBox(),
+              freeBox(),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              priceBox(),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                child: Column(
+                  children: <Widget>[
+                    Text('ราคาขาย'),
+                    Text(
+                      productAllModel.priceSale +
+                          '/' +
+                          productAllModel.unitOrderShow,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          noteBox(),
+          //  Row(children: <Widget>[priceBox(),priceBox(),],),
+          //  Row(children: <Widget>[noteBox()],),
+        ],
+      ),
+    );
+  }
+
+  Future<void> submitThread() async {
+    try {
+      var medID = currentProductAllModel.id;
+      String url =
+          'http://ptnpharma.com/apisupplier//json_submit_deal.php?memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote'; //'';
+
+      await http.get(url).then((value) {
+        confirmSubmit();
+      });
+    } catch (e) {}
+  }
+
+  Future<void> confirmSubmit() async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Complete'),
+            content: Text('แก้ไขดีลเรียบร้อย'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    backProcess();
+                  },
+                  child: Text('OK'))
+            ],
+          );
+        });
+  }
+
+  void backProcess() {
+    Navigator.of(context).pop();
+  }
+
+  Widget submitButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 30.0),
+          child: RaisedButton(
+            color: Color.fromARGB(0xff, 13, 163, 93),
+            onPressed: () {
+              memberID = myUserModel.id.toString();
+              var medID = currentProductAllModel.id;
+              print(
+                  'memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote');
+
+              submitThread();
+            },
+            child: Text(
+              'Update',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget showPackage(int index) {
     return Text(productAllModel.unitOrderShow);
   }
 
-
   Widget showChoosePricePackage(int index) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         showDetailPrice(index),
-        incDecValue(index),
+        // incDecValue(index),
       ],
     );
   }
@@ -117,58 +410,7 @@ class _DetailState extends State<Detail> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-
         showPackage(index),
-      ],
-    );
-  }
-
-  Widget decButton(int index) {
-    int value = amounts[index];
-    return IconButton(
-      icon: Icon(Icons.remove_circle_outline),
-      onPressed: () {
-        print('dec index $index');
-        if (value == 0) {
-          normalDialog(context, 'Cannot decrese', 'Because empty cart');
-        } else {
-          setState(() {
-            value--;
-            amounts[index] = value;
-          });
-        }
-      },
-    );
-  }
-
-  Widget incButton(int index) {
-    int value = amounts[index];
-
-    return IconButton(
-      icon: Icon(Icons.add_circle_outline),
-      onPressed: () {
-        setState(() {
-          print('inc index $index');
-          value++;
-          amounts[index] = value;
-        });
-      },
-    );
-  }
-
-  Widget showValue(int value) {
-    return Text('$value');
-  }
-
-  Widget incDecValue(int index) {
-    int value = amounts[index];
-
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        decButton(index),
-        showValue(value),
-        incButton(index),
       ],
     );
   }
@@ -247,7 +489,7 @@ class _DetailState extends State<Detail> {
           //showCart(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('Detail'),
+        title: Text('ข้อมูลสต๊อก'),
       ),
       body: productAllModel == null ? showProgress() : showDetailList(),
     );
@@ -267,9 +509,9 @@ class _DetailState extends State<Detail> {
           children: <Widget>[
             Expanded(
               child: RaisedButton(
-                color: MyStyle().textColor,
+                color: Colors.lightGreen,
                 child: Text(
-                  'Add to Cart',
+                  'Update deal',
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
@@ -279,16 +521,6 @@ class _DetailState extends State<Detail> {
 
                   int index = 0;
                   List<bool> status = List();
-
-                  // for (var object in unitSizeModels) {
-                  //   if (amounts[index] == 0) {
-                  //     status.add(true);
-                  //   } else {
-                  //     status.add(false);
-                  //   }
-
-                  //   index++;
-                  // }
 
                   bool sumStatus = true;
                   if (status.length == 1) {
@@ -300,20 +532,7 @@ class _DetailState extends State<Detail> {
                   if (sumStatus) {
                     normalDialog(
                         context, 'Do not choose item', 'Please choose item');
-                  } else {
-                    int index = 0;
-                    // for (var object in unitSizeModels) {
-                    //   String unitSize = unitSizeModels[index].unit;
-                    //   int qTY = amounts[index];
-
-                    //   print(
-                    //       'productID = $productID, memberID=$memberID, unitSize=$unitSize, QTY=$qTY');
-                    //   if (qTY != 0) {
-                    //     addCart(productID, unitSize, qTY, memberID);
-                    //   }
-                    //   index++;
-                    // }
-                  }
+                  } else {}
                 },
               ),
             ),
@@ -345,18 +564,21 @@ class _DetailState extends State<Detail> {
     return Stack(
       children: <Widget>[
         showController(),
-        addButton(),
+        // addButton(),
       ],
     );
   }
 
   ListView showController() {
     return ListView(
-      padding: EdgeInsets.all(30.0),
+      padding: EdgeInsets.all(15.0),
       children: <Widget>[
-        showImage(),
         showTitle(),
-        showPrice(),
+        showImage(),
+        showStock(),
+        showFormDeal(),
+        submitButton(),
+        //showPrice(),
       ],
     );
   }

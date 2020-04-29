@@ -99,7 +99,7 @@ class _HomeState extends State<Home> {
 
         MaterialPageRoute route = MaterialPageRoute(
           builder: (BuildContext context) => Detail(
-            productAllModel: promoteModels[banerIndex],
+            // productAllModel: promoteModels[banerIndex],
           ),
         );
         Navigator.of(context).push(route).then((value) {});
@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
 
         MaterialPageRoute route = MaterialPageRoute(
           builder: (BuildContext context) => Detail(
-            productAllModel: suggestModels[suggessIndex],
+            // productAllModel: suggestModels[suggessIndex],
           ),
         );
         Navigator.of(context).push(route).then((value) {});

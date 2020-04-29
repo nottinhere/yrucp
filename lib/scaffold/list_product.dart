@@ -166,14 +166,14 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
 
-      children: [
+      children: [       
         Column(
           children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('หน่วย'),
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('ขาย/เดือน'),
             Text(
-              filterProductAllModels[index].unitOrderShow,
-              style: TextStyle( 
+              filterProductAllModels[index].cMin,
+              style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(0xff, 0, 0, 0),
@@ -193,15 +193,14 @@ class _ListProductState extends State<ListProduct> {
                 color: Color.fromARGB(0xff, 0, 0, 0),
               ),
             ),
-          ],
-        ),
-        Column(
+          ],         
+        ),Column(
           children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ขาย/เดือน'),
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('หน่วย'),
             Text(
-              filterProductAllModels[index].cMin,
-              style: TextStyle(
+              filterProductAllModels[index].unitOrderShow,
+              style: TextStyle( 
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(0xff, 0, 0, 0),

@@ -1,4 +1,4 @@
-class ProductAllModel {
+class ProductDetailModel {
   String title;
   String productCode;
   String photo;
@@ -15,7 +15,7 @@ class ProductAllModel {
   String emotical;
   int id;
 
-  ProductAllModel(
+  ProductDetailModel(
       {this.title,
       this.productCode,
       this.photo,
@@ -32,7 +32,7 @@ class ProductAllModel {
       this.emotical,
       this.id});
 
-  ProductAllModel.fromJson(Map<String, dynamic> json) {
+  ProductDetailModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     productCode = json['product_code'];
     photo = json['photo'];
