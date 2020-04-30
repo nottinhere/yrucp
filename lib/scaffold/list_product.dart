@@ -254,7 +254,7 @@ class _ListProductState extends State<ListProduct> {
     );
   }
 
-  Widget showProductItem() {
+  Widget showProductItem() { 
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
