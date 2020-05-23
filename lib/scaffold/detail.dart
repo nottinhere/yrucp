@@ -489,7 +489,7 @@ class _DetailState extends State<Detail> {
           //showCart(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('ข้อมูลสต๊อก'),
+        title: Text('แก้ไขข้อมูลสต๊อก'),
       ),
       body: productAllModel == null ? showProgress() : showDetailList(),
     );

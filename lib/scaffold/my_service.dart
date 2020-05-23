@@ -108,7 +108,7 @@ class _MyServiceState extends State<MyService> {
   }
 
   Widget showAppName() {
-    return Text('PTNPharma');
+    return Text('For Supplier');
   }
 
   Widget showLogin() {
@@ -162,7 +162,7 @@ class _MyServiceState extends State<MyService> {
           headDrawer(),
           menuHome(),
           menuContact(),
-          menuReadQRcode(),
+         // menuReadQRcode(),
           menuLogOut(),
         ],
       ),

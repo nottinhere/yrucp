@@ -7,13 +7,14 @@ import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
 
-import 'detail.dart';
+import 'detail_view.dart';
 import 'detail_cart.dart';
 
-class ListProduct extends StatefulWidget {
+class ListProductOutofstock extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListProduct({Key key, this.index, this.userModel}) : super(key: key);
+  ListProductOutofstock({Key key, this.index, this.userModel})
+      : super(key: key);
 
   @override
   _ListProductState createState() => _ListProductState();
@@ -38,7 +39,7 @@ class Debouncer {
   }
 }
 
-class _ListProductState extends State<ListProduct> {
+class _ListProductState extends State<ListProductOutofstock> {
   // Explicit
   int myIndex;
   List<ProductAllModel> productAllModels = List(); // set array
@@ -46,7 +47,7 @@ class _ListProductState extends State<ListProduct> {
   int amontCart = 0;
   UserModel myUserModel;
   String searchString = '';
-
+  String totalPrice = '';
   int amountListView = 6, page = 1;
   String sort = 'asc';
   ScrollController scrollController = ScrollController();
@@ -66,7 +67,7 @@ class _ListProductState extends State<ListProduct> {
 
     setState(() {
       readData(); // read  ข้อมูลมาแสดง
-      readCart();
+      // readCart();
     });
   }
 
@@ -93,10 +94,11 @@ class _ListProductState extends State<ListProduct> {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
     String url =
-        'http://ptnpharma.com/apisupplier/json_product.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
-    if (myIndex != 0) {
-      url = '${MyStyle().readProductWhereMode}$myIndex';
-    }
+        'http://ptnpharma.com/apisupplier/json_product_outofstock.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+
+    // if (myIndex != 0) {
+    //   url = '${MyStyle().readProductWhereMode}$myIndex';
+    // }
 
     http.Response response = await http.get(url);
     print('url readData ##################+++++++++++>>> $url');
@@ -114,13 +116,17 @@ class _ListProductState extends State<ListProduct> {
         filterProductAllModels = productAllModels;
       });
     }
+
+    setState(() {
+      totalPrice = result['totalPrice'];
+    });
   }
 
   Widget showPercentStock(int index) {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.75,
+          width: MediaQuery.of(context).size.width * 0.90,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -153,7 +159,7 @@ class _ListProductState extends State<ListProduct> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
           child: Text(
             filterProductAllModels[index].title,
             style: MyStyle().h3bStyle,
@@ -209,6 +215,71 @@ class _ListProductState extends State<ListProduct> {
             ),
           ],
         ),
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('ดีล'),
+            Text(
+              filterProductAllModels[index].dealOrder.toString(),
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('แถม'),
+            Text(
+              filterProductAllModels[index].freeOrder.toString(),
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+    // return Text('na');
+  }
+
+  Widget showDeal(int index) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('ราคาทุน'),
+            Text(
+              filterProductAllModels[index].priceOrder,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('รวม'),
+            Text(
+              filterProductAllModels[index].itemSum,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 255),
+              ),
+            ),
+          ],
+        ),
       ],
     );
     // return Text('na');
@@ -218,13 +289,15 @@ class _ListProductState extends State<ListProduct> {
     return Container(
       padding: EdgeInsets.only(left: 10.0, right: 5.0),
       // height: MediaQuery.of(context).size.width * 0.5,
-      width: MediaQuery.of(context).size.width * 0.80,
+      width: MediaQuery.of(context).size.width *
+          0.95, // MediaQuery.of(context).size.width * 0.80,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showPercentStock(index),
           showName(index),
-          showStock(index)
+          showStock(index),
+          showDeal(index),
         ],
       ),
     );
@@ -243,13 +316,13 @@ class _ListProductState extends State<ListProduct> {
       border: Border(
         top: BorderSide(
           //
-          color: Colors.blueGrey.shade100,
-          width: 2.0,
+          color: Colors.yellow.shade400,
+          width: 3.0,
         ),
         bottom: BorderSide(
           //
-          color: Colors.blueGrey.shade100,
-          width: 2.0,
+          color: Colors.yellow.shade400,
+          width: 3.0,
         ),
       ),
     );
@@ -270,11 +343,11 @@ class _ListProductState extends State<ListProduct> {
 
                 child: Container(
                   decoration: myBoxDecoration(),
-                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                   child: Row(
                     children: <Widget>[
                       showText(index),
-                      showImage(index),
+                      // showImage(index),
                     ],
                   ),
                 ),
@@ -283,7 +356,7 @@ class _ListProductState extends State<ListProduct> {
             onTap: () {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return Detail(
+                return DetailView(
                   productAllModel: filterProductAllModels[index],
                   userModel: myUserModel,
                 );
@@ -301,6 +374,47 @@ class _ListProductState extends State<ListProduct> {
       child:
           statusStart ? CircularProgressIndicator() : Text('Search not found'),
     );
+  }
+
+  Widget showTotal() {
+    return Container(
+      padding:
+          EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
+            children: [
+              // Icon(Icons.kitchen, color: Colors.green[500]),
+              Text(
+                ' ยอดรวม ',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+              Text(
+                totalPrice,
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 255),
+                ),
+              ),Text(
+                ' บาท ',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+    // return Text('na');
   }
 
   /*
@@ -351,7 +465,7 @@ class _ListProductState extends State<ListProduct> {
             print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
-              sort = (sort=='asc')?'desc':'asc';
+              sort = (sort == 'asc') ? 'desc' : 'asc';
               productAllModels.clear();
               readData();
             });
@@ -361,10 +475,11 @@ class _ListProductState extends State<ListProduct> {
 
   Widget showContent() {
     return filterProductAllModels.length == 0
-        ? showProgressIndicate()
+        ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
 
+/*
   Future<void> readCart() async {
     String memberId = myUserModel.id.toString();
     print(memberId);
@@ -381,7 +496,7 @@ class _ListProductState extends State<ListProduct> {
       });
     }
   }
-
+*/
   Widget showCart() {
     return GestureDetector(
       onTap: () {
@@ -422,8 +537,8 @@ class _ListProductState extends State<ListProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyStyle().barColor,
-        title: Text('รายการสินค้า'),
+        backgroundColor: MyStyle().barColor, //Colors.yellow.shade700,
+        title: Text('รายการสินค้าขาดสต๊อก'),
         actions: <Widget>[
           //  showCart(),
         ],
@@ -437,6 +552,7 @@ class _ListProductState extends State<ListProduct> {
           searchForm(),
           sortButton(),
           showContent(),
+          showTotal(),
         ],
       ),
     );

@@ -1,4 +1,4 @@
-class ProductAllModel {
+class ProductHavesumModel {
   String title;
   String productCode;
   String photo;
@@ -9,10 +9,6 @@ class ProductAllModel {
   int subtract;
   String percentStock;
   String pcStock;
-  String overStock;
-  String percentOverStock;
-  String sumPriceOver;
-  String sumLosesaleInStock;
   String priceOrder;
   String priceSale;
   int dealOrder;
@@ -21,7 +17,7 @@ class ProductAllModel {
   String emotical;
   int id;
 
-  ProductAllModel(
+  ProductHavesumModel(
       {this.title,
       this.productCode,
       this.photo,
@@ -32,10 +28,6 @@ class ProductAllModel {
       this.subtract,
       this.percentStock,
       this.pcStock,
-      this.overStock,
-      this.percentOverStock,
-      this.sumPriceOver,
-      this.sumLosesaleInStock,
       this.priceOrder,
       this.priceSale,
       this.dealOrder,
@@ -44,7 +36,7 @@ class ProductAllModel {
       this.emotical,
       this.id});
 
-  ProductAllModel.fromJson(Map<String, dynamic> json) {
+  ProductHavesumModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     productCode = json['product_code'];
     photo = json['photo'];
@@ -55,10 +47,6 @@ class ProductAllModel {
     subtract = json['subtract'];
     percentStock = json['percentStock'];
     pcStock = json['pcStock'];
-    overStock = json['overStock'];
-    percentOverStock = json['percentOverStock'];
-    sumPriceOver = json['sumPriceOver'];
-    sumLosesaleInStock = json['sumLosesaleInStock'];
     priceOrder = json['price_order'];
     priceSale = json['price_sale'];
     dealOrder = json['deal_order'];
@@ -80,10 +68,6 @@ class ProductAllModel {
     data['subtract'] = this.subtract;
     data['percentStock'] = this.percentStock;
     data['pcStock'] = this.pcStock;
-    data['overStock'] = this.overStock;
-    data['percentOverStock'] = this.percentOverStock;
-    data['sumPriceOver'] = this.sumPriceOver;
-    data['sumLosesaleInStock'] = this.sumLosesaleInStock;
     data['price_order'] = this.priceOrder;
     data['price_sale'] = this.priceSale;
     data['deal_order'] = this.dealOrder;

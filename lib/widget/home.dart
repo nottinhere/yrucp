@@ -9,6 +9,9 @@ import 'package:ptnsupplier/models/promote_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/scaffold/detail.dart';
 import 'package:ptnsupplier/scaffold/list_product.dart';
+import 'package:ptnsupplier/scaffold/list_product_outofstock.dart';
+import 'package:ptnsupplier/scaffold/list_product_overstock.dart';
+import 'package:ptnsupplier/scaffold/list_product_losesale.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,8 +102,8 @@ class _HomeState extends State<Home> {
 
         MaterialPageRoute route = MaterialPageRoute(
           builder: (BuildContext context) => Detail(
-            // productAllModel: promoteModels[banerIndex],
-          ),
+              // productAllModel: promoteModels[banerIndex],
+              ),
         );
         Navigator.of(context).push(route).then((value) {});
       },
@@ -126,7 +129,7 @@ class _HomeState extends State<Home> {
 
         MaterialPageRoute route = MaterialPageRoute(
           builder: (BuildContext context) => Detail(
-             productAllModel: suggestModels[suggessIndex],
+            productAllModel: suggestModels[suggessIndex],
           ),
         );
         Navigator.of(context).push(route).then((value) {});
@@ -177,8 +180,8 @@ class _HomeState extends State<Home> {
   }
 
   Widget profileBox() {
-   String login = myUserModel.subject;
-   return Container(
+    String login = myUserModel.subject;
+    return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
@@ -192,7 +195,7 @@ class _HomeState extends State<Home> {
                 Container(
                   width: 45.0,
                   child: Image.asset('images/icon_user.png'),
-                  padding:EdgeInsets.all(8.0) ,
+                  padding: EdgeInsets.all(8.0),
                 ),
                 Text(
                   '$login', // 'ผู้แทน : $login',
@@ -207,17 +210,15 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click profile');
-         // routeToListProduct(0);
+          // routeToListProduct(0);
         },
       ),
     );
   }
 
- 
-
   Widget productBox() {
-   String login = myUserModel.subject;
-   return Container(
+    String login = myUserModel.subject;
+    return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
@@ -231,12 +232,12 @@ class _HomeState extends State<Home> {
                 Container(
                   width: 45.0,
                   child: Image.asset('images/icon_drugs.png'),
-                  padding:EdgeInsets.all(8.0) ,
+                  padding: EdgeInsets.all(8.0),
                 ),
                 Text(
                   'รายการสินค้า',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
@@ -252,9 +253,9 @@ class _HomeState extends State<Home> {
     );
   }
 
- Widget logoutBox() {
-   String login = myUserModel.subject;
-   return Container(
+  Widget outOfStockBox() {
+    String login = myUserModel.subject;
+    return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
       child: GestureDetector(
@@ -267,13 +268,148 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Container(
                   width: 45.0,
+                  child: Image.asset('images/icon_drugs.png'),
+                  padding: EdgeInsets.all(8.0),
+                ),
+                Text(
+                  'ขาดสต๊อก',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click out of stock');
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductOutofstock(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget overStockBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 45.0,
+                  child: Image.asset('images/icon_drugs.png'),
+                  padding: EdgeInsets.all(8.0),
+                ),
+                Text(
+                  '้นสต๊อก',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click over stock');
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductOverstock(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget loseSaleBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 45.0,
+                  child: Image.asset('images/icon_drugs.png'),
+                  padding: EdgeInsets.all(8.0),
+                ),
+                Text(
+                  'ไม่เคลื่อนไหว',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click over stock');
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductLosesale(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget logoutBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 45.0,
                   child: Image.asset('images/icon_logout.png'),
-                  padding:EdgeInsets.all(8.0) ,
+                  padding: EdgeInsets.all(8.0),
                 ),
                 Text(
                   'ออกจากระบบ',
                   style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
@@ -294,10 +430,11 @@ class _HomeState extends State<Home> {
     sharedPreferences.clear();
     exit(0);
   }
-  
-  Widget topLeft() {
+
+  Widget row1Left() {
+    // all product
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -308,11 +445,11 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Container(
-                  width: 45.0,
-                  child: Image.asset('images/icon_promotion.png'),
+                  width: 70.0,
+                  child: Image.asset('images/icon_drugs.png'),
                 ),
                 Text(
-                  'Promotion',
+                  'รายการสินค้า',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -330,9 +467,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget topRight() {
+  Widget row1Right() {
+    // outofstock
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -343,11 +481,11 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Container(
-                  width: 45.0,
-                  child: Image.asset('images/icon_new.png'),
+                  width: 70.0,
+                  child: Image.asset('images/icon_outofstock.png'),
                 ),
                 Text(
-                  'New item',
+                  'ขาดสต๊อก',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -359,15 +497,24 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click newproduct');
-          routeToListProduct(1);
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductOutofstock(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
   }
 
-  Widget bottomLeft() {
+  Widget row2Left() {
+    // overstock
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -378,11 +525,11 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Container(
-                  width: 45.0,
-                  child: Image.asset('images/icon_updateprice.png'),
+                  width: 70.0,
+                  child: Image.asset('images/icon_overstock3.png'),
                 ),
                 Text(
-                  'Update price',
+                  'ล้นสต๊อก',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -394,15 +541,24 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click updateprice');
-          routeToListProduct(2);
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductOverstock(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
   }
 
-  Widget bottomRight() {
+  Widget row2Right() {
+    // losesale
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.45,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -413,11 +569,11 @@ class _HomeState extends State<Home> {
             child: Column(
               children: <Widget>[
                 Container(
-                  width: 45.0,
-                  child: Image.asset('images/icon_recommend.png'),
+                  width: 70.0,
+                  child: Image.asset('images/icon_losesale.png'),
                 ),
                 Text(
-                  'Recommend',
+                  'ไม่เคลื่อนไหว',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -429,56 +585,40 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click recommend');
-          routeToListProduct(3);
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductLosesale(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
   }
 
-/*
-  Widget productMenu() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
-      height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.green.shade100,
-          child: Container(
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Text(
-              'recommend',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click recommend');
-          routeToListProduct(3);
-        },
-      ),
-    );
-  }
-*/
-  Widget bottomMenu() {
+  Widget row1Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        bottomLeft(),
-        bottomRight(),
+        row1Left(),
+        row1Right(),
       ],
     );
   }
 
-  Widget topMenu() {
+  Widget row2Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        topLeft(),
-        topRight(),
+        row2Left(),
+        row2Right(),
       ],
     );
   }
@@ -499,12 +639,19 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-         // topMenu(),
+          row1Menu(),
+          mySizebox(),
+          row2Menu(),
+
+          // productBox(),
           // mySizebox(),
-         // bottomMenu(),
-         productBox(),
-         mySizebox(),
-         logoutBox(),
+          // outOfStockBox(),
+          // mySizebox(),
+          // overStockBox(),
+          // mySizebox(),
+          // loseSaleBox(),
+          // mySizebox(),
+          logoutBox(),
         ],
       ),
     );
@@ -515,19 +662,19 @@ class _HomeState extends State<Home> {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          headTitle('ข้อมูลของคุณ',Icons.verified_user),
+          headTitle('ข้อมูลของคุณ', Icons.verified_user),
           profileBox(),
-       //   promotion(),
-      //    headTitle('Seggest Item',Icons.thumb_up),
-       //   suggest(),
-          headTitle('Home menu',Icons.home),
+          //   promotion(),
+          //    headTitle('Seggest Item',Icons.thumb_up),
+          //   suggest(),
+          headTitle('Home menu', Icons.home),
           homeMenu(),
         ],
       ),
     );
   }
 
-  Widget headTitle(String string,IconData iconData) {
+  Widget headTitle(String string, IconData iconData) {
     // Widget  แทน object ประเภทไดก็ได้
     return Container(
       padding: EdgeInsets.all(5.0),

@@ -1,4 +1,4 @@
-class ProductAllModel {
+class ProductOverStockModel {
   String title;
   String productCode;
   String photo;
@@ -12,7 +12,6 @@ class ProductAllModel {
   String overStock;
   String percentOverStock;
   String sumPriceOver;
-  String sumLosesaleInStock;
   String priceOrder;
   String priceSale;
   int dealOrder;
@@ -21,7 +20,7 @@ class ProductAllModel {
   String emotical;
   int id;
 
-  ProductAllModel(
+  ProductOverStockModel(
       {this.title,
       this.productCode,
       this.photo,
@@ -35,7 +34,6 @@ class ProductAllModel {
       this.overStock,
       this.percentOverStock,
       this.sumPriceOver,
-      this.sumLosesaleInStock,
       this.priceOrder,
       this.priceSale,
       this.dealOrder,
@@ -44,7 +42,7 @@ class ProductAllModel {
       this.emotical,
       this.id});
 
-  ProductAllModel.fromJson(Map<String, dynamic> json) {
+  ProductOverStockModel.fromJson(Map<String, dynamic> json) {
     title = json['title'];
     productCode = json['product_code'];
     photo = json['photo'];
@@ -58,7 +56,6 @@ class ProductAllModel {
     overStock = json['overStock'];
     percentOverStock = json['percentOverStock'];
     sumPriceOver = json['sumPriceOver'];
-    sumLosesaleInStock = json['sumLosesaleInStock'];
     priceOrder = json['price_order'];
     priceSale = json['price_sale'];
     dealOrder = json['deal_order'];
@@ -83,7 +80,6 @@ class ProductAllModel {
     data['overStock'] = this.overStock;
     data['percentOverStock'] = this.percentOverStock;
     data['sumPriceOver'] = this.sumPriceOver;
-    data['sumLosesaleInStock'] = this.sumLosesaleInStock;
     data['price_order'] = this.priceOrder;
     data['price_sale'] = this.priceSale;
     data['deal_order'] = this.dealOrder;

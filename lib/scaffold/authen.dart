@@ -8,7 +8,6 @@ import 'package:ptnsupplier/utility/my_style.dart';
 import 'package:ptnsupplier/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Authen extends StatefulWidget {
   @override
   _AuthenState createState() => _AuthenState();
@@ -21,8 +20,6 @@ class _AuthenState extends State<Authen> {
   UserModel userModel;
   bool remember = false; // false => unCheck      true = Check
   bool status = true;
-
-
 
   // Method
   @override
@@ -40,7 +37,7 @@ class _AuthenState extends State<Authen> {
 
       if (user != null) {
         checkAuthen();
-      }else{
+      } else {
         setState(() {
           status = false;
         });
@@ -103,8 +100,10 @@ class _AuthenState extends State<Authen> {
       // No space
       String url =
           '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';
-      http.Response response = await http.get(
-          url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
+      print('url = $url');
+
+      http.Response response = await http
+          .get(url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
       var result = json.decode(response.body);
 
       int statusInt = result['status'];
@@ -116,8 +115,16 @@ class _AuthenState extends State<Authen> {
       } else {
         Map<String, dynamic> map = result['data'];
         print('map = $map');
-        userModel = UserModel.fromJson(map);
 
+        int userStatus = map['status'];
+        print('userStatus = $userStatus');
+
+        if (userStatus == 0) {
+          print('can not login');
+          normalDialog(context, 'Login fail', 'Please contact webmaster');
+        }
+
+        userModel = UserModel.fromJson(map);
         if (remember) {
           saveSharePreference();
         } else {
@@ -166,7 +173,7 @@ class _AuthenState extends State<Authen> {
           ),
           prefixIcon: Icon(Icons.account_box, color: Colors.grey[800]),
           border: InputBorder.none,
-          hintText: 'User :',
+          hintText: 'Username :',
           hintStyle: TextStyle(color: Colors.grey[800]),
         ),
       ),
@@ -200,7 +207,7 @@ class _AuthenState extends State<Authen> {
             color: Colors.grey[800],
           ),
           border: InputBorder.none,
-          hintText: 'Pass :',
+          hintText: 'Password :',
           hintStyle: TextStyle(color: Colors.grey[800]),
         ),
       ),
@@ -245,35 +252,35 @@ class _AuthenState extends State<Authen> {
 
   Container mainContent() {
     return Container(
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            colors: [Colors.white, MyStyle().bgColor],
-            radius: 1.5,
-          ),
+      decoration: BoxDecoration(
+        gradient: RadialGradient(
+          colors: [Colors.white, MyStyle().bgColor],
+          radius: 1.5,
         ),
-        child: Center(
-          child: Form(
-            key: formKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min, //
-                children: <Widget>[
-                  showLogo(),
-                  mySizeBox(),
-                  showAppName(),
-                  mySizeBox(),
-                  userForm(),
-                  mySizeBox(),
-                  passwordForm(),
-                  mySizeBox(),
-                  rememberCheckbox(),
-                  mySizeBox(),
-                  loginButton(),
-                ],
-              ),
+      ),
+      child: Center(
+        child: Form(
+          key: formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min, //
+              children: <Widget>[
+                showLogo(),
+                mySizeBox(),
+                showAppName(),
+                mySizeBox(),
+                userForm(),
+                mySizeBox(),
+                passwordForm(),
+                mySizeBox(),
+                rememberCheckbox(),
+                mySizeBox(),
+                loginButton(),
+              ],
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }

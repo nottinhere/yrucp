@@ -8,9 +8,6 @@ class UserModel {
   String personContact;
   String personLineid;
   String personFacebook;
-  Null discount;
-  Null endyearPromotion;
-  Null note;
   int status;
 
   UserModel(
@@ -23,9 +20,6 @@ class UserModel {
       this.personContact,
       this.personLineid,
       this.personFacebook,
-      this.discount,
-      this.endyearPromotion,
-      this.note,
       this.status});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -38,9 +32,6 @@ class UserModel {
     personContact = json['person_contact'];
     personLineid = json['person_lineid'];
     personFacebook = json['person_facebook'];
-    discount = json['discount'];
-    endyearPromotion = json['endyear_promotion'];
-    note = json['note'];
     status = json['status'];
   }
 
@@ -55,9 +46,6 @@ class UserModel {
     data['person_contact'] = this.personContact;
     data['person_lineid'] = this.personLineid;
     data['person_facebook'] = this.personFacebook;
-    data['discount'] = this.discount;
-    data['endyear_promotion'] = this.endyearPromotion;
-    data['note'] = this.note;
     data['status'] = this.status;
     return data;
   }
