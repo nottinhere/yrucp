@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:ptnsupplier/plugin/flare_checkbox/flare_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
+
+import 'package:toggle_switch/toggle_switch.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'detail_view.dart';
 import 'detail_cart.dart';
@@ -94,7 +98,7 @@ class _ListProductState extends State<ListProductOutofstock> {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
     String url =
-        'http://ptnpharma.com/apisupplier/json_product_outofstock.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+        'http://ptnpharma.com/apisupplier/json_product_outofstock_checkorder.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
     // if (myIndex != 0) {
     //   url = '${MyStyle().readProductWhereMode}$myIndex';
@@ -248,7 +252,139 @@ class _ListProductState extends State<ListProductOutofstock> {
     // return Text('na');
   }
 
+  Widget showOrdercheck(int index) {
+    return Row(
+      children: <Widget>[
+        Text('สัั่งแล้ว'),
+        FlareCheckbox(
+          onChanged: print,
+          animation: 'images/checkbox.flr',
+          value: true,
+          width: 100.00,
+          height: 100.00,
+        ),
+      ],
+    );
+  }
+
+  Widget showOrderSwitch(int index) {
+    int memberId = myUserModel.id;
+    int med_id = filterProductAllModels[index].id;
+    return Row(
+      children: <Widget>[
+        ToggleSwitch(
+            minWidth: 80.0,
+            cornerRadius: 20,
+            activeBgColor: Colors.lightBlue.shade400,
+            activeTextColor: Colors.white,
+            inactiveBgColor: Colors.grey.shade500,
+            inactiveTextColor: Colors.white,
+            labels: ['รอ', 'สั่งสินค้า'],
+            // icons: [FontAwesomeIcons.check, FontAwesomeIcons.times],
+            onToggle: (index) async {
+              String url =
+                  'http://ptnpharma.com/apisupplier/json_orderitem.php?memberId=$memberId&med_id=$med_id&status=$index';
+              http.Response response = await http.get(url);
+              print('url OrderItem >>> $url');
+            }),
+      ],
+    );
+  }
+
+  Widget showRemoveSwitch(int index) {
+    int memberId = myUserModel.id;
+    int med_id = filterProductAllModels[index].id;
+    return Row(
+      children: <Widget>[
+        ToggleSwitch(
+            minWidth: 80.0,
+            cornerRadius: 20,
+            initialLabelIndex: 1,
+            activeBgColor: Colors.red.shade400,
+            activeTextColor: Colors.white,
+            inactiveBgColor: Colors.blueGrey.shade500,
+            inactiveTextColor: Colors.white,
+            labels: ['ยกเลิก', 'สั่งแล้ว'],
+            // icons: [FontAwesomeIcons.check, FontAwesomeIcons.times],
+            onToggle: (index) async {
+              String url =
+                  'http://ptnpharma.com/apisupplier/json_removeitem.php?memberId=$memberId&med_id=$med_id&status=$index';
+              http.Response response = await http.get(url);
+              print('url RemoveItem >>> $url');
+            }),
+      ],
+    );
+  }
+/*
+  var textStatus = [];
+  var textButton = [];
+  var textTest  = 'ทดสอบ';
+  Widget showRemoveButton(int index) {
+    int memberId = myUserModel.id;
+    int med_id = filterProductAllModels[index].id;
+
+    var textStatus = {index: 'สั่งแล้ว'};
+    var textButton = {index: 'ยกเลิก'};
+    // textStatus[index] = 'สั่งแล้ว';
+    // textButton[index] = 'ยกเลิก';
+
+    changeText(index) {
+      setState(() {
+        textStatus[index] = '';
+        textButton[index] = 'ยกเลิกแล้ว';
+        textTest  = 'ใช้ได้';
+        print('url value >>> $index >> ' + textStatus[index] + " >> " +textButton[index]);
+      });
+    }
+
+    return Row(
+      children: <Widget>[
+        Text(
+          textStatus[index]+' >> '+textTest,
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.lightBlue.shade700,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 10.00, right: 10.00),
+        ),
+        FlatButton(
+          color: Colors.red,
+          textColor: Colors.white,
+          disabledColor: Colors.grey,
+          disabledTextColor: Colors.black,
+          splashColor: Colors.blueAccent,
+          onPressed: () async {
+            changeText(index);
+            String url =
+                'http://ptnpharma.com/apisupplier/json_removeitem.php?memberId=$memberId&med_id=$med_id';
+            // http.Response response = await http.get(url);
+            print('url RemoveItem >>> $url');
+
+            // setState(() {
+            // var textStatus = {index: ''};
+            // var textButton = {index: 'ยกเลิกแล้ว'};
+            // // textStatus[index] = '';
+            // // textButton[index] = 'ยกเลิกแล้ว';
+            // print('url value >>> $index >> ' +
+            //     textStatus[index] +
+            //     " >> " +
+            //     textButton[index]);
+
+            // });
+          },
+          child: Text(textButton[index], style: TextStyle(fontSize: 15)),
+        ),
+      ],
+    );
+  }
+*/
+
   Widget showDeal(int index) {
+    int memberId = myUserModel.id;
+    int med_id = filterProductAllModels[index].id;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -282,6 +418,16 @@ class _ListProductState extends State<ListProductOutofstock> {
         ),
       ],
     );
+  }
+
+  Widget showOrderStatus(int index) {
+    int memberId = myUserModel.id;
+    int med_id = filterProductAllModels[index].id;
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      filterProductAllModels[index].orderStatus == 0
+          ? showOrderSwitch(index)
+          : showRemoveSwitch(index),
+    ]);
     // return Text('na');
   }
 
@@ -298,6 +444,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           showName(index),
           showStock(index),
           showDeal(index),
+          showOrderStatus(index),
         ],
       ),
     );
@@ -401,7 +548,8 @@ class _ListProductState extends State<ListProductOutofstock> {
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 255),
                 ),
-              ),Text(
+              ),
+              Text(
                 ' บาท ',
                 style: TextStyle(
                   fontSize: 18.0,

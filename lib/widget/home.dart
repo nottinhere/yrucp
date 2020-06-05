@@ -7,11 +7,15 @@ import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_all_model.dart';
 import 'package:ptnsupplier/models/promote_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
+import 'package:ptnsupplier/models/news_model.dart';
+
 import 'package:ptnsupplier/scaffold/detail.dart';
 import 'package:ptnsupplier/scaffold/list_product.dart';
 import 'package:ptnsupplier/scaffold/list_product_outofstock.dart';
 import 'package:ptnsupplier/scaffold/list_product_overstock.dart';
 import 'package:ptnsupplier/scaffold/list_product_losesale.dart';
+import 'package:ptnsupplier/scaffold/list_product_monthlyreport.dart';
+import 'package:ptnsupplier/scaffold/detail_news.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,22 +32,43 @@ class _HomeState extends State<Home> {
   // Explicit
   // List<PromoteModel> promoteModels = List();
   List<Widget> promoteLists = List();
-  List<Widget> suggestLists = List();
   List<String> urlImages = List();
   List<String> urlImagesSuggest = List();
 
-  int amontCart = 0, banerIndex = 0, suggessIndex = 0;
+  int amontCart = 0, banerIndex = 0, suggessIndex = 0, newsIndex = 0;
   UserModel myUserModel;
   List<ProductAllModel> promoteModels = List();
-  List<ProductAllModel> suggestModels = List();
+
+  NewsModel newsModel;
+  String imageNews = '';
+  String subjectNews = '';
 
   // Method
   @override
   void initState() {
     super.initState();
     readPromotion();
-    readSuggest();
+    readNews();
     myUserModel = widget.userModel;
+  }
+
+  Future<void> readNews() async {
+    String url = 'http://ptnpharma.com/apisupplier/json_supnewsdetail.php';
+    http.Response response = await http.get(url);
+    var result = json.decode(response.body);
+    var mapItemNews =
+        result['itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
+    for (var map in mapItemNews) {
+      // PromoteModel promoteModel = PromoteModel.fromJson(map);
+      NewsModel newsModel = NewsModel.fromJson(map);
+      String urlImage = newsModel.photo;
+      String subject = newsModel.subject;
+      setState(() {
+        //promoteModels.add(promoteModel); // push ค่าลง arra
+        subjectNews = subject;
+        imageNews = urlImage;
+      });
+    }
   }
 
   Future<void> readPromotion() async {
@@ -67,26 +92,6 @@ class _HomeState extends State<Home> {
 
   Image showImageNetWork(String urlImage) {
     return Image.network(urlImage);
-  }
-
-  Future<void> readSuggest() async {
-    String url = 'http://ptnpharma.com/apisupplier/json_promotion.php';
-    http.Response response = await http.get(url);
-    var result = json.decode(response.body);
-    var mapItemProduct =
-        result['itemsProduct']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
-    for (var map in mapItemProduct) {
-      PromoteModel promoteModel = PromoteModel.fromJson(map);
-
-      ProductAllModel productAllModel = ProductAllModel.fromJson(map);
-      String urlImage = promoteModel.photo;
-      setState(() {
-        //promoteModels.add(promoteModel); // push ค่าลง array
-        suggestModels.add(productAllModel);
-        suggestLists.add(Image.network(urlImage));
-        urlImagesSuggest.add(urlImage);
-      });
-    }
   }
 
   Widget myCircularProgress() {
@@ -122,49 +127,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget showCarouseSliderSuggest() {
-    return GestureDetector(
-      onTap: () {
-        print('You Click index is $suggessIndex');
-
-        MaterialPageRoute route = MaterialPageRoute(
-          builder: (BuildContext context) => Detail(
-            productAllModel: suggestModels[suggessIndex],
-          ),
-        );
-        Navigator.of(context).push(route).then((value) {});
-      },
-      child: CarouselSlider(
-        enlargeCenterPage: true,
-        aspectRatio: 16 / 9,
-        pauseAutoPlayOnTouch: Duration(seconds: 5),
-        autoPlay: true,
-        autoPlayAnimationDuration: Duration(seconds: 5),
-        items: suggestLists,
-        onPageChanged: (int index) {
-          suggessIndex = index;
-          // print('index = $index');
-        },
-      ),
-    );
-  }
-
   Widget promotion() {
     return Container(
       padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
       height: MediaQuery.of(context).size.height * 0.20,
       child:
           promoteLists.length == 0 ? myCircularProgress() : showCarouseSlider(),
-    );
-  }
-
-  Widget suggest() {
-    return Container(
-      // color: Colors.grey.shade400,
-      height: MediaQuery.of(context).size.height * 0.20,
-      child: suggestLists.length == 0
-          ? myCircularProgress()
-          : showCarouseSliderSuggest(),
     );
   }
 
@@ -388,6 +356,51 @@ class _HomeState extends State<Home> {
     );
   }
 
+    Widget reportBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 45.0,
+                  child: Image.asset('images/icon_drugs.png'),
+                  padding: EdgeInsets.all(8.0),
+                ),
+                Text(
+                  'สรุปการขาย',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click monthly report');
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductReport(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget logoutBox() {
     String login = myUserModel.subject;
     return Container(
@@ -429,6 +442,54 @@ class _HomeState extends State<Home> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences.clear();
     exit(0);
+  }
+
+  Widget newsBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  subjectNews, // 'ผู้แทน : $login',
+                  style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+                SizedBox(
+                  width: 10.0,
+                  height: 8.0,
+                ),
+                Image.network(
+                  imageNews,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('This is News');
+          // int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return DetailNews(
+              // index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
   }
 
   Widget row1Left() {
@@ -599,6 +660,51 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget row3Left() {
+    // overstock
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_report.png'),
+                ),
+                Text(
+                  'สรุปการขาย',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click monthly report');
+          int index;
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductReport(
+              index: index,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+
   Widget row1Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -623,6 +729,18 @@ class _HomeState extends State<Home> {
     );
   }
 
+    Widget row3Menu() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        row3Left(),
+        // row2Right(),
+      ],
+    );
+  }
+
   Widget mySizebox() {
     return SizedBox(
       width: 10.0,
@@ -642,15 +760,8 @@ class _HomeState extends State<Home> {
           row1Menu(),
           mySizebox(),
           row2Menu(),
-
-          // productBox(),
-          // mySizebox(),
-          // outOfStockBox(),
-          // mySizebox(),
-          // overStockBox(),
-          // mySizebox(),
-          // loseSaleBox(),
-          // mySizebox(),
+          mySizebox(),
+          row3Menu(),          
           logoutBox(),
         ],
       ),
@@ -664,11 +775,12 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           headTitle('ข้อมูลของคุณ', Icons.verified_user),
           profileBox(),
-          //   promotion(),
           //    headTitle('Seggest Item',Icons.thumb_up),
-          //   suggest(),
+          //  suggest(),
           headTitle('Home menu', Icons.home),
           homeMenu(),
+          headTitle('ข่าวสาร', Icons.bookmark),
+          newsBox(),
         ],
       ),
     );

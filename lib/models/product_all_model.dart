@@ -18,6 +18,7 @@ class ProductAllModel {
   int dealOrder;
   int freeOrder;
   String itemSum;
+  int orderStatus;
   String emotical;
   int id;
 
@@ -41,6 +42,7 @@ class ProductAllModel {
       this.dealOrder,
       this.freeOrder,
       this.itemSum,
+      this.orderStatus,
       this.emotical,
       this.id});
 
@@ -64,6 +66,7 @@ class ProductAllModel {
     dealOrder = json['deal_order'];
     freeOrder = json['free_order'];
     itemSum = json['item_sum'];
+    orderStatus = json['orderStatus'];
     emotical = json['emotical'];
     id = json['id'];
   }
@@ -89,6 +92,7 @@ class ProductAllModel {
     data['deal_order'] = this.dealOrder;
     data['free_order'] = this.freeOrder;
     data['item_sum'] = this.itemSum;
+    data['orderStatus'] = this.orderStatus;
     data['emotical'] = this.emotical;
     data['id'] = this.id;
     return data;
