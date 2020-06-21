@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/product_report_model.dart';
 import 'package:ptnsupplier/models/user_model.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:intl/intl.dart';
+import 'package:date_time_format/date_time_format.dart';
 
 // import 'detail_view.dart';
 // import 'detail_cart.dart';
@@ -54,6 +56,14 @@ class _ListProductState extends State<ListProductReport> {
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
 
+
+  final dateTime =  DateTime.now();
+  String month = DateTimeFormat.format(DateTime.now(), format: 'm');
+  String monthname = DateTimeFormat.format(DateTime.now(), format: 'F');
+  String year = DateTimeFormat.format(DateTime.now(), format: 'Y');
+
+
+
   // Method
   @override
   void initState() {
@@ -61,12 +71,9 @@ class _ListProductState extends State<ListProductReport> {
     super.initState();
     myIndex = widget.index;
     myUserModel = widget.userModel;
-
     createController(); // เมื่อ scroll to bottom
-
     setState(() {
       readData(); // read  ข้อมูลมาแสดง
-      // readCart();
     });
   }
 
@@ -74,10 +81,9 @@ class _ListProductState extends State<ListProductReport> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-        page++;
-        readData();
-
-        // print('in the end');
+          page++;
+          readData();
+        //  print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -92,20 +98,20 @@ class _ListProductState extends State<ListProductReport> {
   Future<void> readData() async {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
+
     String url =
-        'http://ptnpharma.com/apisupplier/json_product_monthlyreport.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'http://ptnpharma.com/apisupplier/json_product_monthlyreport.php?memberId=$memberId&searchKey=$searchString&page=$page&month=$month&year=$year';
 
     // if (myIndex != 0) {
     //   url = '${MyStyle().readProductWhereMode}$myIndex';
     // }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    print('url readData ++++>>> $url');
     var result = json.decode(response.body);
     // print('result = $result');
     // print('url ListProduct ====>>>> $url');
-    // print('result ListProduct ========>>>>> $result');
-
+    print('result ListProduct ========>>>>> $result');
     var itemProducts = result['itemsProduct'];
 
     for (var map in itemProducts) {
@@ -179,7 +185,7 @@ class _ListProductState extends State<ListProductReport> {
         Column(
           children: [
             // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ไม่่จัดส่ง'),
+            Text('ไม่จัดส่ง'),
             Text(
               filterProductReportModel[index].rejectValue,
               style: TextStyle(
@@ -300,6 +306,13 @@ class _ListProductState extends State<ListProductReport> {
     );
   }
 
+    Widget showLoading() {
+    return Center(
+      child:
+          CircularProgressIndicator()
+    );
+  }
+
   Widget myLayout() {
     return Column(
       children: <Widget>[
@@ -315,21 +328,29 @@ class _ListProductState extends State<ListProductReport> {
       // color: Colors.grey,
       padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
       child: ListTile(
-        trailing: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              print('searchString ===>>> $searchString');
-              setState(() {
-                page = 1;
-                productReportModel.clear();
-                readData();
-              });
-            }),
+        // trailing: IconButton(
+        //     icon: Icon(Icons.search),
+        //     onPressed: () {
+        //       print('searchString ===>>> $searchString');
+        //       setState(() {
+        //         page = 1;
+        //         productReportModel.clear();
+        //         readData();
+        //       });
+        //     }),
         title: TextField(
           decoration:
               InputDecoration(border: InputBorder.none, hintText: 'Search'),
           onChanged: (String string) {
             searchString = string.trim();
+          },
+                    textInputAction: TextInputAction.search,
+          onSubmitted: (value) {
+            setState(() {
+              page = 1;
+              productReportModel.clear();
+              readData();
+            });
           },
         ),
       ),
@@ -337,20 +358,51 @@ class _ListProductState extends State<ListProductReport> {
   }
 
   Widget selectMonthButton() {
-    return Container(
-      child: FlatButton.icon(
-          // color: Colors.red,
-          icon: Icon(Icons.sort), //`Icon` to display
-          label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
-          onPressed: () {
-            print('searchString ===>>> $searchString');
-            setState(() {
-              page = 1;
-              sort = (sort == 'asc') ? 'desc' : 'asc';
-              productReportModel.clear();
-              readData();
-            });
-          }),
+    return Center(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          RaisedButton(
+            onPressed: () {
+              setState(() {
+                String strDt = "$year-$month-15";
+                page  = 1;
+                month = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'm');
+                monthname = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'F');
+                year = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'Y');
+                productReportModel.clear();
+                readData();
+              });
+            },
+            child: Text(' < < ', style: TextStyle(fontSize: 20)),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.00, right: 20.00),
+            child: Text(
+              monthname + ',' + year,
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              setState(() {
+                String strDt = "$year-$month-15";
+                page  = 1;
+                month = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'm');
+                monthname = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'F');
+                year = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'Y');
+                productReportModel.clear();
+                readData();
+              });
+            },
+            child: const Text(' > >', style: TextStyle(fontSize: 20)),
+          ),
+        ],
+      ),
     );
   }
 

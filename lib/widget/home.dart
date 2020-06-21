@@ -356,7 +356,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-    Widget reportBox() {
+  Widget reportBox() {
     String login = myUserModel.subject;
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
@@ -396,6 +396,43 @@ class _HomeState extends State<Home> {
             );
           });
           Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget logoutSquareBox() {
+    String login = myUserModel.subject;
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.9,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.lightBlue.shade50,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Container(
+                  width: 45.0,
+                  child: Image.asset('images/icon_logout.png'),
+                  padding: EdgeInsets.all(8.0),
+                ),
+                Text(
+                  'ออกจากระบบ',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click square logout');
+          logOut();
         },
       ),
     );
@@ -704,6 +741,41 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget row3Right() {
+    // losesale
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_logout.png'),
+                ),
+                Text(
+                  'ออกจากระบบ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click square logout');
+          logOut();
+        },
+      ),
+    );
+  }
 
   Widget row1Menu() {
     return Row(
@@ -729,14 +801,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-    Widget row3Menu() {
+  Widget row3Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         row3Left(),
-        // row2Right(),
+        row3Right(),
       ],
     );
   }
@@ -761,8 +833,10 @@ class _HomeState extends State<Home> {
           mySizebox(),
           row2Menu(),
           mySizebox(),
-          row3Menu(),          
-          logoutBox(),
+          row3Menu(),
+          // logoutBox(),
+          mySizebox(),
+          mySizebox(),
         ],
       ),
     );

@@ -414,33 +414,42 @@ class _ListProductState extends State<ListProductOverstock> {
   }
   */
 
-  Widget searchForm() {
+ Widget searchForm() {
     return Container(
       decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
       padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
       child: ListTile(
-        trailing: IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              print('searchString ===>>> $searchString');
-              setState(() {
-                page = 1;
-                productAllModels.clear();
-                readData();
-              });
-            }),
+        // trailing: IconButton(
+        //     icon: Icon(Icons.search),
+        //     onPressed: () {
+        //       print('searchString ===>>> $searchString');
+        //       setState(() {
+        //         page = 1;
+        //         productAllModels.clear();
+        //         readData();
+        //       });
+        //     }),
         title: TextField(
           decoration:
               InputDecoration(border: InputBorder.none, hintText: 'Search'),
           onChanged: (String string) {
             searchString = string.trim();
           },
+          textInputAction: TextInputAction.search,
+          onSubmitted: (value) {
+            setState(() {
+              page = 1;
+              productAllModels.clear();
+              readData();
+            });
+          },
         ),
       ),
     );
   }
 
+ 
   Widget sortButton() {
     return Container(
       child: FlatButton.icon(
