@@ -187,7 +187,7 @@ class _DetailState extends State<Detail> {
       padding: EdgeInsets.only(left: 10.0, right: 20.0),
       child: Column(
         children: <Widget>[
-          Text('ดึล :'),
+          Text('ดีล :'),
           TextFormField(
             style: TextStyle(color: Colors.black),
             initialValue:
@@ -202,7 +202,7 @@ class _DetailState extends State<Detail> {
               ),
               prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
               //border: InputBorder.none,
-              hintText: 'ดึล',
+              hintText: 'ดีล',
               hintStyle: TextStyle(color: Colors.grey),
             ),
           ),
@@ -392,6 +392,16 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  Widget showPhoto() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.5 - 50,
+      child: Image.network(
+        productAllModel.photo,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
   Widget showPackage(int index) {
     return Text(productAllModel.unitOrderShow);
   }
@@ -578,7 +588,7 @@ class _DetailState extends State<Detail> {
         showStock(),
         showFormDeal(),
         submitButton(),
-        //showPrice(),
+        showPhoto(),
       ],
     );
   }

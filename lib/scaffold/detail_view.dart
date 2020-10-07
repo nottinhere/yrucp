@@ -306,6 +306,16 @@ class _DetailState extends State<DetailView> {
     );
   }
 
+  Widget showPhoto() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.5 - 50,
+      child: Image.network(
+        productAllModel.photo,
+        fit: BoxFit.contain,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -344,6 +354,7 @@ class _DetailState extends State<DetailView> {
         showStock(),
         showFormDeal(),
         showPrice(),
+        showPhoto(),
         // submitButton(),
       ],
     );

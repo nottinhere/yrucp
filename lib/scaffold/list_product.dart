@@ -231,10 +231,27 @@ class _ListProductState extends State<ListProduct> {
   }
 
   Widget showImage(int index) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      width: MediaQuery.of(context).size.width * 0.15,
-      child: Image.network(filterProductAllModels[index].emotical),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(5.0),
+          width: MediaQuery.of(context).size.width * 0.15,
+          child: Image.network(filterProductAllModels[index].emotical),
+        ),
+        Container(
+          padding: EdgeInsets.all(5.0),
+          // width: MediaQuery.of(context).size.width * 0.15,
+          // child: Image.network(filterProductAllModels[index].photo),
+          width: 50,
+          height: 50,
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            fit: BoxFit.cover,
+            alignment: FractionalOffset.topCenter,
+            image: new NetworkImage(filterProductAllModels[index].photo),
+          )),
+        ),
+      ],
     );
   }
 

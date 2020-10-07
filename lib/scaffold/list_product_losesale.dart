@@ -13,8 +13,7 @@ import 'detail_cart.dart';
 class ListProductLosesale extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListProductLosesale({Key key, this.index, this.userModel})
-      : super(key: key);
+  ListProductLosesale({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
   _ListProductState createState() => _ListProductState();
@@ -214,7 +213,7 @@ class _ListProductState extends State<ListProductLosesale> {
               ),
             ),
           ],
-        ), 
+        ),
         Column(
           children: [
             // Icon(Icons.kitchen, color: Colors.green[500]),
@@ -290,10 +289,27 @@ class _ListProductState extends State<ListProductLosesale> {
   }
 
   Widget showImage(int index) {
-    return Container(
-      padding: EdgeInsets.all(5.0),
-      width: MediaQuery.of(context).size.width * 0.15,
-      child: Image.network(filterProductAllModels[index].emotical),
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(5.0),
+          width: MediaQuery.of(context).size.width * 0.15,
+          child: Image.network(filterProductAllModels[index].emotical),
+        ),
+        Container(
+          padding: EdgeInsets.all(5.0),
+          // width: MediaQuery.of(context).size.width * 0.15,
+          // child: Image.network(filterProductAllModels[index].photo),
+          width: 50,
+          height: 50,
+          decoration: new BoxDecoration(
+              image: new DecorationImage(
+            fit: BoxFit.cover,
+            alignment: FractionalOffset.topCenter,
+            image: new NetworkImage(filterProductAllModels[index].photo),
+          )),
+        ),
+      ],
     );
   }
 
@@ -325,8 +341,7 @@ class _ListProductState extends State<ListProductLosesale> {
               padding:
                   EdgeInsets.only(top: 3.0, bottom: 3.0, left: 6.0, right: 6.0),
               child: Card(
-                 color: Color.fromRGBO(255, 255, 222, 1.0),
-
+                color: Color.fromRGBO(255, 255, 222, 1.0),
                 child: Container(
                   decoration: myBoxDecoration(),
                   padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
@@ -387,7 +402,8 @@ class _ListProductState extends State<ListProductLosesale> {
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 255),
                 ),
-              ),Text(
+              ),
+              Text(
                 ' บาท ',
                 style: TextStyle(
                   fontSize: 18.0,
@@ -414,7 +430,7 @@ class _ListProductState extends State<ListProductLosesale> {
   }
   */
 
- Widget searchForm() {
+  Widget searchForm() {
     return Container(
       decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
