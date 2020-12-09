@@ -10,13 +10,13 @@ import 'package:ptnsupplier/utility/my_style.dart';
 import 'detail.dart';
 import 'detail_cart.dart';
 
-class ListProduct extends StatefulWidget {
+class ListProductAlert extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListProduct({Key key, this.index, this.userModel}) : super(key: key);
+  ListProductAlert({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListProductState createState() => _ListProductState();
+  _ListProductAlertState createState() => _ListProductAlertState();
 }
 
 //class
@@ -38,7 +38,7 @@ class Debouncer {
   }
 }
 
-class _ListProductState extends State<ListProduct> {
+class _ListProductAlertState extends State<ListProductAlert> {
   // Explicit
   int myIndex;
   List<ProductAllModel> productAllModels = List(); // set array
@@ -92,10 +92,9 @@ class _ListProductState extends State<ListProduct> {
   Future<void> readData() async {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
-    String url =
-        'http://ptnpharma.com/apisupplier/json_data_product.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+    String url = 'http://ptnpharma.com/apisupplier/json_product_alert.php';
     if (myIndex != 0) {
-      url = '${MyStyle().readProductWhereMode}$myIndex';
+      url = 'http://ptnpharma.com/apisupplier/json_product_alert.php';
     }
 
     http.Response response = await http.get(url);

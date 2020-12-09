@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 
 class MyStyle {
   double h1 = 24.0, h2 = 18.0;
-  Color mainColor   = Colors.blueGrey.shade700;
+  Color mainColor = Colors.blueGrey.shade700;
   Color textColor = Colors.blueGrey.shade500;
   Color bgColor = Colors.lightBlue.shade100;
   Color barColor = Colors.lightBlue;
-
 
   TextStyle h1Style = TextStyle(
     fontSize: 24.0,
@@ -42,21 +41,25 @@ class MyStyle {
   );
 
   Widget mySizebox() {
-  return SizedBox(
-    width: 10.0,
-    height: 16.0,
-  );
-}
-
+    return SizedBox(
+      width: 10.0,
+      height: 16.0,
+    );
+  }
 
   String fontName = 'Sarabun';
 
-  String readAllProduct           = 'http://www.ptnpharma.com/apisupplier/json_product.php?top=100';
-  String readProductWhereMode     = 'http://www.ptnpharma.com/apisupplier/json_product.php?searchKey=';
-  String getUserWhereUserAndPass  = 'http://www.ptnpharma.com/apisupplier/json_login.php';
-  String getProductWhereId        = 'http://www.ptnpharma.com/apisupplier/json_productdetail.php?id=';
+  String readAllProduct =
+      'http://www.ptnpharma.com/apisupplier/json_product.php?top=100';
+  String readProductWhereMode =
+      'http://www.ptnpharma.com/apisupplier/json_product.php?searchKey=';
+  String getUserWhereUserAndPass =
+      'http://www.ptnpharma.com/apisupplier/json_authen.php'; // json_login.php
+  String getProductWhereId =
+      'http://www.ptnpharma.com/apisupplier/json_productdetail.php?id=';
 
-  String loadMyCart               =  'http://www.ptnpharma.com/apisupplier/json_loadmycart.php?memberID=';
+  String loadMyCart =
+      'http://www.ptnpharma.com/apisupplier/json_loadmycart.php?memberID=';
 
   MyStyle();
 }

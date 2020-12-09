@@ -15,6 +15,7 @@ import 'package:ptnsupplier/scaffold/list_product_outofstock.dart';
 import 'package:ptnsupplier/scaffold/list_product_overstock.dart';
 import 'package:ptnsupplier/scaffold/list_product_losesale.dart';
 import 'package:ptnsupplier/scaffold/list_product_monthlyreport.dart';
+import 'package:ptnsupplier/scaffold/list_product_alert.dart';
 import 'package:ptnsupplier/scaffold/detail_news.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -149,6 +150,8 @@ class _HomeState extends State<Home> {
 
   Widget profileBox() {
     String login = myUserModel.subject;
+    int loginStatus = myUserModel.status;
+
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       // height: 80.0,
@@ -777,6 +780,48 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget row4Left() {
+    // all product
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.45,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/alert.png'),
+                ),
+                Text(
+                  'แจ้งเตือน',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListProductAlert(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget row1Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -813,6 +858,18 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget row4Menu() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        row4Left(),
+        // row4Right(),
+      ],
+    );
+  }
+
   Widget mySizebox() {
     return SizedBox(
       width: 10.0,
@@ -834,6 +891,8 @@ class _HomeState extends State<Home> {
           row2Menu(),
           mySizebox(),
           row3Menu(),
+          mySizebox(),
+          row4Menu(),
           // logoutBox(),
           mySizebox(),
           mySizebox(),

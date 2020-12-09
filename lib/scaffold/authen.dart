@@ -92,6 +92,44 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    // exit(0);
+  }
+
+  Widget okButtonLogin(BuildContext buildContext) {
+    return FlatButton(
+      child: Text('OK'),
+      onPressed: () {
+        // Navigator.of(buildContext).pop();  // pop คือการทำให้มันหายไป
+        logOut();
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext buildContext) {
+          return Authen();
+        });
+        Navigator.of(context).push(materialPageRoute);
+      },
+    );
+  }
+
+  Future<void> normalDialogLogin(
+    BuildContext buildContext,
+    String title,
+    String message,
+  ) async {
+    showDialog(
+      context: buildContext,
+      builder: (BuildContext buildContext) {
+        return AlertDialog(
+          title: showTitle(title),
+          content: Text(message),
+          actions: <Widget>[okButtonLogin(buildContext)],
+        );
+      },
+    );
+  }
+
   Future<void> checkAuthen() async {
     if (user.isEmpty || password.isEmpty) {
       // Have space
@@ -111,18 +149,20 @@ class _AuthenState extends State<Authen> {
 
       if (statusInt == 0) {
         String message = result['message'];
-        normalDialog(context, 'Login fail', message);
-      } else {
+        normalDialogLogin(context, 'Login fail..', message);
+      } else if (statusInt == 1) {
         Map<String, dynamic> map = result['data'];
         print('map = $map');
 
         int userStatus = map['status'];
         print('userStatus = $userStatus');
 
-        if (userStatus == 0) {
-          print('can not login');
-          normalDialog(context, 'Login fail', 'Please contact webmaster');
-        }
+        // if (userStatus == 0) {
+        //   print('Ban user from admin');
+        //   String message = 'Please contact webmaster';
+        //   // normalDialog(context, 'Login fail..', message);
+        //   // normalDialog(context, 'Login fail', 'Please contact webmaster');
+        // }
 
         userModel = UserModel.fromJson(map);
         if (remember) {

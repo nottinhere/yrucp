@@ -53,6 +53,16 @@ flutter:
   assets:
     - images/logo.png
     - images/shopping_cart.png
+    - images/icon_logout.png
+    - images/icon_losesale.png
+    - images/icon_outofstock.png
+    - images/icon_overstock.png
+    - images/icon_overstock3.png
+    - images/icon_drugs.png
+    - images/1-angry.png
+    - images/2-sad.png
+    - images/3-ok.png
+    - images/4-smile.png
     - images/
   #  - images/a_dot_ham.jpeg
 

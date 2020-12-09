@@ -93,7 +93,7 @@ class _ListProductState extends State<ListProductLosesale> {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
     String url =
-        'http://ptnpharma.com/apisupplier/json_product_losesale.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+        'http://ptnpharma.com/apisupplier/json_data_product_losesale.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
     // if (myIndex != 0) {
     //   url = '${MyStyle().readProductWhereMode}$myIndex';
