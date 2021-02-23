@@ -116,6 +116,194 @@ class _ListProductState extends State<ListProduct> {
     }
   }
 
+  Widget promotionTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade400,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'โปรโมชัน',
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          // routeToListProduct(2);
+        },
+      ),
+    );
+  }
+
+  Widget updatepriceTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.22,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade400,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'จะปรับราคา',
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click update price');
+          // routeToListProduct(3);
+        },
+      ),
+    );
+  }
+
+  Widget newproductTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade400,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'สินค้าใหม่',
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click new item');
+          // routeToListProduct(1);
+        },
+      ),
+    );
+  }
+
+  Widget notreceiveTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade400,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'สั่งแล้วไม่ได้รับ',
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click not receive');
+          // routeToListProduct(4);
+        },
+      ),
+    );
+  }
+
+  Widget cancelTag(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.red.shade800,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  filterProductAllModels[index].itemStatusText,
+                  style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click not receive');
+          // routeToListProduct(4);
+        },
+      ),
+    );
+  }
+
+  Widget showTag(index) {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisSize: MainAxisSize.max,
+      // mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        SizedBox(
+          width: 5.0,
+          height: 8.0,
+        ),
+        filterProductAllModels[index].itemStatus != 1
+            ? cancelTag(index)
+            : Container(),
+        (filterProductAllModels[index].promotion == 1 &&
+                filterProductAllModels[index].itemStatus == 1)
+            ? promotionTag()
+            : Container(),
+        (filterProductAllModels[index].newproduct == 1 &&
+                filterProductAllModels[index].itemStatus == 1)
+            ? newproductTag()
+            : Container(),
+        (filterProductAllModels[index].updateprice == 1 &&
+                filterProductAllModels[index].itemStatus == 1)
+            ? updatepriceTag()
+            : Container(),
+        SizedBox(
+          width: 5.0,
+          height: 8.0,
+        )
+      ],
+    );
+  }
+
   Widget showPercentStock(int index) {
     return Row(
       children: <Widget>[
@@ -218,12 +406,13 @@ class _ListProductState extends State<ListProduct> {
     return Container(
       padding: EdgeInsets.only(left: 10.0, right: 5.0),
       // height: MediaQuery.of(context).size.width * 0.5,
-      width: MediaQuery.of(context).size.width * 0.80,
+      width: MediaQuery.of(context).size.width * 0.79,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showPercentStock(index),
           showName(index),
+          showTag(index),
           showStock(index)
         ],
       ),

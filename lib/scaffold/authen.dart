@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ptnsupplier/models/user_model.dart';
+import 'package:ptnsupplier/models/popup_model.dart';
 import 'package:ptnsupplier/scaffold/my_service.dart';
 import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:ptnsupplier/scaffold/detail_popup.dart';
 import 'package:ptnsupplier/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -20,6 +23,11 @@ class _AuthenState extends State<Authen> {
   UserModel userModel;
   bool remember = false; // false => unCheck      true = Check
   bool status = true;
+
+  PopupModel popupModel;
+  String subjectPopup = '';
+  String imagePopup = '';
+  String statusPopup = '';
 
   // Method
   @override
@@ -135,6 +143,25 @@ class _AuthenState extends State<Authen> {
       // Have space
       normalDialog(context, 'Have space', 'Please fill all input');
     } else {
+      String urlPop = 'http://ptnpharma.com/apisupplier/json_popup.php';
+      http.Response responsePop = await http.get(urlPop);
+      var resultPop = json.decode(responsePop.body);
+      var mapItemPopup = resultPop[
+          'itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
+      for (var map in mapItemPopup) {
+        // PromoteModel promoteModel = PromoteModel.fromJson(map);
+        PopupModel popupModel = PopupModel.fromJson(map);
+        String urlImage = popupModel.photo;
+        String subject = popupModel.subject;
+        String popstatus = popupModel.popstatus;
+        setState(() {
+          //promoteModels.add(promoteModel); // push ค่าลง arra
+          subjectPopup = subject;
+          statusPopup = popstatus;
+          imagePopup = urlImage;
+        });
+      }
+
       // No space
       String url =
           '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';
@@ -168,10 +195,71 @@ class _AuthenState extends State<Authen> {
         if (remember) {
           saveSharePreference();
         } else {
-          routeToMyService();
+          routeToMyService(statusPopup);
         }
       }
     }
+  }
+
+  void gotoService() {
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyService(
+        userModel: userModel,
+      );
+    });
+
+    Navigator.of(context).pushAndRemoveUntil(
+        materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+        (Route<dynamic> route) {
+      return false;
+    });
+  }
+
+  void gotoPopupdetail() {
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return DetailPopup(
+        // index: index,
+        userModel: userModel,
+      );
+    });
+    Navigator.of(context).push(materialPageRoute);
+  }
+
+  void _onBasicAlertPressed(context) {
+    var alertStyle = AlertStyle(
+      isCloseButton: false,
+      isOverlayTapDismiss: false,
+      titleStyle: TextStyle(
+        color: Colors.red,
+      ),
+    );
+
+    Alert(
+      context: context,
+      style: alertStyle,
+      title: "ประกาศ !!!",
+      desc: subjectPopup,
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Close",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          onPressed: () => gotoService(),
+          color: Color.fromRGBO(255, 77, 77, 1.0),
+        ),
+        DialogButton(
+          child: Text(
+            "รายละเอียด",
+            style: TextStyle(color: Colors.white, fontSize: 18),
+          ),
+          onPressed: () => gotoPopupdetail(),
+          color: Color.fromRGBO(51, 153, 255, 1.0),
+        ),
+      ],
+    ).show();
   }
 
   Future<void> saveSharePreference() async {
@@ -179,21 +267,32 @@ class _AuthenState extends State<Authen> {
     sharedPreferences.setString('User', user);
     sharedPreferences.setString('Password', password);
 
-    routeToMyService();
+    routeToMyService(statusPopup);
   }
 
-  void routeToMyService() {
-    MaterialPageRoute materialPageRoute =
-        MaterialPageRoute(builder: (BuildContext buildContext) {
-      return MyService(
-        userModel: userModel,
-      );
-    });
-    Navigator.of(context).pushAndRemoveUntil(
-        materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-        (Route<dynamic> route) {
-      return false;
-    });
+  // void routeToMyService() {
+  //   MaterialPageRoute materialPageRoute =
+  //       MaterialPageRoute(builder: (BuildContext buildContext) {
+  //     return MyService(
+  //       userModel: userModel,
+  //     );
+  //   });
+  //   Navigator.of(context).pushAndRemoveUntil(
+  //       materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+  //       (Route<dynamic> route) {
+  //     return false;
+  //   });
+  // }
+
+  void routeToMyService(statusPopup) async {
+    // print('statusPopup >> $statusPopup');
+    if (statusPopup == '1') {
+      // when turn on popup alert
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _onBasicAlertPressed(context));
+    } else {
+      gotoService();
+    }
   }
 
   Widget userForm() {

@@ -31,7 +31,7 @@ dependencies:
   toggle_switch: "^0.1.4"
   intl: ^0.15.8
   date_time_format: ^1.0.0+4
-
+  rflutter_alert: ^1.1.0
 
 dev_dependencies:
   flutter_test:

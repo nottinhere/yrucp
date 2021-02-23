@@ -12,6 +12,10 @@ class ProductDetailModel {
   String priceSale;
   int dealOrder;
   int freeOrder;
+  int recommend;
+  int promotion;
+  int updateprice;
+  int newproduct;
   String emotical;
   int id;
 
@@ -29,6 +33,10 @@ class ProductDetailModel {
       this.priceSale,
       this.dealOrder,
       this.freeOrder,
+      this.recommend,
+      this.promotion,
+      this.updateprice,
+      this.newproduct,
       this.emotical,
       this.id});
 
@@ -46,6 +54,10 @@ class ProductDetailModel {
     priceSale = json['price_sale'];
     dealOrder = json['deal_order'];
     freeOrder = json['free_order'];
+    recommend = json['recommend'];
+    promotion = json['promotion'];
+    updateprice = json['updateprice'];
+    newproduct = json['newproduct'];
     emotical = json['emotical'];
     id = json['id'];
   }
@@ -65,6 +77,10 @@ class ProductDetailModel {
     data['price_sale'] = this.priceSale;
     data['deal_order'] = this.dealOrder;
     data['free_order'] = this.freeOrder;
+    data['recommend'] = this.recommend;
+    data['promotion'] = this.promotion;
+    data['updateprice'] = this.updateprice;
+    data['newproduct'] = this.newproduct;
     data['emotical'] = this.emotical;
     data['id'] = this.id;
     return data;

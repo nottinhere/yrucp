@@ -44,6 +44,7 @@ class _DetailState extends State<DetailView> {
     if (currentProductAllModel != null) {
       id = currentProductAllModel.id.toString();
       String url = '${MyStyle().getProductWhereId}$id';
+      print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
       print('result = $result');

@@ -17,6 +17,12 @@ class ProductAllModel {
   String priceSale;
   int dealOrder;
   int freeOrder;
+  int recommend;
+  int promotion;
+  int updateprice;
+  int newproduct;
+  int itemStatus;
+  String itemStatusText;
   String itemSum;
   int orderStatus;
   String emotical;
@@ -41,6 +47,12 @@ class ProductAllModel {
       this.priceSale,
       this.dealOrder,
       this.freeOrder,
+      this.recommend,
+      this.promotion,
+      this.updateprice,
+      this.newproduct,
+      this.itemStatus,
+      this.itemStatusText,
       this.itemSum,
       this.orderStatus,
       this.emotical,
@@ -65,6 +77,12 @@ class ProductAllModel {
     priceSale = json['price_sale'];
     dealOrder = json['deal_order'];
     freeOrder = json['free_order'];
+    recommend = json['recommend'];
+    promotion = json['promotion'];
+    updateprice = json['updateprice'];
+    newproduct = json['newproduct'];
+    itemStatus = json['itemStatus'];
+    itemStatusText = json['itemStatusText'];
     itemSum = json['item_sum'];
     orderStatus = json['orderStatus'];
     emotical = json['emotical'];
@@ -91,6 +109,12 @@ class ProductAllModel {
     data['price_sale'] = this.priceSale;
     data['deal_order'] = this.dealOrder;
     data['free_order'] = this.freeOrder;
+    data['recommend'] = this.recommend;
+    data['promotion'] = this.promotion;
+    data['updateprice'] = this.updateprice;
+    data['newproduct'] = this.newproduct;
+    data['itemStatus'] = this.itemStatus;
+    data['itemStatusText'] = this.itemStatusText;
     data['item_sum'] = this.itemSum;
     data['orderStatus'] = this.orderStatus;
     data['emotical'] = this.emotical;

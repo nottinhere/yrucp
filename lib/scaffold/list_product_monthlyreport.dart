@@ -56,13 +56,10 @@ class _ListProductState extends State<ListProductReport> {
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
 
-
-  final dateTime =  DateTime.now();
+  final dateTime = DateTime.now();
   String month = DateTimeFormat.format(DateTime.now(), format: 'm');
   String monthname = DateTimeFormat.format(DateTime.now(), format: 'F');
   String year = DateTimeFormat.format(DateTime.now(), format: 'Y');
-
-
 
   // Method
   @override
@@ -81,8 +78,8 @@ class _ListProductState extends State<ListProductReport> {
     scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
-          page++;
-          readData();
+        page++;
+        readData();
         //  print('in the end');
 
         // setState(() {
@@ -306,11 +303,8 @@ class _ListProductState extends State<ListProductReport> {
     );
   }
 
-    Widget showLoading() {
-    return Center(
-      child:
-          CircularProgressIndicator()
-    );
+  Widget showLoading() {
+    return Center(child: CircularProgressIndicator());
   }
 
   Widget myLayout() {
@@ -344,7 +338,7 @@ class _ListProductState extends State<ListProductReport> {
           onChanged: (String string) {
             searchString = string.trim();
           },
-                    textInputAction: TextInputAction.search,
+          textInputAction: TextInputAction.search,
           onSubmitted: (value) {
             setState(() {
               page = 1;
@@ -366,10 +360,16 @@ class _ListProductState extends State<ListProductReport> {
             onPressed: () {
               setState(() {
                 String strDt = "$year-$month-15";
-                page  = 1;
-                month = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'm');
-                monthname = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'F');
-                year = DateTimeFormat.format(DateTime.parse(strDt).subtract(Duration(days: 30)),format: 'Y');
+                page = 1;
+                month = DateTimeFormat.format(
+                    DateTime.parse(strDt).subtract(Duration(days: 30)),
+                    format: 'm');
+                monthname = DateTimeFormat.format(
+                    DateTime.parse(strDt).subtract(Duration(days: 30)),
+                    format: 'F');
+                year = DateTimeFormat.format(
+                    DateTime.parse(strDt).subtract(Duration(days: 30)),
+                    format: 'Y');
                 productReportModel.clear();
                 readData();
               });
@@ -391,10 +391,16 @@ class _ListProductState extends State<ListProductReport> {
             onPressed: () {
               setState(() {
                 String strDt = "$year-$month-15";
-                page  = 1;
-                month = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'm');
-                monthname = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'F');
-                year = DateTimeFormat.format(DateTime.parse(strDt).add(Duration(days: 30)),format: 'Y');
+                page = 1;
+                month = DateTimeFormat.format(
+                    DateTime.parse(strDt).add(Duration(days: 30)),
+                    format: 'm');
+                monthname = DateTimeFormat.format(
+                    DateTime.parse(strDt).add(Duration(days: 30)),
+                    format: 'F');
+                year = DateTimeFormat.format(
+                    DateTime.parse(strDt).add(Duration(days: 30)),
+                    format: 'Y');
                 productReportModel.clear();
                 readData();
               });
