@@ -50,7 +50,9 @@ class _MyServiceState extends State<MyService> {
       subtitle: Text('Description Home'),
       onTap: () {
         setState(() {
-          currentWidget = Home();
+          currentWidget = Home(
+            userModel: myUserModel,
+          );
         });
         Navigator.of(context).pop();
       },
@@ -162,7 +164,7 @@ class _MyServiceState extends State<MyService> {
           headDrawer(),
           menuHome(),
           menuContact(),
-         // menuReadQRcode(),
+          // menuReadQRcode(),
           menuLogOut(),
         ],
       ),
