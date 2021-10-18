@@ -15,6 +15,7 @@ class ProductAllModel {
   String sumLosesaleInStock;
   String priceOrder;
   String priceSale;
+  String demand;
   int dealOrder;
   int freeOrder;
   int recommend;
@@ -45,6 +46,7 @@ class ProductAllModel {
       this.sumLosesaleInStock,
       this.priceOrder,
       this.priceSale,
+      this.demand,
       this.dealOrder,
       this.freeOrder,
       this.recommend,
@@ -75,6 +77,7 @@ class ProductAllModel {
     sumLosesaleInStock = json['sumLosesaleInStock'];
     priceOrder = json['price_order'];
     priceSale = json['price_sale'];
+    demand = json['demand'];
     dealOrder = json['deal_order'];
     freeOrder = json['free_order'];
     recommend = json['recommend'];
@@ -107,6 +110,7 @@ class ProductAllModel {
     data['sumLosesaleInStock'] = this.sumLosesaleInStock;
     data['price_order'] = this.priceOrder;
     data['price_sale'] = this.priceSale;
+    data['demand'] = this.demand;
     data['deal_order'] = this.dealOrder;
     data['free_order'] = this.freeOrder;
     data['recommend'] = this.recommend;
