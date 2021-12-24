@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/models/popup_model.dart';
-import 'package:ptnsupplier/scaffold/my_service.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
-import 'package:ptnsupplier/scaffold/detail_popup.dart';
-import 'package:ptnsupplier/utility/normal_dialog.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/models/popup_model.dart';
+import 'package:yrucp/scaffold/my_service.dart';
+import 'package:yrucp/utility/my_style.dart';
+import 'package:yrucp/scaffold/detail_popup.dart';
+import 'package:yrucp/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
@@ -176,20 +176,13 @@ class _AuthenState extends State<Authen> {
 
       if (statusInt == 0) {
         String message = result['message'];
-        normalDialogLogin(context, 'Login fail..', message);
+        normalDialogLogin(context, 'ข้อมูลไม่ถูกต้อง', message);
       } else if (statusInt == 1) {
         Map<String, dynamic> map = result['data'];
         print('map = $map');
 
         int userStatus = map['status'];
         print('userStatus = $userStatus');
-
-        // if (userStatus == 0) {
-        //   print('Ban user from admin');
-        //   String message = 'Please contact webmaster';
-        //   // normalDialog(context, 'Login fail..', message);
-        //   // normalDialog(context, 'Login fail', 'Please contact webmaster');
-        // }
 
         userModel = UserModel.fromJson(map);
         if (remember) {
@@ -363,7 +356,7 @@ class _AuthenState extends State<Authen> {
 
   Widget showAppName() {
     return Text(
-      'SUPPLIER',
+      ' ',
       style: TextStyle(
         fontSize: MyStyle().h1,
         color: MyStyle().mainColor,
@@ -384,7 +377,7 @@ class _AuthenState extends State<Authen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: status ? showProcess() : mainContent(),
+        child: status ? mainContent() : mainContent(),
       ),
     );
   }

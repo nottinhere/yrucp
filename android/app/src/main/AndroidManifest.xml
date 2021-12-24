@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ptnsupplier.app">
+    package="com.yrucp.app">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +11,7 @@
          In most cases you can leave this as-is, but you if you want to provide
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
-        <!--android:label="ptnsupplier" -->
+        <!--android:label="yrucp" -->
          <!-- android:networkSecurityConfig="@xml/network_security_config" -->
     <application
         android:name="io.flutter.app.FlutterApplication"

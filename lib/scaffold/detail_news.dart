@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
-import 'package:ptnsupplier/models/news_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/utility/my_style.dart';
+import 'package:yrucp/models/news_model.dart';
 
 class DetailNews extends StatefulWidget {
   final NewsModel newsModel;
@@ -74,7 +74,7 @@ class _DetailState extends State<DetailNews> {
 
   Widget showTitle() {
     return Card(
-          child: Column(
+      child: Column(
         children: <Widget>[
           Text(
             subjectNews,
@@ -86,7 +86,7 @@ class _DetailState extends State<DetailNews> {
           ),
           SizedBox(
             width: 10.0,
-            height:15.0,
+            height: 15.0,
           )
         ],
       ),
@@ -112,12 +112,8 @@ class _DetailState extends State<DetailNews> {
   }
 
   Widget showDetail() {
-
-   
-    
-
     return Card(
-          child: Container(
+      child: Container(
         // decoration: MyStyle().boxLightGreen,
         // height: 35.0,
         width: MediaQuery.of(context).size.width * 0.95,
@@ -125,20 +121,21 @@ class _DetailState extends State<DetailNews> {
         child: Column(
           children: <Widget>[
             SizedBox(
-            width: 10.0,
-            height: 5.0,
-          ),
-          Text(
-            'โพสเมื่อ :' + postdateNews,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
+              width: 10.0,
+              height: 5.0,
             ),
-          ),SizedBox(
-            width: 10.0,
-            height: 10.0,
-          ),
+            Text(
+              'โพสเมื่อ :' + postdateNews,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+              height: 10.0,
+            ),
             Text(
               detailNews.replaceAll('\\n', '\n'),
               style: TextStyle(

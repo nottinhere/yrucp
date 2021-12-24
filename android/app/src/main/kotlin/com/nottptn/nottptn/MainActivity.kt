@@ -1,4 +1,4 @@
-package com.ptnsupplier.app
+package com.yrucp.app
 
 import android.os.Bundle
 

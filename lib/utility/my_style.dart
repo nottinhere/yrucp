@@ -5,7 +5,7 @@ class MyStyle {
   Color mainColor = Colors.blueGrey.shade700;
   Color textColor = Colors.blueGrey.shade500;
   Color bgColor = Colors.lightBlue.shade100;
-  Color barColor = Colors.lightBlue;
+  Color barColor = Color.fromARGB(0xff, 0x67, 0x62, 0x65); // Colors.lightBlue;
 
   TextStyle h1Style = TextStyle(
     fontSize: 24.0,

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ptnsupplier/plugin/flare_checkbox/flare_checkbox.dart';
+import 'package:yrucp/plugin/flare_checkbox/flare_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:yrucp/models/product_all_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/utility/my_style.dart';
 
 import 'package:toggle_switch/toggle_switch.dart';
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';

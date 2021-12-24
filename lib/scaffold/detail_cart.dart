@@ -3,10 +3,10 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/price_list_model.dart';
-import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:yrucp/models/price_list_model.dart';
+import 'package:yrucp/models/product_all_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/utility/my_style.dart';
 
 class DetailCart extends StatefulWidget {
   final UserModel userModel;
@@ -267,26 +267,26 @@ class _DetailCartState extends State<DetailCart> {
   Widget comfirmButton(int index, String size) {
     return FlatButton(
       child: Text('Confirm'),
-      onPressed: (){
+      onPressed: () {
         deleteCart(index, size);
         Navigator.of(context).pop();
       },
     );
   }
 
-  Future<void> deleteCart(int index, String size)async{
+  Future<void> deleteCart(int index, String size) async {
+    String productID = productAllModels[index].id.toString();
+    String unitSize = size;
+    String memberID = myUserModel.id.toString();
 
-        String productID  = productAllModels[index].id.toString();
-        String unitSize   = size;
-        String memberID   = myUserModel.id.toString(); 
+    print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
 
-        print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
+    String url =
+        'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
 
-        String url = 'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
-
-        await http.get(url).then((response) {
-          readCart();
-        });
+    await http.get(url).then((response) {
+      readCart();
+    });
   }
 
   Widget editAndDeleteButton(int index, String size) {

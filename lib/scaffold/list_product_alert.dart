@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:yrucp/models/product_all_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/utility/my_style.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';

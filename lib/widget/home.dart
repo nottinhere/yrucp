@@ -1,25 +1,29 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/promote_model.dart';
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/models/news_model.dart';
+import 'package:yrucp/models/product_all_model.dart';
+import 'package:yrucp/models/promote_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/models/news_model.dart';
 
-import 'package:ptnsupplier/scaffold/detail.dart';
-import 'package:ptnsupplier/scaffold/list_product.dart';
-import 'package:ptnsupplier/scaffold/list_product_outofstock.dart';
-import 'package:ptnsupplier/scaffold/list_product_overstock.dart';
-import 'package:ptnsupplier/scaffold/list_product_losesale.dart';
-import 'package:ptnsupplier/scaffold/list_product_highdemand.dart';
-import 'package:ptnsupplier/scaffold/list_product_monthlyreport.dart';
-import 'package:ptnsupplier/scaffold/list_product_alert.dart';
-import 'package:ptnsupplier/scaffold/detail_news.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
+import 'package:yrucp/scaffold/detail.dart';
+import 'package:yrucp/scaffold/list_complain.dart';
+
+import 'package:yrucp/scaffold/detail_news.dart';
+import 'package:yrucp/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+/*   remove this code  */
+import 'package:yrucp/scaffold/list_product.dart';
+import 'package:yrucp/scaffold/list_product_outofstock.dart';
+import 'package:yrucp/scaffold/list_product_overstock.dart';
+import 'package:yrucp/scaffold/list_product_losesale.dart';
+import 'package:yrucp/scaffold/list_product_highdemand.dart';
+import 'package:yrucp/scaffold/list_product_monthlyreport.dart';
+import 'package:yrucp/scaffold/list_product_alert.dart';
+/*      ----- -----    */
 
 class Home extends StatefulWidget {
   final UserModel userModel;
@@ -102,46 +106,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget showCarouseSlider() {
-    return GestureDetector(
-      onTap: () {
-        print('You Click index is $banerIndex');
-
-        MaterialPageRoute route = MaterialPageRoute(
-          builder: (BuildContext context) => Detail(
-              // productAllModel: promoteModels[banerIndex],
-              ),
-        );
-        Navigator.of(context).push(route).then((value) {});
-      },
-      child: CarouselSlider(
-        enlargeCenterPage: true,
-        aspectRatio: 16 / 9,
-        pauseAutoPlayOnTouch: Duration(seconds: 5),
-        autoPlay: true,
-        autoPlayAnimationDuration: Duration(seconds: 5),
-        items: promoteLists,
-        onPageChanged: (int index) {
-          banerIndex = index;
-          // print('index = $index');
-        },
-      ),
-    );
-  }
-
-  Widget promotion() {
-    return Container(
-      padding: EdgeInsets.only(top: 5.0, bottom: 5.0),
-      height: MediaQuery.of(context).size.height * 0.20,
-      child:
-          promoteLists.length == 0 ? myCircularProgress() : showCarouseSlider(),
-    );
-  }
-
-  void routeToListProduct(int index) {
+  void routeToListComplain(int index) {
     MaterialPageRoute materialPageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
-      return ListProduct(
+      return ListComplain(
         index: index,
         userModel: myUserModel,
       );
@@ -182,7 +150,7 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click profile');
-          // routeToListProduct(0);
+          // routeToListComplain(0);
         },
       ),
     );
@@ -219,7 +187,7 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click product');
-          routeToListProduct(0);
+          routeToListComplain(0);
         },
       ),
     );
@@ -481,7 +449,7 @@ class _HomeState extends State<Home> {
 
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.clear();
+    await sharedPreferences.clear();
     exit(0);
   }
 
@@ -533,11 +501,12 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget row1Left() {
+  Widget Complainbox() {
     // all product
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
-      // height: 80.0,
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
       child: GestureDetector(
         child: Card(
           // color: Colors.green.shade100,
@@ -548,10 +517,10 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Container(
                   width: 70.0,
-                  child: Image.asset('images/icon_drugs.png'),
+                  child: Image.asset('images/icon_complain.png'),
                 ),
                 Text(
-                  'รายการสินค้า',
+                  'เรื่องร้องเรียน',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -563,7 +532,7 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click promotion');
-          routeToListProduct(0);
+          routeToListComplain(0);
         },
       ),
     );
@@ -787,11 +756,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget row3Right() {
+  Widget LogoutBox() {
     // losesale
     return Container(
-      width: MediaQuery.of(context).size.width * 0.45,
+      // width: MediaQuery.of(context).size.width * 0.45,
       // height: 80.0,
+      width: 150.0,
+      height: 150.0,
+
       child: GestureDetector(
         child: Card(
           // color: Colors.green.shade100,
@@ -829,8 +801,8 @@ class _HomeState extends State<Home> {
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        row1Left(),
-        row1Right(),
+        Complainbox(),
+        LogoutBox(),
       ],
     );
   }
@@ -846,30 +818,6 @@ class _HomeState extends State<Home> {
       ],
     );
   }
-
-  Widget row3Menu() {
-    return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-      // mainAxisSize: MainAxisSize.max,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        row3Left(),
-        row3Right(),
-      ],
-    );
-  }
-
-  // Widget row4Menu() {
-  //   return Row(
-  //     // mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //     // mainAxisSize: MainAxisSize.max,
-  //     mainAxisSize: MainAxisSize.min,
-  //     children: <Widget>[
-  //       // row4Left(),
-  //       // row4Right(),
-  //     ],
-  //   );
-  // }
 
   Widget mySizebox() {
     return SizedBox(
@@ -889,13 +837,55 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           row1Menu(),
           mySizebox(),
-          row2Menu(),
+          // row2Menu(),
           mySizebox(),
-          row3Menu(),
-          mySizebox(),
+          // row3Menu(),
+          // mySizebox(),
           // row4Menu(),
           // logoutBox(),
           mySizebox(),
+          mySizebox(),
+        ],
+      ),
+    );
+  }
+
+  Widget row1MenuAdmin() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Complainbox(),
+        LogoutBox(),
+      ],
+    );
+  }
+
+  Widget row2MenuAdmin() {
+    return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceAround,
+      // mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        row2Left(),
+        row2Right(),
+      ],
+    );
+  }
+
+  Widget adminMenu() {
+    return Container(
+      margin: EdgeInsets.only(top: 5.0),
+      alignment: Alignment(0.0, 0.0),
+      // color: Colors.green.shade50,
+      // height: MediaQuery.of(context).size.height * 0.5 - 81,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          row1MenuAdmin(),
+          mySizebox(),
+          // row2MenuAdmin(),
           mySizebox(),
         ],
       ),
@@ -913,8 +903,12 @@ class _HomeState extends State<Home> {
           //  suggest(),
           headTitle('เมนู', Icons.home),
           homeMenu(),
-          headTitle('ข่าวสาร', Icons.bookmark),
-          newsBox(),
+
+          headTitle('ผู้ดูแลระบบ', Icons.admin_panel_settings),
+          adminMenu(),
+
+          // headTitle('ข่าวสาร', Icons.bookmark),
+          // newsBox(),
         ],
       ),
     );

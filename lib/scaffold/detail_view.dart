@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ptnsupplier/models/product_all_model.dart';
-import 'package:ptnsupplier/models/user_model.dart';
-import 'package:ptnsupplier/scaffold/detail_cart.dart';
-import 'package:ptnsupplier/utility/my_style.dart';
-import 'package:ptnsupplier/utility/normal_dialog.dart';
+import 'package:yrucp/models/product_all_model.dart';
+import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/scaffold/detail_cart.dart';
+import 'package:yrucp/utility/my_style.dart';
+import 'package:yrucp/utility/normal_dialog.dart';
 
 class DetailView extends StatefulWidget {
   final ProductAllModel productAllModel;
@@ -61,8 +61,6 @@ class _DetailState extends State<DetailView> {
       } // for
     }
   }
-
-
 
   Widget promotionTag() {
     return Container(
@@ -247,7 +245,6 @@ class _DetailState extends State<DetailView> {
       ],
     );
   }
-
 
   Widget showTitle() {
     return Text(
