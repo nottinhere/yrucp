@@ -8,6 +8,8 @@ class ComplainAllModel {
   String textstatus;
   String division;
   String staff;
+  String startdate_fix;
+  String enddate_fix;
   int id;
 
   ComplainAllModel(
@@ -20,6 +22,8 @@ class ComplainAllModel {
       this.textstatus,
       this.division,
       this.staff,
+      this.startdate_fix,
+      this.enddate_fix,
       this.id});
 
   ComplainAllModel.fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,8 @@ class ComplainAllModel {
     textstatus = json['textstatus'];
     division = json['division'];
     staff = json['staff'];
+    startdate_fix = json['startdate_fix'];
+    enddate_fix = json['enddate_fix'];
     id = json['id'];
   }
 
@@ -46,6 +52,8 @@ class ComplainAllModel {
     data['textstatus'] = this.textstatus;
     data['division'] = this.division;
     data['staff'] = this.staff;
+    data['startdate_fix'] = this.startdate_fix;
+    data['enddate_fix'] = this.enddate_fix;
     data['id'] = this.id;
     return data;
   }

@@ -297,14 +297,14 @@ class _ListProductAlertState extends State<ListProductAlert> {
               ),
             ),
             onTap: () {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return Detail(
-                  productAllModel: filterProductAllModels[index],
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Detail(
+              //     productAllModel: filterProductAllModels[index],
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
             },
           );
         },

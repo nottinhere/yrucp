@@ -11,17 +11,18 @@ import 'package:yrucp/scaffold/detail_cart.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
 
-class Detail extends StatefulWidget {
+class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
   final UserModel userModel;
 
-  Detail({Key key, this.complainAllModel, this.userModel}) : super(key: key);
+  DetailStaff({Key key, this.complainAllModel, this.userModel})
+      : super(key: key);
 
   @override
-  _DetailState createState() => _DetailState();
+  _DetailStaffState createState() => _DetailStaffState();
 }
 
-class _DetailState extends State<Detail> {
+class _DetailStaffState extends State<DetailStaff> {
   // Explicit
   ComplainAllModel currentComplainAllModel;
   ComplainAllModel complainAllModel;
@@ -686,13 +687,13 @@ class _DetailState extends State<Detail> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        showDetailPrice(index),
+        showDetailStaffPrice(index),
         // incDecValue(index),
       ],
     );
   }
 
-  Widget showDetailPrice(int index) {
+  Widget showDetailStaffPrice(int index) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -708,7 +709,7 @@ class _DetailState extends State<Detail> {
       child: ListView.builder(
         // itemCount: unitSizeModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
-          return showChoosePricePackage(index); // showDetailPrice(index);
+          return showChoosePricePackage(index); // showDetailStaffPrice(index);
         },
       ),
     );
@@ -733,7 +734,7 @@ class _DetailState extends State<Detail> {
   Widget Logout() {
     return GestureDetector(
       onTap: () {
-        routeToDetailCart();
+        routeToDetailStaffCart();
       },
       child: Container(
         margin: EdgeInsets.only(top: 15.0, right: 5.0),
@@ -756,7 +757,7 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  void routeToDetailCart() {
+  void routeToDetailStaffCart() {
     MaterialPageRoute materialPageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
       return DetailCart(
@@ -776,7 +777,7 @@ class _DetailState extends State<Detail> {
         backgroundColor: MyStyle().barColor,
         title: Text('รายละเอียดเรื่องร้องเรียน'),
       ),
-      body: complainAllModel == null ? showProgress() : showDetailList(),
+      body: complainAllModel == null ? showProgress() : showDetailStaffList(),
     );
   }
 
@@ -845,7 +846,7 @@ class _DetailState extends State<Detail> {
     });
   }
 
-  Widget showDetailList() {
+  Widget showDetailStaffList() {
     return Stack(
       children: <Widget>[
         showController(),

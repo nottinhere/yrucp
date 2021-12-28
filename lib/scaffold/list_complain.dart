@@ -307,6 +307,82 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
+  Widget L1_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.green.shade700,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Assign (L1)',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You are boss');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return Detail(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget L2_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.green.shade700,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'Detail (L2)',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You are staff');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return Detail(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget showTag(index) {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -344,7 +420,7 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
-  Widget showPercentStock(int index) {
+  Widget showNumber(int index) {
     return Row(
       children: <Widget>[
         Container(
@@ -360,16 +436,14 @@ class _ListComplainState extends State<ListComplain> {
                   color: Color.fromARGB(0xff, 16, 149, 161),
                 ),
               ),
-              // Text(
-              //   'In stock : ' +
-              //       filterComplainAllModels[index].percentStock +
-              //       '%',
-              //   style: TextStyle(
-              //     fontSize: 16.0,
-              //     // fontWeight: FontWeight.bold,
-              //     color: Color.fromARGB(0xff, 0, 0, 0),
-              //   ),
-              // ),
+              Text(
+                'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
             ],
           ),
         ),
@@ -377,7 +451,7 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
-  Widget showName(int index) {
+  Widget showSubject(int index) {
     return Row(
       children: <Widget>[
         Container(
@@ -391,7 +465,7 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
-  Widget showStock(int index) {
+  Widget showResponsible(int index) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -437,6 +511,9 @@ class _ListComplainState extends State<ListComplain> {
             ),
           ],
         ),
+        Row(
+          children: [L1_btn(index), L2_btn(index)],
+        )
       ],
     );
     // return Text('na');
@@ -450,9 +527,13 @@ class _ListComplainState extends State<ListComplain> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Row(children: [showPercentStock(index), showTag(index)]),
-          showName(index),
-          showStock(index)
+          Row(children: [
+            showNumber(index),
+            // showDatapost(index),
+            showTag(index)
+          ]),
+          showSubject(index),
+          showResponsible(index)
         ],
       ),
     );
