@@ -143,24 +143,24 @@ class _AuthenState extends State<Authen> {
       // Have space
       normalDialog(context, 'Have space', 'Please fill all input');
     } else {
-      String urlPop = 'http://ptnpharma.com/apisupplier/json_popup.php';
-      http.Response responsePop = await http.get(urlPop);
-      var resultPop = json.decode(responsePop.body);
-      var mapItemPopup = resultPop[
-          'itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
-      for (var map in mapItemPopup) {
-        // PromoteModel promoteModel = PromoteModel.fromJson(map);
-        PopupModel popupModel = PopupModel.fromJson(map);
-        String urlImage = popupModel.photo;
-        String subject = popupModel.subject;
-        String popstatus = popupModel.popstatus;
-        setState(() {
-          //promoteModels.add(promoteModel); // push ค่าลง arra
-          subjectPopup = subject;
-          statusPopup = popstatus;
-          imagePopup = urlImage;
-        });
-      }
+      // String urlPop = 'http://ptnpharma.com/apisupplier/json_popup.php';
+      // http.Response responsePop = await http.get(urlPop);
+      // var resultPop = json.decode(responsePop.body);
+      // var mapItemPopup = resultPop[
+      //     'itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
+      // for (var map in mapItemPopup) {
+      //   // PromoteModel promoteModel = PromoteModel.fromJson(map);
+      //   PopupModel popupModel = PopupModel.fromJson(map);
+      //   String urlImage = popupModel.photo;
+      //   String subject = popupModel.subject;
+      //   String popstatus = popupModel.popstatus;
+      //   setState(() {
+      //     //promoteModels.add(promoteModel); // push ค่าลง arra
+      //     subjectPopup = subject;
+      //     statusPopup = popstatus;
+      //     imagePopup = urlImage;
+      //   });
+      // }
 
       // No space
       String url =
@@ -188,7 +188,7 @@ class _AuthenState extends State<Authen> {
         if (remember) {
           saveSharePreference();
         } else {
-          routeToMyService(statusPopup);
+         routeToMyService();
         }
       }
     }
@@ -260,33 +260,34 @@ class _AuthenState extends State<Authen> {
     sharedPreferences.setString('User', user);
     sharedPreferences.setString('Password', password);
 
-    routeToMyService(statusPopup);
+//    routeToMyService(statusPopup);  // with popup 
+    routeToMyService();  // with popup 
   }
 
-  // void routeToMyService() {
-  //   MaterialPageRoute materialPageRoute =
-  //       MaterialPageRoute(builder: (BuildContext buildContext) {
-  //     return MyService(
-  //       userModel: userModel,
-  //     );
-  //   });
-  //   Navigator.of(context).pushAndRemoveUntil(
-  //       materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-  //       (Route<dynamic> route) {
-  //     return false;
-  //   });
+  void routeToMyService() {
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyService(
+        userModel: userModel,
+      );
+    });
+    Navigator.of(context).pushAndRemoveUntil(
+        materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+        (Route<dynamic> route) {
+      return false;
+    });
+  }
+
+  // void routeToMyService(statusPopup) async {  // with popup 
+  //   // print('statusPopup >> $statusPopup');
+  //   if (statusPopup == '1') {
+  //     // when turn on popup alert
+  //     WidgetsBinding.instance
+  //         .addPostFrameCallback((_) => _onBasicAlertPressed(context));
+  //   } else {
+  //     gotoService();
+  //   }
   // }
-
-  void routeToMyService(statusPopup) async {
-    // print('statusPopup >> $statusPopup');
-    if (statusPopup == '1') {
-      // when turn on popup alert
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => _onBasicAlertPressed(context));
-    } else {
-      gotoService();
-    }
-  }
 
   Widget userForm() {
     return Container(

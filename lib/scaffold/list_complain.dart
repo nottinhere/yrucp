@@ -121,6 +121,32 @@ class _ListComplainState extends State<ListComplain> {
     }
   }
 
+  Widget Logout() {
+    return GestureDetector(
+      onTap: () {
+        routeToDetailCart();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/icon_logout_white.png'),
+            // Text(
+            //   '$amontCart',
+            //   style: TextStyle(
+            //     backgroundColor: Colors.blue.shade600,
+            //     color: Colors.white,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget unreadTag() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
@@ -756,11 +782,13 @@ class _ListComplainState extends State<ListComplain> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          Logout(),
+          // showCart(),
+        ],
         backgroundColor: MyStyle().barColor,
         title: Text('เรื่องร้องเรียน'),
-        actions: <Widget>[
-          //  showCart(),
-        ],
+
       ),
       // body: filterComplainAllModels.length == 0
       //     ? showProgressIndicate()

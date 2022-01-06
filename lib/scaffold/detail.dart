@@ -576,21 +576,21 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget noteBox() {
-    return Container(
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-      child: TextField(
-        onChanged: (value) {
-          txtnote = value.trim();
-        },
-        keyboardType: TextInputType.multiline,
-        maxLines: 2,
-        decoration: InputDecoration(
-            prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-            labelText: 'Note :'),
-      ),
-    );
-  }
+  // Widget noteBox() {
+  //   return Container(
+  //     margin: EdgeInsets.only(left: 10.0, right: 10.0),
+  //     child: TextField(
+  //       onChanged: (value) {
+  //         txtnote = value.trim();
+  //       },
+  //       keyboardType: TextInputType.multiline,
+  //       maxLines: 2,
+  //       decoration: InputDecoration(
+  //           prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+  //           labelText: 'Note :'),
+  //     ),
+  //   );
+  // }
 
   Widget showFormDeal() {
     return Card(
@@ -599,7 +599,7 @@ class _DetailState extends State<Detail> {
           Row(
             children: <Widget>[complainBox(), showAppoint()],
           ),
-          noteBox(),
+          // noteBox(),
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
         ],
@@ -610,8 +610,10 @@ class _DetailState extends State<Detail> {
   Future<void> submitThread() async {
     try {
       var medID = currentComplainAllModel.id;
+      var cpID = currentComplainAllModel.id;
+
       String url =
-          'http://ptnpharma.com/apisupplier//json_submit_deal.php?memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote'; //'';
+          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_assign_submit.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
 
       await http.get(url).then((value) {
         confirmSubmit();
@@ -652,9 +654,9 @@ class _DetailState extends State<Detail> {
             color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
-              var medID = currentComplainAllModel.id;
+              var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote');
+                  'memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote');
 
               submitThread();
             },
@@ -733,7 +735,7 @@ class _DetailState extends State<Detail> {
   Widget Logout() {
     return GestureDetector(
       onTap: () {
-        routeToDetailCart();
+        Logout();
       },
       child: Container(
         margin: EdgeInsets.only(top: 15.0, right: 5.0),
@@ -742,14 +744,6 @@ class _DetailState extends State<Detail> {
         child: Stack(
           children: <Widget>[
             Image.asset('images/icon_logout_white.png'),
-            // Text(
-            //   '$amontCart',
-            //   style: TextStyle(
-            //     backgroundColor: Colors.blue.shade600,
-            //     color: Colors.white,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ],
         ),
       ),
