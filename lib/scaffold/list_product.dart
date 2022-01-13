@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:yrucp/models/product_all_model.dart';
 import 'package:yrucp/models/user_model.dart';
 import 'package:yrucp/utility/my_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -114,6 +116,12 @@ class _ListProductState extends State<ListProduct> {
         filterProductAllModels = productAllModels;
       });
     }
+  }
+
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    exit(0);
   }
 
   Widget promotionTag() {

@@ -1,12 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:yrucp/models/product_all_model.dart';
 import 'package:yrucp/models/complain_all_model.dart';
 import 'package:yrucp/models/user_model.dart';
+import 'package:yrucp/scaffold/detail.dart';
+import 'package:yrucp/scaffold/detail_staff.dart';
 import 'package:yrucp/utility/my_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -121,10 +125,16 @@ class _ListComplainState extends State<ListComplain> {
     }
   }
 
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    exit(0);
+  }
+
   Widget Logout() {
     return GestureDetector(
       onTap: () {
-        routeToDetailCart();
+        logOut();
       },
       child: Container(
         margin: EdgeInsets.only(top: 15.0, right: 5.0),
@@ -365,7 +375,14 @@ class _ListComplainState extends State<ListComplain> {
               userModel: myUserModel,
             );
           });
-          Navigator.of(context).push(materialPageRoute);
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context)
+              .push(materialPageRoute)
+              .then((value) => setState(() {
+                    readData();
+                    //showTag(index);
+                    showResponsible(index);
+                  }));
         },
       ),
     );
@@ -398,7 +415,7 @@ class _ListComplainState extends State<ListComplain> {
           print('You are staff');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return Detail(
+            return DetailStaff(
               complainAllModel: filterComplainAllModels[index],
               userModel: myUserModel,
             );
@@ -528,7 +545,7 @@ class _ListComplainState extends State<ListComplain> {
             // Icon(Icons.kitchen, color: Colors.green[500]),
             Text('ผู้รับผิดชอบ'),
             Text(
-              filterComplainAllModels[index].staff,
+              filterComplainAllModels[index].staff_name,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -788,7 +805,6 @@ class _ListComplainState extends State<ListComplain> {
         ],
         backgroundColor: MyStyle().barColor,
         title: Text('เรื่องร้องเรียน'),
-
       ),
       // body: filterComplainAllModels.length == 0
       //     ? showProgressIndicate()

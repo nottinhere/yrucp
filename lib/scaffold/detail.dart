@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'package:yrucp/models/user_model.dart';
 import 'package:yrucp/scaffold/detail_cart.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -71,8 +73,11 @@ class _DetailState extends State<Detail> {
         setState(() {
           complainAllModel = ComplainAllModel.fromJson(map);
           Map<String, dynamic> priceListMap = map['price_list'];
+          _mySelection =
+              (complainAllModel.staff == '-') ? null : complainAllModel.staff;
         });
       } // for
+
     }
   }
 
@@ -87,6 +92,12 @@ class _DetailState extends State<Detail> {
     setState(() {
       dataST = itemDivisions;
     });
+  }
+
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    exit(0);
   }
 
   Widget unreadTag() {
@@ -301,6 +312,20 @@ class _DetailState extends State<Detail> {
         ),
         Column(
           children: [
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('วันนัดหมาย'),
+            Text(
+              complainAllModel.appointdate,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
@@ -318,19 +343,17 @@ class _DetailState extends State<Detail> {
             // Icon(Icons.kitchen, color: Colors.green[500]),
             Text('ผู้รับผิดชอบ'),
             Center(
-              child: new DropdownButton(
+              child: DropdownButton(
+                value: _mySelection,
+                onChanged: (String newVal) {
+                  setState(() => _mySelection = newVal);
+                },
                 items: dataST.map((item) {
                   return new DropdownMenuItem(
                     child: new Text(item['person_name']),
                     value: item['id'].toString(),
                   );
                 }).toList(),
-                onChanged: (newVal) {
-                  setState(() {
-                    _mySelection = newVal;
-                  });
-                },
-                value: _mySelection,
               ),
             ),
           ],
@@ -499,31 +522,56 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget showAppointStartdate() {
+  Widget startdateBtn() {}
+  Widget startdateShow() {
+    return Container(
+        child: Column(children: <Widget>[
+      Text(
+        complainAllModel.staff,
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(0xff, 0, 0, 0),
+        ),
+      ),
+    ]));
+  }
+
+  Widget showAppointdate() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.33,
       child: Column(
         children: <Widget>[
           Text(
-            'วันนัดหมาย',
+            'วันเริ่มงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
           ),
-          Text(
-            complainAllModel.staff,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
-            ),
-          ),
+          startdateShow(),
         ],
       ),
     );
   }
 
-  Widget showAppointEnddate() {
+  Widget showFixStartdate() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.33,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'วันเริ่มงาน',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          startdateShow(),
+        ],
+      ),
+    );
+  }
+
+  Widget showFixEnddate() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.33,
       child: Column(
@@ -559,7 +607,7 @@ class _DetailState extends State<Detail> {
             ),
           ),
           Text(
-            complainAllModel.staff,
+            complainAllModel.staff_name,
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -567,9 +615,9 @@ class _DetailState extends State<Detail> {
             ),
           ),
           mySizebox(),
-          showAppointStartdate(),
+          showFixStartdate(),
           mySizebox(),
-          showAppointEnddate(),
+          showFixEnddate(),
           mySizebox(),
         ],
       ),
@@ -613,7 +661,7 @@ class _DetailState extends State<Detail> {
       var cpID = currentComplainAllModel.id;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_assign_submit.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
+          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
 
       await http.get(url).then((value) {
         confirmSubmit();
@@ -768,7 +816,7 @@ class _DetailState extends State<Detail> {
           Logout(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('รายละเอียดเรื่องร้องเรียน'),
+        title: Text('รายละเอียดเรื่องร้องเรียน (Leader)'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailList(),
     );

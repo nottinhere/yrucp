@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'package:yrucp/models/user_model.dart';
 import 'package:yrucp/scaffold/detail_cart.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -72,8 +74,11 @@ class _DetailStaffState extends State<DetailStaff> {
         setState(() {
           complainAllModel = ComplainAllModel.fromJson(map);
           Map<String, dynamic> priceListMap = map['price_list'];
+          _mySelection =
+              (complainAllModel.staff == '-') ? null : complainAllModel.staff;
         });
       } // for
+
     }
   }
 
@@ -88,6 +93,12 @@ class _DetailStaffState extends State<DetailStaff> {
     setState(() {
       dataST = itemDivisions;
     });
+  }
+
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    exit(0);
   }
 
   Widget unreadTag() {
@@ -302,6 +313,20 @@ class _DetailStaffState extends State<DetailStaff> {
         ),
         Column(
           children: [
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('วันนัดหมาย'),
+            Text(
+              complainAllModel.appointdate,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
@@ -314,28 +339,26 @@ class _DetailStaffState extends State<DetailStaff> {
             ),
           ],
         ),
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('ผู้รับผิดชอบ'),
-            Center(
-              child: new DropdownButton(
-                items: dataST.map((item) {
-                  return new DropdownMenuItem(
-                    child: new Text(item['person_name']),
-                    value: item['id'].toString(),
-                  );
-                }).toList(),
-                onChanged: (newVal) {
-                  setState(() {
-                    _mySelection = newVal;
-                  });
-                },
-                value: _mySelection,
-              ),
-            ),
-          ],
-        ),
+        // Column(
+        //   children: [
+        //     // Icon(Icons.kitchen, color: Colors.green[500]),
+        //     Text('ผู้รับผิดชอบ'),
+        //     Center(
+        //       child: DropdownButton(
+        //         value: _mySelection,
+        //         onChanged: (String newVal) {
+        //           setState(() => _mySelection = newVal);
+        //         },
+        //         items: dataST.map((item) {
+        //           return new DropdownMenuItem(
+        //             child: new Text(item['person_name']),
+        //             value: item['id'].toString(),
+        //           );
+        //         }).toList(),
+        //       ),
+        //     ),
+        //   ],
+        // ),
       ],
     );
     // return Text('na');
@@ -500,6 +523,21 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
+  Widget startdateBtn() {}
+  Widget startdateShow() {
+    return Container(
+        child: Column(children: <Widget>[
+      Text(
+        complainAllModel.staff,
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(0xff, 0, 0, 0),
+        ),
+      ),
+    ]));
+  }
+
   Widget showAppointStartdate() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.33,
@@ -511,14 +549,7 @@ class _DetailStaffState extends State<DetailStaff> {
               decoration: TextDecoration.underline,
             ),
           ),
-          Text(
-            complainAllModel.staff,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
-            ),
-          ),
+          startdateShow(),
         ],
       ),
     );
@@ -560,7 +591,7 @@ class _DetailStaffState extends State<DetailStaff> {
             ),
           ),
           Text(
-            complainAllModel.staff,
+            complainAllModel.staff_name,
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -577,21 +608,21 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
-  Widget noteBox() {
-    return Container(
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-      child: TextField(
-        onChanged: (value) {
-          txtnote = value.trim();
-        },
-        keyboardType: TextInputType.multiline,
-        maxLines: 2,
-        decoration: InputDecoration(
-            prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-            labelText: 'Note :'),
-      ),
-    );
-  }
+  // Widget noteBox() {
+  //   return Container(
+  //     margin: EdgeInsets.only(left: 10.0, right: 10.0),
+  //     child: TextField(
+  //       onChanged: (value) {
+  //         txtnote = value.trim();
+  //       },
+  //       keyboardType: TextInputType.multiline,
+  //       maxLines: 2,
+  //       decoration: InputDecoration(
+  //           prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+  //           labelText: 'Note :'),
+  //     ),
+  //   );
+  // }
 
   Widget showFormDeal() {
     return Card(
@@ -600,7 +631,7 @@ class _DetailStaffState extends State<DetailStaff> {
           Row(
             children: <Widget>[complainBox(), showAppoint()],
           ),
-          noteBox(),
+          // noteBox(),
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
         ],
@@ -611,8 +642,10 @@ class _DetailStaffState extends State<DetailStaff> {
   Future<void> submitThread() async {
     try {
       var medID = currentComplainAllModel.id;
+      var cpID = currentComplainAllModel.id;
+
       String url =
-          'http://ptnpharma.com/apisupplier//json_submit_deal.php?memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote'; //'';
+          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
 
       await http.get(url).then((value) {
         confirmSubmit();
@@ -653,9 +686,9 @@ class _DetailStaffState extends State<DetailStaff> {
             color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
-              var medID = currentComplainAllModel.id;
+              var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&medId=$medID&deal_order=$txtdeal&free_order=$txtfree&price_order=$txtprice&note=$txtnote');
+                  'memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote');
 
               submitThread();
             },
@@ -734,7 +767,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Widget Logout() {
     return GestureDetector(
       onTap: () {
-        routeToDetailStaffCart();
+        Logout();
       },
       child: Container(
         margin: EdgeInsets.only(top: 15.0, right: 5.0),
@@ -743,14 +776,6 @@ class _DetailStaffState extends State<DetailStaff> {
         child: Stack(
           children: <Widget>[
             Image.asset('images/icon_logout_white.png'),
-            // Text(
-            //   '$amontCart',
-            //   style: TextStyle(
-            //     backgroundColor: Colors.blue.shade600,
-            //     color: Colors.white,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -775,7 +800,7 @@ class _DetailStaffState extends State<DetailStaff> {
           Logout(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('รายละเอียดเรื่องร้องเรียน'),
+        title: Text('รายละเอียดเรื่องร้องเรียน (Staff)'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailStaffList(),
     );
