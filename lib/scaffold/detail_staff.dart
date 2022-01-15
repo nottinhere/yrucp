@@ -523,12 +523,42 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
-  Widget startdateBtn() {}
+  Widget startdateBtn() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ลงเวลาเข้า',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
   Widget startdateShow() {
     return Container(
         child: Column(children: <Widget>[
       Text(
-        complainAllModel.staff,
+        complainAllModel.startdate_fix,
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,
@@ -549,10 +579,56 @@ class _DetailStaffState extends State<DetailStaff> {
               decoration: TextDecoration.underline,
             ),
           ),
+          startdateBtn(),
           startdateShow(),
         ],
       ),
     );
+  }
+
+  Widget enddateBtn() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ลงเวลาออก',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget enddateShow() {
+    return Container(
+        child: Column(children: <Widget>[
+      Text(
+        complainAllModel.enddate_fix,
+        style: TextStyle(
+          fontSize: 16.0,
+          fontWeight: FontWeight.bold,
+          color: Color.fromARGB(0xff, 0, 0, 0),
+        ),
+      ),
+    ]));
   }
 
   Widget showAppointEnddate() {
@@ -566,14 +642,8 @@ class _DetailStaffState extends State<DetailStaff> {
               decoration: TextDecoration.underline,
             ),
           ),
-          Text(
-            complainAllModel.staff,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
-            ),
-          ),
+          enddateBtn(),
+          enddateShow(),
         ],
       ),
     );
