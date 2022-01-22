@@ -524,12 +524,13 @@ class _DetailStaffState extends State<DetailStaff> {
   }
 
   Widget startdateBtn() {
+    int post_id = complainAllModel.id;
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
-        child: Card(
-          color: Colors.grey.shade600,
+        child: ElevatedButton(
+          // color: Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -548,10 +549,24 @@ class _DetailStaffState extends State<DetailStaff> {
         ),
         onTap: () {
           print('You click not receive');
-          // routeToListComplain(4);
+          checkIn(post_id);
         },
       ),
     );
+  }
+
+  Future<void> checkIn(int post_id) async {
+    int unitSize = post_id;
+/*
+    print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
+
+    String url =
+        'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
+
+    await http.get(url).then((response) {
+      readCart();
+    });
+    */
   }
 
   Widget startdateShow() {
