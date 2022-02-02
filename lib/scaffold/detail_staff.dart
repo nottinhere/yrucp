@@ -339,26 +339,6 @@ class _DetailStaffState extends State<DetailStaff> {
             ),
           ],
         ),
-        // Column(
-        //   children: [
-        //     // Icon(Icons.kitchen, color: Colors.green[500]),
-        //     Text('ผู้รับผิดชอบ'),
-        //     Center(
-        //       child: DropdownButton(
-        //         value: _mySelection,
-        //         onChanged: (String newVal) {
-        //           setState(() => _mySelection = newVal);
-        //         },
-        //         items: dataST.map((item) {
-        //           return new DropdownMenuItem(
-        //             child: new Text(item['person_name']),
-        //             value: item['id'].toString(),
-        //           );
-        //         }).toList(),
-        //       ),
-        //     ),
-        //   ],
-        // ),
       ],
     );
     // return Text('na');
@@ -530,43 +510,26 @@ class _DetailStaffState extends State<DetailStaff> {
       // height: 80.0,
       child: GestureDetector(
         child: ElevatedButton(
-          // color: Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'ลงเวลาเข้า',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
+          child: const Text('ลงเวลาเข้า'),
+          onPressed: () {
+            print('You click checkin');
+            checkIn();
+          },
         ),
-        onTap: () {
-          print('You click not receive');
-          checkIn(post_id);
-        },
       ),
     );
   }
 
-  Future<void> checkIn(int post_id) async {
-    int unitSize = post_id;
-/*
-    print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
+  Future<void> checkIn() async {
+    memberID = myUserModel.id.toString();
+    var cpID = currentComplainAllModel.id;
 
     String url =
-        'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';
+        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_checkin.php?memberId=$memberID&cpID=$cpID'; //'';
 
-    await http.get(url).then((response) {
-      readCart();
+    await http.get(url).then((value) {
+      // confirmSubmit();
     });
-    */
   }
 
   Widget startdateShow() {
@@ -602,32 +565,18 @@ class _DetailStaffState extends State<DetailStaff> {
   }
 
   Widget enddateBtn() {
+    int post_id = complainAllModel.id;
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
-        child: Card(
-          color: Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'ลงเวลาออก',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
+        child: ElevatedButton(
+          child: const Text('ลงเวลาออก'),
+          onPressed: () {
+            print('You click checkout');
+            checkOut();
+          },
         ),
-        onTap: () {
-          print('You click not receive');
-          // routeToListComplain(4);
-        },
       ),
     );
   }
@@ -662,6 +611,19 @@ class _DetailStaffState extends State<DetailStaff> {
         ],
       ),
     );
+  }
+
+  Future<void> checkOut() async {
+    //  postID = post_id;
+    memberID = myUserModel.id.toString();
+    var cpID = currentComplainAllModel.id;
+
+    String url =
+        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_checkout.php?memberId=$memberID&cpID=$cpID'; //'';
+
+    await http.get(url).then((value) {
+      // confirmSubmit();
+    });
   }
 
   Widget showAppoint() {

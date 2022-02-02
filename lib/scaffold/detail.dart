@@ -12,6 +12,7 @@ import 'package:yrucp/scaffold/detail_cart.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -21,6 +22,16 @@ class Detail extends StatefulWidget {
 
   @override
   _DetailState createState() => _DetailState();
+}
+
+class Helper {
+  final int id;
+  final String name;
+
+  Helper({
+    this.id,
+    this.name,
+  });
 }
 
 class _DetailState extends State<Detail> {
@@ -41,7 +52,46 @@ class _DetailState extends State<Detail> {
 
   List<StaffModel> staffModels = List(); // set array
   List<StaffModel> filterStaffModels = List();
+  List<StaffModel> _selectedHelper = List();
   String _mySelection;
+
+  // List _items;
+  // List<StaffModel> _helpers;
+
+  static List<StaffModel> _helpers = [
+    StaffModel(id: 1, subject: "Lion"),
+    // StaffModel(id: 2, subject: "Flamingo"),
+    // StaffModel(id: 3, subject: "Hippo"),
+    // StaffModel(id: 4, subject: "Horse"),
+    // StaffModel(id: 5, subject: "Tiger"),
+    // StaffModel(id: 6, subject: "Penguin"),
+    // StaffModel(id: 7, subject: "Spider"),
+    // StaffModel(id: 8, subject: "Snake"),
+    // StaffModel(id: 9, subject: "Bear"),
+    // StaffModel(id: 10, subject: "Beaver"),
+    // StaffModel(id: 11, subject: "Cat"),
+    // StaffModel(id: 12, subject: "Fish"),
+    // StaffModel(id: 13, subject: "Rabbit"),
+    // StaffModel(id: 14, subject: "Mouse"),
+    // StaffModel(id: 15, subject: "Dog"),
+    // StaffModel(id: 16, subject: "Zebra"),
+    // StaffModel(id: 17, subject: "Cow"),
+    // StaffModel(id: 18, subject: "Frog"),
+    // StaffModel(id: 19, subject: "Blue Jay"),
+    // StaffModel(id: 20, subject: "Moose"),
+    // StaffModel(id: 21, subject: "Gecko"),
+    // StaffModel(id: 22, subject: "Kangaroo"),
+    // StaffModel(id: 23, subject: "Shark"),
+    // StaffModel(id: 24, subject: "Crocodile"),
+    // StaffModel(id: 25, subject: "Owl"),
+    // StaffModel(id: 26, subject: "Dragonfly"),
+    // StaffModel(id: 27, subject: "Dolphin"),
+  ];
+  var _items = _helpers
+      .map((helper) => MultiSelectItem<StaffModel>(helper, helper.subject))
+      .toList();
+
+  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   // Method
   @override
@@ -49,7 +99,7 @@ class _DetailState extends State<Detail> {
     super.initState();
     currentComplainAllModel = widget.complainAllModel;
     myUserModel = widget.userModel;
-
+    _selectedHelper = _helpers;
     setState(() {
       getProductWhereID();
       readCart();
@@ -83,13 +133,38 @@ class _DetailState extends State<Detail> {
 
   List dataST;
   Future<void> readStaff() async {
+    List<StaffModel> _listhelpers = [];
+
     int memberId = myUserModel.id;
     String urlDV =
         'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dv=$dv';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemDivisions = result['itemsProduct'];
+
     setState(() {
+      for (var map in itemDivisions) {
+        int personID = map['id'];
+        String personName = map['person_name'];
+
+        _listhelpers.add(
+          StaffModel(
+            id: personID,
+            subject: personName,
+          ),
+        );
+
+        print('personID >> $personID , personName >> $personName');
+      } // for
+    });
+
+    setState(() {
+      var _items = _listhelpers
+          .map((helper) => MultiSelectItem<StaffModel>(helper, helper.subject))
+          .toList();
+      print('<< _items >> $_items');
+      // print('<< _itemhelpers >> $_itemhelpers');
+
       dataST = itemDivisions;
     });
   }
@@ -338,6 +413,18 @@ class _DetailState extends State<Detail> {
             ),
           ],
         ),
+      ],
+    );
+    // return Text('na');
+  }
+
+  Widget showResponsible_staff() {
+    // print(_helpers);
+    print('_items in >> $_items');
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
         Column(
           children: [
             // Icon(Icons.kitchen, color: Colors.green[500]),
@@ -354,6 +441,94 @@ class _DetailState extends State<Detail> {
                     value: item['id'].toString(),
                   );
                 }).toList(),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.kitchen, color: Colors.green[500]),
+            Text('ผู้ช่วย'),
+            // Center(
+            //   child: MultiSelectBottomSheetField<Helper>(
+            //     key: _multiSelectKey,
+            //     initialChildSize: 0.7,
+            //     maxChildSize: 0.95,
+            //     // initialValue: [_helpers[4], _helpers[7], _helpers[9]],
+            //     title: Text("ทีมงาน"),
+            //     buttonText: Text("เลือกทีมงาน"),
+            //     items: _items,
+            //     // items: dataST.map((item) {}).toList(),
+            //     searchable: true,
+            //     buttonIcon: Icon(
+            //       Icons.supervisor_account_sharp,
+            //       color: Colors.blue,
+            //     ),
+            //     validator: (values) {
+            //       if (values == null || values.isEmpty) {
+            //         return "Required";
+            //       }
+            //       List<String> names = values.map((e) => e.name).toList();
+            //       if (names.contains("Frog")) {
+            //         return "Frogs are weird!";
+            //       }
+            //       return null;
+            //     },
+            //     onConfirm: (values) {
+            //       setState(() {
+            //         _selectedHelper = values;
+            //       });
+            //       _multiSelectKey.currentState.validate();
+            //     },
+            //     chipDisplay: MultiSelectChipDisplay(
+            //       onTap: (item) {
+            //         setState(() {
+            //           _selectedHelper.remove(item);
+            //         });
+            //         _multiSelectKey.currentState.validate();
+            //       },
+            //     ),
+            //   ),
+            // ),
+            Center(
+              child: MultiSelectBottomSheetField<StaffModel>(
+                key: _multiSelectKey,
+                initialChildSize: 0.7,
+                maxChildSize: 0.95,
+                // initialValue: [_helpers[4], _helpers[7], _helpers[9]],
+                title: Text("ทีมงาน"),
+                buttonText: Text("เลือกทีมงาน"),
+                items: _items,
+                // items: dataST.extras.map((e) => e.subject).toList();
+                searchable: true,
+                buttonIcon: Icon(
+                  Icons.supervisor_account_sharp,
+                  color: Colors.blue,
+                ),
+                validator: (values) {
+                  if (values == null || values.isEmpty) {
+                    return "Required";
+                  }
+                  List<String> names = values.map((e) => e.subject).toList();
+                  if (names.contains("Frog")) {
+                    return "Frogs are weird!";
+                  }
+                  return null;
+                },
+                onConfirm: (values) {
+                  setState(() {
+                    _selectedHelper = values;
+                  });
+                  _multiSelectKey.currentState.validate();
+                },
+                chipDisplay: MultiSelectChipDisplay(
+                  onTap: (item) {
+                    setState(() {
+                      _selectedHelper.remove(item);
+                    });
+                    _multiSelectKey.currentState.validate();
+                  },
+                ),
               ),
             ),
           ],
@@ -905,6 +1080,7 @@ class _DetailState extends State<Detail> {
         showHeader(),
         // showSubject(),
         showResponsible(),
+        showResponsible_staff(),
         showFormDeal(),
         submitButton(),
         // showPhoto(),
