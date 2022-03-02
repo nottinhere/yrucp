@@ -188,7 +188,7 @@ class _AuthenState extends State<Authen> {
         if (remember) {
           saveSharePreference();
         } else {
-         routeToMyService();
+          routeToMyService();
         }
       }
     }
@@ -260,8 +260,8 @@ class _AuthenState extends State<Authen> {
     sharedPreferences.setString('User', user);
     sharedPreferences.setString('Password', password);
 
-//    routeToMyService(statusPopup);  // with popup 
-    routeToMyService();  // with popup 
+//    routeToMyService(statusPopup);  // with popup
+    routeToMyService(); // with popup
   }
 
   void routeToMyService() {
@@ -278,7 +278,7 @@ class _AuthenState extends State<Authen> {
     });
   }
 
-  // void routeToMyService(statusPopup) async {  // with popup 
+  // void routeToMyService(statusPopup) async {  // with popup
   //   // print('statusPopup >> $statusPopup');
   //   if (statusPopup == '1') {
   //     // when turn on popup alert

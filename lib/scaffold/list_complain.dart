@@ -11,6 +11,7 @@ import 'package:yrucp/scaffold/detail.dart';
 import 'package:yrucp/scaffold/detail_staff.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yrucp/widget/home.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -18,6 +19,7 @@ import 'detail_cart.dart';
 class ListComplain extends StatefulWidget {
   final int index;
   final UserModel userModel;
+
   ListComplain({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
@@ -151,6 +153,28 @@ class _ListComplainState extends State<ListComplain> {
             //     fontWeight: FontWeight.bold,
             //   ),
             // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget Home() {
+    return GestureDetector(
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext buildContext) {
+          return Home();
+        });
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/home.png'),
           ],
         ),
       ),
@@ -800,7 +824,8 @@ class _ListComplainState extends State<ListComplain> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Logout(),
+          Home(),
+          // Logout(),
           // showCart(),
         ],
         backgroundColor: MyStyle().barColor,

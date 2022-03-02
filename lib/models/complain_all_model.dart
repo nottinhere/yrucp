@@ -10,6 +10,7 @@ class ComplainAllModel {
   String division;
   String staff;
   String staff_name;
+  String helper;
   String startdate_fix;
   String enddate_fix;
   int id;
@@ -26,6 +27,7 @@ class ComplainAllModel {
       this.division,
       this.staff,
       this.staff_name,
+      this.helper,
       this.startdate_fix,
       this.enddate_fix,
       this.id});
@@ -42,6 +44,7 @@ class ComplainAllModel {
     division = json['division'];
     staff = json['staff'];
     staff_name = json['staff_name'];
+    helper = json['helper'];
     startdate_fix = json['startdate_fix'];
     enddate_fix = json['enddate_fix'];
     id = json['id'];
@@ -60,6 +63,7 @@ class ComplainAllModel {
     data['division'] = this.division;
     data['staff'] = this.staff;
     data['staff_name'] = this.staff_name;
+    data['helper'] = this.helper;
     data['startdate_fix'] = this.startdate_fix;
     data['enddate_fix'] = this.enddate_fix;
     data['id'] = this.id;

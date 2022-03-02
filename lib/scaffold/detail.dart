@@ -13,6 +13,7 @@ import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:yrucp/widget/home.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -46,6 +47,7 @@ class _DetailState extends State<Detail> {
 
   String txtdeal = '', txtfree = '', txtprice = '', txtnote = '';
   String memberID;
+  String strhelperID;
 
   int page = 1, dv = 1;
   String searchString = '';
@@ -53,43 +55,13 @@ class _DetailState extends State<Detail> {
   List<StaffModel> staffModels = List(); // set array
   List<StaffModel> filterStaffModels = List();
   List<StaffModel> _selectedHelper = List();
-  String _mySelection;
+  List<StaffModel> _selectedDBHelper = [];
+  List<StaffModel> _listhelpers = [];
 
-  // List _items;
-  // List<StaffModel> _helpers;
+  String _mySelection, _myHelperSelection;
 
-  static List<StaffModel> _helpers = [
-    StaffModel(id: 1, subject: "Lion"),
-    // StaffModel(id: 2, subject: "Flamingo"),
-    // StaffModel(id: 3, subject: "Hippo"),
-    // StaffModel(id: 4, subject: "Horse"),
-    // StaffModel(id: 5, subject: "Tiger"),
-    // StaffModel(id: 6, subject: "Penguin"),
-    // StaffModel(id: 7, subject: "Spider"),
-    // StaffModel(id: 8, subject: "Snake"),
-    // StaffModel(id: 9, subject: "Bear"),
-    // StaffModel(id: 10, subject: "Beaver"),
-    // StaffModel(id: 11, subject: "Cat"),
-    // StaffModel(id: 12, subject: "Fish"),
-    // StaffModel(id: 13, subject: "Rabbit"),
-    // StaffModel(id: 14, subject: "Mouse"),
-    // StaffModel(id: 15, subject: "Dog"),
-    // StaffModel(id: 16, subject: "Zebra"),
-    // StaffModel(id: 17, subject: "Cow"),
-    // StaffModel(id: 18, subject: "Frog"),
-    // StaffModel(id: 19, subject: "Blue Jay"),
-    // StaffModel(id: 20, subject: "Moose"),
-    // StaffModel(id: 21, subject: "Gecko"),
-    // StaffModel(id: 22, subject: "Kangaroo"),
-    // StaffModel(id: 23, subject: "Shark"),
-    // StaffModel(id: 24, subject: "Crocodile"),
-    // StaffModel(id: 25, subject: "Owl"),
-    // StaffModel(id: 26, subject: "Dragonfly"),
-    // StaffModel(id: 27, subject: "Dolphin"),
-  ];
-  var _items = _helpers
-      .map((helper) => MultiSelectItem<StaffModel>(helper, helper.subject))
-      .toList();
+  // static List<StaffModel> _helpers = [];
+  var _items;
 
   final _multiSelectKey = GlobalKey<FormFieldState>();
 
@@ -99,7 +71,7 @@ class _DetailState extends State<Detail> {
     super.initState();
     currentComplainAllModel = widget.complainAllModel;
     myUserModel = widget.userModel;
-    _selectedHelper = _helpers;
+    // _selectedHelper = _helpers;
     setState(() {
       getProductWhereID();
       readCart();
@@ -110,7 +82,6 @@ class _DetailState extends State<Detail> {
   Future<void> getProductWhereID() async {
     if (currentComplainAllModel != null) {
       id = currentComplainAllModel.id.toString();
-      // String url = '${MyStyle().getProductWhereId}$id';
       String url =
           'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_complaindetail.php?id=$id';
       print('url = $url');
@@ -125,7 +96,11 @@ class _DetailState extends State<Detail> {
           Map<String, dynamic> priceListMap = map['price_list'];
           _mySelection =
               (complainAllModel.staff == '-') ? null : complainAllModel.staff;
+          _myHelperSelection =
+              (complainAllModel.helper == '-') ? null : complainAllModel.helper;
         });
+
+        print('_myHelperSelection >> $_myHelperSelection');
       } // for
 
     }
@@ -133,16 +108,19 @@ class _DetailState extends State<Detail> {
 
   List dataST;
   Future<void> readStaff() async {
-    List<StaffModel> _listhelpers = [];
-
     int memberId = myUserModel.id;
+    String myDBhelper = currentComplainAllModel.helper;
+
     String urlDV =
         'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dv=$dv';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemDivisions = result['itemsProduct'];
 
+    List<String> listHelperDB = myDBhelper.split(',').toList();
+
     setState(() {
+      int i = 0;
       for (var map in itemDivisions) {
         int personID = map['id'];
         String personName = map['person_name'];
@@ -154,17 +132,21 @@ class _DetailState extends State<Detail> {
           ),
         );
 
-        print('personID >> $personID , personName >> $personName');
+        if (listHelperDB.contains(personID.toString())) {
+          print('exists personID >> $personID , personName >> $personName');
+
+          _selectedDBHelper.add(_listhelpers[i]);
+        }
+        i = i + 1;
       } // for
     });
 
     setState(() {
-      var _items = _listhelpers
+      _items = _listhelpers
           .map((helper) => MultiSelectItem<StaffModel>(helper, helper.subject))
           .toList();
-      print('<< _items >> $_items');
-      // print('<< _itemhelpers >> $_itemhelpers');
-
+      // print('<< _items >> $_items');
+      // print('<< _listhelpers >> $_listhelpers');
       dataST = itemDivisions;
     });
   }
@@ -419,8 +401,7 @@ class _DetailState extends State<Detail> {
   }
 
   Widget showResponsible_staff() {
-    // print(_helpers);
-    print('_items in >> $_items');
+    print('_selectedDBHelper in >> $_selectedDBHelper');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -447,59 +428,17 @@ class _DetailState extends State<Detail> {
         ),
         Column(
           children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
             Text('ผู้ช่วย'),
-            // Center(
-            //   child: MultiSelectBottomSheetField<Helper>(
-            //     key: _multiSelectKey,
-            //     initialChildSize: 0.7,
-            //     maxChildSize: 0.95,
-            //     // initialValue: [_helpers[4], _helpers[7], _helpers[9]],
-            //     title: Text("ทีมงาน"),
-            //     buttonText: Text("เลือกทีมงาน"),
-            //     items: _items,
-            //     // items: dataST.map((item) {}).toList(),
-            //     searchable: true,
-            //     buttonIcon: Icon(
-            //       Icons.supervisor_account_sharp,
-            //       color: Colors.blue,
-            //     ),
-            //     validator: (values) {
-            //       if (values == null || values.isEmpty) {
-            //         return "Required";
-            //       }
-            //       List<String> names = values.map((e) => e.name).toList();
-            //       if (names.contains("Frog")) {
-            //         return "Frogs are weird!";
-            //       }
-            //       return null;
-            //     },
-            //     onConfirm: (values) {
-            //       setState(() {
-            //         _selectedHelper = values;
-            //       });
-            //       _multiSelectKey.currentState.validate();
-            //     },
-            //     chipDisplay: MultiSelectChipDisplay(
-            //       onTap: (item) {
-            //         setState(() {
-            //           _selectedHelper.remove(item);
-            //         });
-            //         _multiSelectKey.currentState.validate();
-            //       },
-            //     ),
-            //   ),
-            // ),
             Center(
               child: MultiSelectBottomSheetField<StaffModel>(
                 key: _multiSelectKey,
                 initialChildSize: 0.7,
                 maxChildSize: 0.95,
+                initialValue: _selectedDBHelper,
                 // initialValue: [_helpers[4], _helpers[7], _helpers[9]],
                 title: Text("ทีมงาน"),
                 buttonText: Text("เลือกทีมงาน"),
                 items: _items,
-                // items: dataST.extras.map((e) => e.subject).toList();
                 searchable: true,
                 buttonIcon: Icon(
                   Icons.supervisor_account_sharp,
@@ -518,6 +457,9 @@ class _DetailState extends State<Detail> {
                 onConfirm: (values) {
                   setState(() {
                     _selectedHelper = values;
+                    List<int> listhelperID =
+                        _selectedHelper.map((e) => e.id).toList();
+                    strhelperID = listhelperID.join(',');
                   });
                   _multiSelectKey.currentState.validate();
                 },
@@ -525,6 +467,9 @@ class _DetailState extends State<Detail> {
                   onTap: (item) {
                     setState(() {
                       _selectedHelper.remove(item);
+                      List<int> listhelperID =
+                          _selectedHelper.map((e) => e.id).toList();
+                      strhelperID = listhelperID.join(',');
                     });
                     _multiSelectKey.currentState.validate();
                   },
@@ -836,8 +781,8 @@ class _DetailState extends State<Detail> {
       var cpID = currentComplainAllModel.id;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
-
+          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID'; //'';
+      print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
       });
@@ -973,6 +918,28 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  Widget Home() {
+    return GestureDetector(
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext buildContext) {
+          return Home();
+        });
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/home.png'),
+          ],
+        ),
+      ),
+    );
+  }
+
   void routeToDetailCart() {
     MaterialPageRoute materialPageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -988,7 +955,7 @@ class _DetailState extends State<Detail> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Logout(),
+          // Home(),
         ],
         backgroundColor: MyStyle().barColor,
         title: Text('รายละเอียดเรื่องร้องเรียน (Leader)'),

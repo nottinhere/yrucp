@@ -10,6 +10,7 @@ import 'package:yrucp/models/news_model.dart';
 
 import 'package:yrucp/scaffold/detail.dart';
 import 'package:yrucp/scaffold/list_complain.dart';
+import 'package:yrucp/scaffold/list_staff.dart';
 
 import 'package:yrucp/scaffold/detail_news.dart';
 import 'package:yrucp/utility/my_style.dart';
@@ -119,7 +120,7 @@ class _HomeState extends State<Home> {
 
   Widget profileBox() {
     String login = myUserModel.subject;
-    int loginStatus = myUserModel.status;
+    // String loginStatus = myUserModel.status;
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
@@ -517,7 +518,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Container(
                   width: 70.0,
-                  child: Image.asset('images/icon_complain.png'),
+                  child: Image.asset('images/icon_checkmark.png'),
                 ),
                 Text(
                   'เรื่องร้องเรียน',
@@ -533,6 +534,86 @@ class _HomeState extends State<Home> {
         onTap: () {
           print('You click promotion');
           routeToListComplain(0);
+        },
+      ),
+    );
+  }
+
+  Widget ManageCategorybox() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_category.png'),
+                ),
+                Text(
+                  'กลุ่มงาน',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          routeToListComplain(0);
+        },
+      ),
+    );
+  }
+
+  Widget ManageUserbox() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_user.png'),
+                ),
+                Text(
+                  'จัดการรายชื่อ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click listUser');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListUser(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -857,6 +938,8 @@ class _HomeState extends State<Home> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Complainbox(),
+        ManageCategorybox(),
+        ManageUserbox(),
         LogoutBox(),
       ],
     );

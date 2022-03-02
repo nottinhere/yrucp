@@ -12,6 +12,7 @@ import 'package:yrucp/scaffold/detail_cart.dart';
 import 'package:yrucp/utility/my_style.dart';
 import 'package:yrucp/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yrucp/widget/home.dart';
 
 class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -99,6 +100,28 @@ class _DetailStaffState extends State<DetailStaff> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     exit(0);
+  }
+
+  Widget Home() {
+    return GestureDetector(
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext buildContext) {
+          return Home();
+        });
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/home.png'),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget unreadTag() {
@@ -844,7 +867,7 @@ class _DetailStaffState extends State<DetailStaff> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Logout(),
+          // Home(),
         ],
         backgroundColor: MyStyle().barColor,
         title: Text('รายละเอียดเรื่องร้องเรียน (Staff)'),
