@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/models/popup_model.dart';
-import 'package:yrucp/scaffold/my_service.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/scaffold/detail_popup.dart';
-import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/popup_model.dart';
+import 'package:yrusv/scaffold/my_service.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/scaffold/detail_popup.dart';
+import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 

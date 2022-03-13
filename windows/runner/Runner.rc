@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.yrucp" "\0"
+            VALUE "CompanyName", "com.yrusv" "\0"
             VALUE "FileDescription", "A new Flutter project." "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "yrucp" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2021 com.yrucp. All rights reserved." "\0"
-            VALUE "OriginalFilename", "yrucp.exe" "\0"
-            VALUE "ProductName", "yrucp" "\0"
+            VALUE "InternalName", "yrusv" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2021 com.yrusv. All rights reserved." "\0"
+            VALUE "OriginalFilename", "yrusv.exe" "\0"
+            VALUE "ProductName", "yrusv" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

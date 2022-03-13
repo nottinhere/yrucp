@@ -8,7 +8,7 @@ class StaffModel {
   String personContact;
   String personLineid;
   String personFacebook;
-  int division;
+  int department;
   String note;
   int status;
   String regdate;
@@ -24,7 +24,7 @@ class StaffModel {
       this.personContact,
       this.personLineid,
       this.personFacebook,
-      this.division,
+      this.department,
       this.note,
       this.status,
       this.regdate,
@@ -40,7 +40,7 @@ class StaffModel {
     personContact = json['person_contact'];
     personLineid = json['person_lineid'];
     personFacebook = json['person_facebook'];
-    division = json['division'];
+    department = json['department'];
     note = json['note'];
     status = json['status'];
     regdate = json['regdate'];
@@ -58,7 +58,7 @@ class StaffModel {
     data['person_contact'] = this.personContact;
     data['person_lineid'] = this.personLineid;
     data['person_facebook'] = this.personFacebook;
-    data['division'] = this.division;
+    data['department'] = this.department;
     data['note'] = this.note;
     data['status'] = this.status;
     data['regdate'] = this.regdate;

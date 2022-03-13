@@ -4,15 +4,15 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/complain_all_model.dart';
-import 'package:yrucp/models/staff_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/scaffold/detail_cart.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/complain_all_model.dart';
+import 'package:yrusv/models/staff_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/detail_cart.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrucp/widget/home.dart';
+import 'package:yrusv/widget/home.dart';
 
 class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -38,7 +38,7 @@ class _DetailStaffState extends State<DetailStaff> {
   String txtdeal = '', txtfree = '', txtprice = '', txtnote = '';
   String memberID;
 
-  int page = 1, dv = 1;
+  int page = 1, dp = 1;
   String searchString = '';
 
   List<StaffModel> staffModels = List(); // set array
@@ -64,13 +64,13 @@ class _DetailStaffState extends State<DetailStaff> {
       id = currentComplainAllModel.id.toString();
       // String url = '${MyStyle().getProductWhereId}$id';
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_complaindetail.php?id=$id';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
       print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
       print('result = $result');
 
-      var itemProducts = result['itemsProduct'];
+      var itemProducts = result['itemsData'];
       for (var map in itemProducts) {
         setState(() {
           complainAllModel = ComplainAllModel.fromJson(map);
@@ -87,10 +87,10 @@ class _DetailStaffState extends State<DetailStaff> {
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dv=$dv';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDivisions = result['itemsProduct'];
+    var itemDivisions = result['itemsData'];
     setState(() {
       dataST = itemDivisions;
     });
@@ -353,7 +353,7 @@ class _DetailStaffState extends State<DetailStaff> {
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
-              complainAllModel.division,
+              complainAllModel.department,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -548,7 +548,7 @@ class _DetailStaffState extends State<DetailStaff> {
     var cpID = currentComplainAllModel.id;
 
     String url =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_checkin.php?memberId=$memberID&cpID=$cpID'; //'';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_checkin.php?memberId=$memberID&cpID=$cpID'; //'';
 
     await http.get(url).then((value) {
       // confirmSubmit();
@@ -642,7 +642,7 @@ class _DetailStaffState extends State<DetailStaff> {
     var cpID = currentComplainAllModel.id;
 
     String url =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_checkout.php?memberId=$memberID&cpID=$cpID'; //'';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_checkout.php?memberId=$memberID&cpID=$cpID'; //'';
 
     await http.get(url).then((value) {
       // confirmSubmit();
@@ -715,7 +715,7 @@ class _DetailStaffState extends State<DetailStaff> {
       var cpID = currentComplainAllModel.id;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
 
       await http.get(url).then((value) {
         confirmSubmit();
@@ -821,7 +821,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Future<void> readCart() async {
     amontCart = 0;
     String memberId = myUserModel.id.toString();
-    String url = 'http://yrucp.com/api/json_loadmycart.php?memberId=$memberId';
+    String url = 'http://yrusv.com/api/json_loadmycart.php?memberId=$memberId';
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -870,7 +870,7 @@ class _DetailStaffState extends State<DetailStaff> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('รายละเอียดเรื่องร้องเรียน (Staff)'),
+        title: Text('เรื่องร้องเรียน :: รายละเอียดงาน'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailStaffList(),
     );
@@ -926,7 +926,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Future<void> addCart(
       String productID, String unitSize, int qTY, String memberID) async {
     String url =
-        'http://yrucp.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
+        'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
 
     http.Response response = await http.get(url).then((response) {
       print('upload ok');

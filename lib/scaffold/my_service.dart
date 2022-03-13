@@ -4,11 +4,11 @@ import 'dart:io';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/scaffold/result_code.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/widget/contact.dart';
-import 'package:yrucp/widget/home.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/result_code.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/widget/contact.dart';
+import 'package:yrusv/widget/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail_cart.dart';
@@ -66,7 +66,7 @@ class _MyServiceState extends State<MyService> {
         size: 36.0,
       ),
       title: Text('Contact'),
-      subtitle: Text('Contact yrucp'),
+      subtitle: Text('Contact yrusv'),
       onTap: () {
         setState(() {
           currentWidget = Contact();

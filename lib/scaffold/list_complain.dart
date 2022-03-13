@@ -4,14 +4,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/complain_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/scaffold/detail.dart';
-import 'package:yrucp/scaffold/detail_staff.dart';
-import 'package:yrucp/utility/my_style.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/complain_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/detail.dart';
+import 'package:yrusv/scaffold/detail_staff.dart';
+import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrucp/widget/home.dart';
+import 'package:yrusv/widget/home.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -50,6 +50,8 @@ class _ListComplainState extends State<ListComplain> {
   int myIndex;
   List<ComplainAllModel> complainAllModels = List(); // set array
   List<ComplainAllModel> filterComplainAllModels = List();
+  ComplainAllModel currentComplainAllModel;
+  ComplainAllModel complainAllModel;
   int amontCart = 0;
   UserModel myUserModel;
   String searchString = '';
@@ -70,10 +72,8 @@ class _ListComplainState extends State<ListComplain> {
     myUserModel = widget.userModel;
 
     createController(); // เมื่อ scroll to bottom
-
     setState(() {
       readData(); // read  ข้อมูลมาแสดง
-      readCart();
     });
   }
 
@@ -103,7 +103,7 @@ class _ListComplainState extends State<ListComplain> {
     //     'http://ptnpharma.com/apisupplier/json_data_product.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
     String url =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
     if (myIndex != 0) {
       url = '${MyStyle().readProductWhereMode}$myIndex';
@@ -116,7 +116,10 @@ class _ListComplainState extends State<ListComplain> {
     // print('url ListComplain ====>>>> $url');
     // print('result ListComplain ========>>>>> $result');
 
-    var itemProducts = result['itemsProduct'];
+    var itemProducts = result['itemsData'];
+
+    int i = 0;
+    int len = (filterComplainAllModels.length);
 
     for (var map in itemProducts) {
       ComplainAllModel complainAllModel = ComplainAllModel.fromJson(map);
@@ -124,7 +127,33 @@ class _ListComplainState extends State<ListComplain> {
         complainAllModels.add(complainAllModel);
         filterComplainAllModels = complainAllModels;
       });
+      print(
+          ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
+
+      i = i + 1;
     }
+  }
+
+  Future<void> updateDatalist(index) async {
+    // List<ProductAllModel> productAllModels_buffer = List(); // []; //
+    // String url = MyStyle().readAllProduct;
+    print('Here is updateDatalist function');
+
+    String id = filterComplainAllModels[index].id.toString();
+    String url =
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
+    print('url = $url');
+    http.Response response = await http.get(url);
+    var result = json.decode(response.body);
+
+    var itemProducts = result['itemsData'];
+    for (var map in itemProducts) {
+      setState(() {
+        complainAllModel = ComplainAllModel.fromJson(map);
+        filterComplainAllModels[index].staff_name = complainAllModel.staff_name;
+        print('staff_name = ${complainAllModel.staff_name}');
+      });
+    } // for
   }
 
   Future<void> logOut() async {
@@ -380,7 +409,7 @@ class _ListComplainState extends State<ListComplain> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Assign (L1)',
+                  'กำหนดงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -403,9 +432,8 @@ class _ListComplainState extends State<ListComplain> {
           Navigator.of(context)
               .push(materialPageRoute)
               .then((value) => setState(() {
-                    readData();
-                    //showTag(index);
-                    showResponsible(index);
+                    // readData();
+                    updateDatalist(index);
                   }));
         },
       ),
@@ -425,7 +453,7 @@ class _ListComplainState extends State<ListComplain> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'Detail (L2)',
+                  'รายละเอียดงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -555,7 +583,7 @@ class _ListComplainState extends State<ListComplain> {
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
-              filterComplainAllModels[index].division,
+              filterComplainAllModels[index].department,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -764,23 +792,6 @@ class _ListComplainState extends State<ListComplain> {
     return filterComplainAllModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
-  }
-
-  Future<void> readCart() async {
-    String memberId = myUserModel.id.toString();
-    print(memberId);
-    String url =
-        'http://ptnpharma.com/apisupplier/json_loadmycart.php?memberId=$memberId';
-
-    http.Response response = await http.get(url);
-    var result = json.decode(response.body);
-    var cartList = result['cart'];
-
-    for (var map in cartList) {
-      setState(() {
-        amontCart++;
-      });
-    }
   }
 
   Widget showCart() {

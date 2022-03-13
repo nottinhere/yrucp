@@ -3,27 +3,30 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/promote_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/models/news_model.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/promote_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/news_model.dart';
 
-import 'package:yrucp/scaffold/detail.dart';
-import 'package:yrucp/scaffold/list_complain.dart';
-import 'package:yrucp/scaffold/list_staff.dart';
+import 'package:yrusv/scaffold/detail.dart';
+import 'package:yrusv/scaffold/list_complain.dart';
+import 'package:yrusv/scaffold/list_complain_admin.dart';
+import 'package:yrusv/scaffold/list_faq.dart';
+import 'package:yrusv/scaffold/list_staff.dart';
+import 'package:yrusv/scaffold/list_department.dart';
 
-import 'package:yrucp/scaffold/detail_news.dart';
-import 'package:yrucp/utility/my_style.dart';
+import 'package:yrusv/scaffold/detail_news.dart';
+import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*   remove this code  */
-import 'package:yrucp/scaffold/list_product.dart';
-import 'package:yrucp/scaffold/list_product_outofstock.dart';
-import 'package:yrucp/scaffold/list_product_overstock.dart';
-import 'package:yrucp/scaffold/list_product_losesale.dart';
-import 'package:yrucp/scaffold/list_product_highdemand.dart';
-import 'package:yrucp/scaffold/list_product_monthlyreport.dart';
-import 'package:yrucp/scaffold/list_product_alert.dart';
+import 'package:yrusv/scaffold/list_product.dart';
+import 'package:yrusv/scaffold/list_product_outofstock.dart';
+import 'package:yrusv/scaffold/list_product_overstock.dart';
+import 'package:yrusv/scaffold/list_product_losesale.dart';
+import 'package:yrusv/scaffold/list_product_highdemand.dart';
+import 'package:yrusv/scaffold/list_product_monthlyreport.dart';
+import 'package:yrusv/scaffold/list_product_alert.dart';
 /*      ----- -----    */
 
 class Home extends StatefulWidget {
@@ -83,7 +86,7 @@ class _HomeState extends State<Home> {
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
     var mapItemProduct =
-        result['itemsProduct']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
+        result['itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
     for (var map in mapItemProduct) {
       PromoteModel promoteModel = PromoteModel.fromJson(map);
       ProductAllModel productAllModel = ProductAllModel.fromJson(map);
@@ -502,6 +505,49 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget ViewQA() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/question-answer.png'),
+                ),
+                Text(
+                  'ถาม-ตอบ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click listUser');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListFaq(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget Complainbox() {
     // all product
     return Container(
@@ -539,6 +585,50 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget ManageComplain() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_checkmark_admin.png'),
+                ),
+                Text(
+                  'เรื่องร้องเรียน',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListComplainAdmin(
+              index: 0,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget ManageCategorybox() {
     // all product
     return Container(
@@ -558,7 +648,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_category.png'),
                 ),
                 Text(
-                  'กลุ่มงาน',
+                  'แผนก',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -570,7 +660,13 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click promotion');
-          routeToListComplain(0);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListDept(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -592,7 +688,7 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Container(
                   width: 70.0,
-                  child: Image.asset('images/icon_user.png'),
+                  child: Image.asset('images/icon_user_admin.png'),
                 ),
                 Text(
                   'จัดการรายชื่อ',
@@ -610,6 +706,49 @@ class _HomeState extends State<Home> {
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListUser(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget ManageQA() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/q-a.png'),
+                ),
+                Text(
+                  'ถาม-ตอบ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click listUser');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListFaq(
               userModel: myUserModel,
             );
           });
@@ -876,6 +1015,45 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget LogoutAdminBox() {
+    // losesale
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      // height: 80.0,
+      width: 150.0,
+      height: 150.0,
+
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_logout_admin.png'),
+                ),
+                Text(
+                  'ออกจากระบบ',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click square logout');
+          logOut();
+        },
+      ),
+    );
+  }
+
   Widget row1Menu() {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -883,6 +1061,7 @@ class _HomeState extends State<Home> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Complainbox(),
+        ViewQA(),
         LogoutBox(),
       ],
     );
@@ -918,14 +1097,6 @@ class _HomeState extends State<Home> {
         children: <Widget>[
           row1Menu(),
           mySizebox(),
-          // row2Menu(),
-          mySizebox(),
-          // row3Menu(),
-          // mySizebox(),
-          // row4Menu(),
-          // logoutBox(),
-          mySizebox(),
-          mySizebox(),
         ],
       ),
     );
@@ -937,10 +1108,11 @@ class _HomeState extends State<Home> {
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Complainbox(),
+        ManageComplain(),
         ManageCategorybox(),
         ManageUserbox(),
-        LogoutBox(),
+        ManageQA(),
+        LogoutAdminBox(),
       ],
     );
   }

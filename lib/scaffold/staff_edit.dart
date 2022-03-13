@@ -5,14 +5,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:yrucp/models/staff_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/models/division_model.dart';
-import 'package:yrucp/scaffold/detail_cart.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:yrusv/models/staff_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/department_model.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrucp/widget/home.dart';
+import 'package:yrusv/widget/home.dart';
 
 class EditUser extends StatefulWidget {
   final UserModel userAllModel;
@@ -39,7 +38,7 @@ class _EditUserState extends State<EditUser> {
   // Explicit
 
   StaffModel staffAllModel;
-  // DivisionModel divisionModel;
+  // DepartmentModel departmentModel;
 
   int amontCart = 0;
   UserModel myUserModel;
@@ -51,7 +50,7 @@ class _EditUserState extends State<EditUser> {
   String memberID;
   String strhelperID;
 
-  int page = 1, dv = 1;
+  int page = 1, dp = 1;
   String searchString = '';
 
   List<StaffModel> staffModels = List(); // set array
@@ -72,30 +71,30 @@ class _EditUserState extends State<EditUser> {
     myUserModel = widget.userModel;
     // _selectedHelper = _helpers;
     setState(() {
-      readDivision();
+      readDepartment();
       readStaff();
     });
   }
 
   List dataDV;
-  Future<void> readDivision() async {
+  Future<void> readDepartment() async {
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_division.php';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDivisions = result['itemsProduct'];
+    var itemDepartments = result['itemsData'];
 
     setState(() {
-      for (var map in itemDivisions) {
-        String dvID = map['dv_id'];
-        String dvName = map['dv_name'];
+      for (var map in itemDepartments) {
+        String dpID = map['dp_id'];
+        String dpName = map['dp_name'];
       } // for
     });
 
     setState(() {
-      dataDV = itemDivisions;
+      dataDV = itemDepartments;
     });
     // print('dataDV >> $dataDV');
   }
@@ -105,7 +104,7 @@ class _EditUserState extends State<EditUser> {
     int memberId = myUserModel.id;
     String selectId = selectUserModel.id.toString();
     String urlST =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_staff.php?memberId=$memberId&selectId=$selectId';
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
     setState(() {
@@ -115,9 +114,9 @@ class _EditUserState extends State<EditUser> {
       txtname = selectUserModel.personName;
       txtcontact = selectUserModel.personContact;
       print('selectUserModel >> $selectUserModel');
-      _mySelection = (selectUserModel.division == '-')
+      _mySelection = (selectUserModel.department == '-')
           ? null
-          : selectUserModel.division.toString();
+          : selectUserModel.department.toString();
     });
   }
 
@@ -127,20 +126,6 @@ class _EditUserState extends State<EditUser> {
     exit(0);
   }
 
-  Widget showSubject() {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-          child: Text(
-            'xxxxxxxxxxxxxxx',
-            style: MyStyle().h3bStyle,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget mySizebox() {
     return SizedBox(
       width: 10.0,
@@ -148,158 +133,110 @@ class _EditUserState extends State<EditUser> {
     );
   }
 
-  Widget showHeader() {
+  Widget formBox() {
     return Card(
       child: Container(
-        // width: MediaQuery.of(context).size.width * 1.00,
-        padding: new EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'หมายเลขเรื่อง :',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(0xff, 16, 149, 161),
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'วันที่รับแจ้ง : ',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
+        // decoration: MyStyle().boxLightGreen,
+        // height: 35.0,
 
-                        // color: Color.fromARGB(0xff, 16, 149, 161),
+        width: MediaQuery.of(context).size.width * 0.63,
+        padding: EdgeInsets.all(20),
+        child: Align(
+          alignment: Alignment.topLeft,
+          child: Column(
+            children: [
+              Row(
+                children: <Widget>[
+                  Text('User :'),
+                  mySizebox(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue: selectUserModel.user, // set default value
+                      onChanged: (string) {
+                        txtuser = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'User',
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
-                  ],
-                ),
-                // Image.network(
-                //   complainAllModel.emotical,
-                //   width: MediaQuery.of(context).size.width * 0.16,
-                // ),
-              ],
-            ),
-            mySizebox(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget complainBox() {
-    return Container(
-      // decoration: MyStyle().boxLightGreen,
-      // height: 35.0,
-
-      width: MediaQuery.of(context).size.width * 0.63,
-      padding: EdgeInsets.only(left: 10.0, right: 20.0),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Column(
-          children: [
-            Row(
-              children: <Widget>[
-                Text('User :'),
-                mySizebox(),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    initialValue: selectUserModel.user, // set default value
-                    onChanged: (string) {
-                      txtuser = string.trim();
-                    },
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        top: 6.0,
+                  ),
+                  mySizebox(),
+                  Text('ชื่อ - นามสกุล :'),
+                  mySizebox(),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue:
+                          selectUserModel.personName, // set default value
+                      onChanged: (string) {
+                        txtname = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'ชื่อ - นามสกุล',
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                      // border: InputBorder.none,
-                      hintText: 'User',
-                      hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
-                ),
-                mySizebox(),
-                Text('ชื่อ - นามสกุล :'),
-                mySizebox(),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    initialValue:
-                        selectUserModel.personName, // set default value
-                    onChanged: (string) {
-                      txtname = string.trim();
-                    },
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        top: 6.0,
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text('เบอร์ติดต่อ :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue:
+                          selectUserModel.personContact, // set default value
+                      keyboardType: TextInputType.number,
+                      onChanged: (string) {
+                        txtcontact = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'เบอร์ติดต่อ',
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                      // border: InputBorder.none,
-                      hintText: 'ชื่อ - นามสกุล',
-                      hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Text('เบอร์ติดต่อ :'),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: TextFormField(
-                    style: TextStyle(color: Colors.black),
-                    initialValue:
-                        selectUserModel.personContact, // set default value
-                    keyboardType: TextInputType.number,
-                    onChanged: (string) {
-                      txtcontact = string.trim();
-                    },
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(
-                        top: 6.0,
-                      ),
-                      prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                      // border: InputBorder.none,
-                      hintText: 'เบอร์ติดต่อ',
-                      hintStyle: TextStyle(color: Colors.grey),
+                  mySizebox(),
+                  Text('แผนก :'),
+                  Center(
+                    child: DropdownButton(
+                      value: _mySelection,
+                      onChanged: (String newVal) {
+                        setState(() => _mySelection = newVal);
+                      },
+                      items: dataDV.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item['dp_name']),
+                          value: item['dp_id'].toString(),
+                        );
+                      }).toList(),
                     ),
                   ),
-                ),
-                mySizebox(),
-                Text('แผนก :'),
-                Center(
-                  child: DropdownButton(
-                    value: _mySelection,
-                    onChanged: (String newVal) {
-                      setState(() => _mySelection = newVal);
-                    },
-                    items: dataDV.map((item) {
-                      return new DropdownMenuItem(
-                        child: new Text(item['dv_name']),
-                        value: item['dv_id'].toString(),
-                      );
-                    }).toList(),
-                  ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -310,7 +247,7 @@ class _EditUserState extends State<EditUser> {
 
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&division=$_mySelection'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -355,7 +292,7 @@ class _EditUserState extends State<EditUser> {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&division=$_mySelection');
+                  'memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
 
               submitThread();
             },
@@ -416,8 +353,8 @@ class _EditUserState extends State<EditUser> {
         actions: <Widget>[
           // Home(),
         ],
-        backgroundColor: MyStyle().barColor,
-        title: Text('รายละเอียดเรื่องร้องเรียน (Leader)'),
+        backgroundColor: MyStyle().barColorAdmin,
+        title: Text('แก้ไขรายชื่อผู้ปฎิบัติงาน'),
       ),
       body: showController(),
     );
@@ -474,13 +411,8 @@ class _EditUserState extends State<EditUser> {
     return ListView(
       padding: EdgeInsets.all(15.0),
       children: <Widget>[
-        // showTitle(),
-
-        showHeader(),
-        // showSubject(),
-        complainBox(),
+        formBox(),
         submitButton(),
-        // showPhoto(),
       ],
     );
   }

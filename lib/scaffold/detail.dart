@@ -4,16 +4,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/complain_all_model.dart';
-import 'package:yrucp/models/staff_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/scaffold/detail_cart.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/complain_all_model.dart';
+import 'package:yrusv/models/staff_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/detail_cart.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:yrucp/widget/home.dart';
+import 'package:yrusv/widget/home.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -49,7 +49,7 @@ class _DetailState extends State<Detail> {
   String memberID;
   String strhelperID;
 
-  int page = 1, dv = 1;
+  int page = 1, dp = 1;
   String searchString = '';
 
   List<StaffModel> staffModels = List(); // set array
@@ -83,13 +83,13 @@ class _DetailState extends State<Detail> {
     if (currentComplainAllModel != null) {
       id = currentComplainAllModel.id.toString();
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_complaindetail.php?id=$id';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
       print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
       print('result = $result');
 
-      var itemProducts = result['itemsProduct'];
+      var itemProducts = result['itemsData'];
       for (var map in itemProducts) {
         setState(() {
           complainAllModel = ComplainAllModel.fromJson(map);
@@ -97,27 +97,40 @@ class _DetailState extends State<Detail> {
           _mySelection =
               (complainAllModel.staff == '-') ? null : complainAllModel.staff;
           _myHelperSelection =
-              (complainAllModel.helper == '-') ? null : complainAllModel.helper;
+              (complainAllModel.helper == '-') ? '' : complainAllModel.helper;
+
+          // currentComplainAllModel.helper = (complainAllModel.helper == '-' ||
+          //         complainAllModel.helper == 'null')
+          //     ? null
+          //     : complainAllModel.helper;
         });
-
-        print('_myHelperSelection >> $_myHelperSelection');
       } // for
-
     }
   }
 
   List dataST;
+  String myDBhelper;
+  List<String> listHelperDB = [];
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
+    print(
+        'currentComplainAllModel.helper >> ${currentComplainAllModel.helper}');
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dv=$dv';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
+    print('urlDV = $urlDV');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDivisions = result['itemsProduct'];
+    var itemDivisions = result['itemsData'];
+    print('myDBhelper >> $myDBhelper');
 
-    List<String> listHelperDB = myDBhelper.split(',').toList();
+    if (myDBhelper != '-') {
+      listHelperDB = myDBhelper.split(',').toList();
+    }
+    print('listHelperDB >> $listHelperDB');
+
+    _selectedDBHelper.clear();
 
     setState(() {
       int i = 0;
@@ -134,11 +147,14 @@ class _DetailState extends State<Detail> {
 
         if (listHelperDB.contains(personID.toString())) {
           print('exists personID >> $personID , personName >> $personName');
-
           _selectedDBHelper.add(_listhelpers[i]);
         }
         i = i + 1;
       } // for
+
+      // print('[0] >> ${_selectedDBHelper[0].subject}');
+      // print('[1] >> ${_selectedDBHelper[1].subject}');
+      // print('[2] >> ${_selectedDBHelper[2].subject}');
     });
 
     setState(() {
@@ -386,7 +402,7 @@ class _DetailState extends State<Detail> {
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
-              complainAllModel.division,
+              complainAllModel.department,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -402,6 +418,9 @@ class _DetailState extends State<Detail> {
 
   Widget showResponsible_staff() {
     print('_selectedDBHelper in >> $_selectedDBHelper');
+    // print('[0] >> ${_selectedDBHelper[0].subject}');
+    // print('[1] >> ${_selectedDBHelper[1].subject}');
+    // print('[2] >> ${_selectedDBHelper[2].subject}');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -435,7 +454,7 @@ class _DetailState extends State<Detail> {
                 initialChildSize: 0.7,
                 maxChildSize: 0.95,
                 initialValue: _selectedDBHelper,
-                // initialValue: [_helpers[4], _helpers[7], _helpers[9]],
+                // initialValue: [_selectedDBHelper[0], _selectedDBHelper[1]],
                 title: Text("ทีมงาน"),
                 buttonText: Text("เลือกทีมงาน"),
                 items: _items,
@@ -618,24 +637,24 @@ class _DetailState extends State<Detail> {
               ],
             ),
             mySizebox(),
-            Text('ราคา :'),
-            TextFormField(
-              style: TextStyle(color: Colors.black),
-              initialValue: complainAllModel.postby, // set default value
-              keyboardType: TextInputType.number,
-              onChanged: (string) {
-                txtprice = string.trim();
-              },
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(
-                  top: 6.0,
-                ),
-                prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                // border: InputBorder.none,
-                hintText: 'ราคา',
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-            ),
+            // Text('ราคา :'),
+            // TextFormField(
+            //   style: TextStyle(color: Colors.black),
+            //   initialValue: complainAllModel.postby, // set default value
+            //   keyboardType: TextInputType.number,
+            //   onChanged: (string) {
+            //     txtprice = string.trim();
+            //   },
+            //   decoration: InputDecoration(
+            //     contentPadding: EdgeInsets.only(
+            //       top: 6.0,
+            //     ),
+            //     prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+            //     // border: InputBorder.none,
+            //     hintText: 'ราคา',
+            //     hintStyle: TextStyle(color: Colors.grey),
+            //   ),
+            // ),
           ],
         ),
       ),
@@ -780,8 +799,10 @@ class _DetailState extends State<Detail> {
       var medID = currentComplainAllModel.id;
       var cpID = currentComplainAllModel.id;
 
+      currentComplainAllModel.helper = strhelperID;
+
       String url =
-          'https://nottinhere.com/demo/yru/yrucp/apiyrucp/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -800,6 +821,7 @@ class _DetailState extends State<Detail> {
               FlatButton(
                   onPressed: () {
                     Navigator.of(context).pop();
+                    // Navigator.pop(context, true);
                     backProcess();
                   },
                   child: Text('OK'))
@@ -887,7 +909,7 @@ class _DetailState extends State<Detail> {
   Future<void> readCart() async {
     amontCart = 0;
     String memberId = myUserModel.id.toString();
-    String url = 'http://yrucp.com/api/json_loadmycart.php?memberId=$memberId';
+    String url = 'http://yrusv.com/api/json_loadmycart.php?memberId=$memberId';
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -958,7 +980,7 @@ class _DetailState extends State<Detail> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('รายละเอียดเรื่องร้องเรียน (Leader)'),
+        title: Text('เรื่องร้องเรียน :: กำหนดผู้ปฏิบัติงาน'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailList(),
     );
@@ -1014,7 +1036,7 @@ class _DetailState extends State<Detail> {
   Future<void> addCart(
       String productID, String unitSize, int qTY, String memberID) async {
     String url =
-        'http://yrucp.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
+        'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
 
     http.Response response = await http.get(url).then((response) {
       print('upload ok');

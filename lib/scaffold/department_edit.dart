@@ -13,76 +13,111 @@ import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widget/home.dart';
 
-class AddUser extends StatefulWidget {
-  final UserModel userModel;
+class EditDept extends StatefulWidget {
+  final DepartmentModel deptAllModel;
 
-  AddUser({Key key, this.userModel}) : super(key: key);
+  UserModel userModel;
+
+  EditDept({Key key, this.deptAllModel, this.userModel}) : super(key: key);
 
   @override
-  _AddUserState createState() => _AddUserState();
+  _EditDeptState createState() => _EditDeptState();
 }
 
-class _AddUserState extends State<AddUser> {
+class _EditDeptState extends State<EditDept> {
   // Explicit
 
   StaffModel staffAllModel;
-  // DepartmentModel divisionModel;
+  // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
+  DepartmentModel selectDeptModel;
+
   String id; // productID
 
-  String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
+  String txtname = '';
   String memberID;
   String strhelperID;
 
   int page = 1, dp = 1;
   String searchString = '';
-  String _mySelection, _myHelperSelection;
 
-  // static List<StaffModel> _helpers = [];
+  List<StaffModel> staffModels = List(); // set array
+  List<StaffModel> filterStaffModels = List();
+
   var _items;
-
-  final _multiSelectKey = GlobalKey<FormFieldState>();
 
   // Method
   @override
   void initState() {
     super.initState();
+    selectDeptModel = widget.deptAllModel;
     myUserModel = widget.userModel;
     // _selectedHelper = _helpers;
     setState(() {
       readDepartment();
+      // readStaff();
     });
   }
 
-  List dataDV;
-  Future<void> readDepartment() async {
-    String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php';
-    print('urlDV >> $urlDV');
+  // List dataDV;
+  // Future<void> readDepartment() async {
+  //   String urlDV =
+  //       'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_division.php';
+  //   print('urlDV >> $urlDV');
 
+  //   http.Response response = await http.get(urlDV);
+  //   var result = json.decode(response.body);
+  //   var itemDivisions = result['itemsData'];
+
+  //   setState(() {
+  //     for (var map in itemDivisions) {
+  //       String dvID = map['dv_id'];
+  //       String dvName = map['dv_name'];
+  //     } // for
+  //   });
+
+  //   setState(() {
+  //     dataDV = itemDivisions;
+  //   });
+  //   // print('dataDV >> $dataDV');
+  // }
+
+  List dataST;
+  Future<void> readDepartment() async {
+    int memberId = myUserModel.id;
+    String selectId = selectDeptModel.dpId.toString();
+
+    String urlDV =
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php&selectId=$selectId';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDepartments = result['itemsData'];
-
     setState(() {
-      for (var map in itemDepartments) {
-        String dpID = map['dp_id'];
-        String dpName = map['dp_name'];
-      } // for
+      Map<String, dynamic> map = result['data'];
+      DepartmentModel selectDeptModel = DepartmentModel.fromJson(map);
+      txtname = selectDeptModel.dpName;
     });
-
-    setState(() {
-      dataDV = itemDepartments;
-    });
-    print('dataDV >> $dataDV');
   }
 
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     exit(0);
+  }
+
+  Widget showSubject() {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          child: Text(
+            'xxxxxxxxxxxxxxx',
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget mySizebox() {
@@ -96,6 +131,7 @@ class _AddUserState extends State<AddUser> {
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
+
         width: MediaQuery.of(context).size.width * 0.63,
         padding: EdgeInsets.all(20),
         child: Align(
@@ -104,35 +140,13 @@ class _AddUserState extends State<AddUser> {
             children: [
               Row(
                 children: <Widget>[
-                  Text('User :'),
+                  Text('แผนก :'),
                   mySizebox(),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      onChanged: (string) {
-                        txtuser = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'User',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
-                  Text('ชื่อ - นามสกุล :'),
-                  mySizebox(),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
+                      initialValue: selectDeptModel.dpName, // set default value
                       onChanged: (string) {
                         txtname = string.trim();
                       },
@@ -149,47 +163,6 @@ class _AddUserState extends State<AddUser> {
                   ),
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  Text('เบอร์ติดต่อ :'),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      keyboardType: TextInputType.number,
-                      onChanged: (string) {
-                        txtcontact = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'เบอร์ติดต่อ',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
-                  Text('แผนก :'),
-                  Center(
-                    child: DropdownButton(
-                      value: _mySelection,
-                      onChanged: (String newVal) {
-                        setState(() => _mySelection = newVal);
-                      },
-                      items: dataDV.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item['dp_name']),
-                          value: item['dp_id'].toString(),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
@@ -198,9 +171,11 @@ class _AddUserState extends State<AddUser> {
   }
 
   Future<void> submitThread() async {
+    String selectId = selectDeptModel.dpId.toString();
+
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -232,6 +207,8 @@ class _AddUserState extends State<AddUser> {
   }
 
   Widget submitButton() {
+    String selectId = selectDeptModel.dpId.toString();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -243,35 +220,17 @@ class _AddUserState extends State<AddUser> {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
+                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname');
 
               submitThread();
             },
             child: Text(
-              'เพิ่มรายชื่อ',
+              'แก้ไขชื่อแผนก',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget Logout() {
-    return GestureDetector(
-      onTap: () {
-        Logout();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/icon_logout_white.png'),
-          ],
-        ),
-      ),
     );
   }
 
@@ -305,7 +264,7 @@ class _AddUserState extends State<AddUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มรายชื่อผู้ปฎิบัติงาน'),
+        title: Text('แก้ไขข้อมูลแผนก'),
       ),
       body: showController(),
     );
@@ -364,6 +323,7 @@ class _AddUserState extends State<AddUser> {
       children: <Widget>[
         formBox(),
         submitButton(),
+        // showPhoto(),
       ],
     );
   }

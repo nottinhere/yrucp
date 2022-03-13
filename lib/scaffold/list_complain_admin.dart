@@ -1,22 +1,29 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/detail.dart';
+import 'package:yrusv/scaffold/detail_staff.dart';
 import 'package:yrusv/utility/my_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yrusv/widget/home.dart';
 
-import 'detail_view.dart';
+import 'detail.dart';
 import 'detail_cart.dart';
 
-class ListProductOverstock extends StatefulWidget {
+class ListComplainAdmin extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListProductOverstock({Key key, this.index, this.userModel}) : super(key: key);
+
+  ListComplainAdmin({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListProductState createState() => _ListProductState();
+  _ListComplainAdminState createState() => _ListComplainAdminState();
 }
 
 //class
@@ -38,15 +45,15 @@ class Debouncer {
   }
 }
 
-class _ListProductState extends State<ListProductOverstock> {
+class _ListComplainAdminState extends State<ListComplainAdmin> {
   // Explicit
   int myIndex;
-  List<ProductAllModel> productAllModels = List(); // set array
-  List<ProductAllModel> filterProductAllModels = List();
+  List<ComplainAllModel> complainAllModels = List(); // set array
+  List<ComplainAllModel> filterComplainAllModels = List();
   int amontCart = 0;
   UserModel myUserModel;
   String searchString = '';
-  String totalPrice = '';
+
   int amountListView = 6, page = 1;
   String sort = 'asc';
   ScrollController scrollController = ScrollController();
@@ -66,7 +73,7 @@ class _ListProductState extends State<ListProductOverstock> {
 
     setState(() {
       readData(); // read  ข้อมูลมาแสดง
-      // readCart();
+      readCart();
     });
   }
 
@@ -81,8 +88,8 @@ class _ListProductState extends State<ListProductOverstock> {
 
         // setState(() {
         //   amountListView = amountListView + 2;
-        //   if (amountListView > filterProductAllModels.length) {
-        //     amountListView = filterProductAllModels.length;
+        //   if (amountListView > filterComplainAllModels.length) {
+        //     amountListView = filterComplainAllModels.length;
         //   }
         // });
       }
@@ -92,51 +99,104 @@ class _ListProductState extends State<ListProductOverstock> {
   Future<void> readData() async {
     // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
-    String url =
-        'http://ptnpharma.com/apisupplier/json_data_product_overstock.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+    // String url =
+    //     'http://ptnpharma.com/apisupplier/json_data_product.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
-    // if (myIndex != 0) {
-    //   url = '${MyStyle().readProductWhereMode}$myIndex';
-    // }
+    String url =
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+
+    if (myIndex != 0) {
+      url = '${MyStyle().readProductWhereMode}$myIndex';
+    }
 
     http.Response response = await http.get(url);
     print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
     // print('result = $result');
-    // print('url ListProduct ====>>>> $url');
-    // print('result ListProduct ========>>>>> $result');
+    // print('url ListComplain ====>>>> $url');
+    // print('result ListComplain ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
-      ProductAllModel productAllModel = ProductAllModel.fromJson(map);
+      ComplainAllModel complainAllModel = ComplainAllModel.fromJson(map);
       setState(() {
-        productAllModels.add(productAllModel);
-        filterProductAllModels = productAllModels;
+        complainAllModels.add(complainAllModel);
+        filterComplainAllModels = complainAllModels;
       });
     }
-
-    setState(() {
-      totalPrice = result['totalPrice'];
-    });
   }
 
-  Widget promotionTag() {
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    exit(0);
+  }
+
+  Widget Logout() {
+    return GestureDetector(
+      onTap: () {
+        logOut();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/icon_logout_white.png'),
+            // Text(
+            //   '$amontCart',
+            //   style: TextStyle(
+            //     backgroundColor: Colors.blue.shade600,
+            //     color: Colors.white,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget Home() {
+    return GestureDetector(
+      onTap: () {
+        MaterialPageRoute materialPageRoute =
+            MaterialPageRoute(builder: (BuildContext buildContext) {
+          return Home();
+        });
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        margin: EdgeInsets.only(top: 15.0, right: 5.0),
+        width: 32.0,
+        height: 32.0,
+        child: Stack(
+          children: <Widget>[
+            Image.asset('images/home.png'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget unreadTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.20,
+      width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade400,
+          color: Colors.red.shade700,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Text(
-                  'โปรโมชัน',
+                  'ยังไม่ตรวจสอบ',
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -146,28 +206,28 @@ class _ListProductState extends State<ListProductOverstock> {
         ),
         onTap: () {
           print('You click promotion');
-          // routeToListProduct(2);
+          // routeToListComplain(2);
         },
       ),
     );
   }
 
-  Widget updatepriceTag() {
+  Widget openedTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade400,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Text(
-                  'จะปรับราคา',
+                  'ตรวจสอบแล้ว',
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -177,28 +237,28 @@ class _ListProductState extends State<ListProductOverstock> {
         ),
         onTap: () {
           print('You click update price');
-          // routeToListProduct(3);
+          // routeToListComplain(3);
         },
       ),
     );
   }
 
-  Widget newproductTag() {
+  Widget inprocessTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.20,
+      width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade400,
+          color: Colors.orange.shade800,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Text(
-                  'สินค้าใหม่',
+                  'กำลังดำเนินการ',
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -208,28 +268,28 @@ class _ListProductState extends State<ListProductOverstock> {
         ),
         onTap: () {
           print('You click new item');
-          // routeToListProduct(1);
+          // routeToListComplain(1);
         },
       ),
     );
   }
 
-  Widget notreceiveTag() {
+  Widget completeTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade400,
+          color: Colors.green.shade800,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Text(
-                  'สั่งแล้วไม่ได้รับ',
+                  'ดำเนินการเรียบร้อบ',
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -239,7 +299,38 @@ class _ListProductState extends State<ListProductOverstock> {
         ),
         onTap: () {
           print('You click not receive');
-          // routeToListProduct(4);
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget incompleteTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ไม่สามารถนำเนินการได้',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click not receive');
+          // routeToListComplain(4);
         },
       ),
     );
@@ -247,7 +338,7 @@ class _ListProductState extends State<ListProductOverstock> {
 
   Widget cancelTag(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.20,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -258,9 +349,9 @@ class _ListProductState extends State<ListProductOverstock> {
             child: Column(
               children: <Widget>[
                 Text(
-                  filterProductAllModels[index].itemStatusText,
+                  filterComplainAllModels[index].textstatus,
                   style: TextStyle(
-                      fontSize: 11,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
@@ -270,7 +361,90 @@ class _ListProductState extends State<ListProductOverstock> {
         ),
         onTap: () {
           print('You click not receive');
-          // routeToListProduct(4);
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget view_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'รายละเอียด',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You are boss');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return Detail(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context)
+              .push(materialPageRoute)
+              .then((value) => setState(() {
+                    readData();
+                    //showTag(index);
+                    showResponsible(index);
+                  }));
+        },
+      ),
+    );
+  }
+
+  Widget delete_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ลบข้อมูล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You are staff');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return DetailStaff(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -282,24 +456,28 @@ class _ListProductState extends State<ListProductOverstock> {
       // mainAxisSize: MainAxisSize.max,
       // mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        SizedBox(
-          width: 5.0,
-          height: 8.0,
-        ),
-        filterProductAllModels[index].itemStatus != 1
-            ? cancelTag(index)
+        // SizedBox(
+        //   width: 5.0,
+        //   height: 8.0,
+        // ),
+        // filterComplainAllModels[index].status != 1
+        //     ? cancelTag(index)
+        //     : Container(),
+
+        (filterComplainAllModels[index].status == '1')
+            ? unreadTag()
             : Container(),
-        (filterProductAllModels[index].promotion == 1 &&
-                filterProductAllModels[index].itemStatus == 1)
-            ? promotionTag()
+        (filterComplainAllModels[index].status == '2')
+            ? openedTag()
             : Container(),
-        (filterProductAllModels[index].newproduct == 1 &&
-                filterProductAllModels[index].itemStatus == 1)
-            ? newproductTag()
+        (filterComplainAllModels[index].status == '3')
+            ? inprocessTag()
             : Container(),
-        (filterProductAllModels[index].updateprice == 1 &&
-                filterProductAllModels[index].itemStatus == 1)
-            ? updatepriceTag()
+        (filterComplainAllModels[index].status == '4')
+            ? completeTag()
+            : Container(),
+        (filterComplainAllModels[index].status == '5')
+            ? incompleteTag()
             : Container(),
         SizedBox(
           width: 5.0,
@@ -309,16 +487,16 @@ class _ListProductState extends State<ListProductOverstock> {
     );
   }
 
-  Widget showPercentStock(int index) {
+  Widget showNumber(int index) {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.90,
+          width: MediaQuery.of(context).size.width * 0.65,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Code : ' + filterProductAllModels[index].productCode,
+                'หมายเลขเรื่อง :   ${filterComplainAllModels[index].id}',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -326,13 +504,11 @@ class _ListProductState extends State<ListProductOverstock> {
                 ),
               ),
               Text(
-                'Over stock : ' +
-                    filterProductAllModels[index].percentOverStock +
-                    '%',
+                'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
                 style: TextStyle(
                   fontSize: 16.0,
                   // fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 156, 0, 0),
+                  color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
             ],
@@ -342,13 +518,13 @@ class _ListProductState extends State<ListProductOverstock> {
     );
   }
 
-  Widget showName(int index) {
+  Widget showSubject(int index) {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            filterProductAllModels[index].title,
+            filterComplainAllModels[index].subject,
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -356,30 +532,30 @@ class _ListProductState extends State<ListProductOverstock> {
     );
   }
 
-  Widget showStock(int index) {
+  Widget showResponsible(int index) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: [
-            // Icon(Icons.timer, color: Colors.green[500]),
-            Text('สต๊อก'),
-            Text(
-              filterProductAllModels[index].sumStock,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
-              ),
-            ),
-          ],
-        ),
         Column(
           children: [
             // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ขาย/เดือน'),
+            Text('ผู้แจ้ง'),
             Text(
-              filterProductAllModels[index].cMin,
+              filterComplainAllModels[index].postby,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.timer, color: Colors.green[500]),
+            Text('แผนกรับผิดชอบ'),
+            Text(
+              filterComplainAllModels[index].department,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -391,9 +567,9 @@ class _ListProductState extends State<ListProductOverstock> {
         Column(
           children: [
             // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('ล้นสต๊อก'),
+            Text('ผู้รับผิดชอบ'),
             Text(
-              filterProductAllModels[index].overStock,
+              filterComplainAllModels[index].staff_name,
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -402,57 +578,9 @@ class _ListProductState extends State<ListProductOverstock> {
             ),
           ],
         ),
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('หน่วย'),
-            Text(
-              filterProductAllModels[index].unitOrderShow,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-    // return Text('na');
-  }
-
-  Widget showDeal(int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('ราคาทุน'),
-            Text(
-              filterProductAllModels[index].priceOrder,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('รวม'),
-            Text(
-              filterProductAllModels[index].sumPriceOver,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 255),
-              ),
-            ),
-          ],
-        ),
+        Row(
+          children: [view_btn(index), delete_btn(index)],
+        )
       ],
     );
     // return Text('na');
@@ -462,58 +590,59 @@ class _ListProductState extends State<ListProductOverstock> {
     return Container(
       padding: EdgeInsets.only(left: 10.0, right: 5.0),
       // height: MediaQuery.of(context).size.width * 0.5,
-      width: MediaQuery.of(context).size.width *
-          0.95, // MediaQuery.of(context).size.width * 0.80,
+      width: MediaQuery.of(context).size.width * 0.79,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          showPercentStock(index),
-          showName(index),
-          showTag(index),
-          showStock(index),
-          showDeal(index),
+          Row(children: [
+            showNumber(index),
+            // showDatapost(index),
+            showTag(index)
+          ]),
+          showSubject(index),
+          showResponsible(index)
         ],
       ),
     );
   }
 
-  Widget showImage(int index) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(5.0),
-          width: MediaQuery.of(context).size.width * 0.15,
-          child: Image.network(filterProductAllModels[index].emotical),
-        ),
-        Container(
-          padding: EdgeInsets.all(5.0),
-          // width: MediaQuery.of(context).size.width * 0.15,
-          // child: Image.network(filterProductAllModels[index].photo),
-          width: 50,
-          height: 50,
-          decoration: new BoxDecoration(
-              image: new DecorationImage(
-            fit: BoxFit.cover,
-            alignment: FractionalOffset.topCenter,
-            image: new NetworkImage(filterProductAllModels[index].photo),
-          )),
-        ),
-      ],
-    );
-  }
+  // Widget showImage(int index) {
+  //   return Row(
+  //     children: [
+  //       Container(
+  //         padding: EdgeInsets.all(5.0),
+  //         width: MediaQuery.of(context).size.width * 0.06,
+  //         child: Image.network(filterComplainAllModels[index].emotical),
+  //       ),
+  //       Container(
+  //         padding: EdgeInsets.all(5.0),
+  //         // width: MediaQuery.of(context).size.width * 0.15,
+  //         // child: Image.network(filterComplainAllModels[index].photo),
+  //         width: 50,
+  //         height: 50,
+  //         decoration: new BoxDecoration(
+  //             image: new DecorationImage(
+  //           fit: BoxFit.cover,
+  //           alignment: FractionalOffset.topCenter,
+  //           image: new NetworkImage(filterComplainAllModels[index].photo),
+  //         )),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   BoxDecoration myBoxDecoration() {
     return BoxDecoration(
       border: Border(
         top: BorderSide(
           //
-          color: Colors.red.shade400,
-          width: 3.0,
+          color: Colors.blueGrey.shade100,
+          width: 2.0,
         ),
         bottom: BorderSide(
           //
-          color: Colors.red.shade300,
-          width: 3.0,
+          color: Colors.blueGrey.shade100,
+          width: 2.0,
         ),
       ),
     );
@@ -523,7 +652,7 @@ class _ListProductState extends State<ListProductOverstock> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: productAllModels.length,
+        itemCount: complainAllModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -534,7 +663,7 @@ class _ListProductState extends State<ListProductOverstock> {
 
                 child: Container(
                   decoration: myBoxDecoration(),
-                  padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
+                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
                   child: Row(
                     children: <Widget>[
                       showText(index),
@@ -545,14 +674,14 @@ class _ListProductState extends State<ListProductOverstock> {
               ),
             ),
             onTap: () {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return DetailView(
-                  productAllModel: filterProductAllModels[index],
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Detail(
+              //     complainAllModel: filterComplainAllModels[index],
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
             },
           );
         },
@@ -565,48 +694,6 @@ class _ListProductState extends State<ListProductOverstock> {
       child:
           statusStart ? CircularProgressIndicator() : Text('Search not found'),
     );
-  }
-
-  Widget showTotal() {
-    return Container(
-      padding:
-          EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            children: [
-              // Icon(Icons.kitchen, color: Colors.green[500]),
-              Text(
-                ' ยอดรวม ',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 0, 0, 0),
-                ),
-              ),
-              Text(
-                totalPrice,
-                style: TextStyle(
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 0, 0, 255),
-                ),
-              ),
-              Text(
-                ' บาท ',
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 0, 0, 0),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-    // return Text('na');
   }
 
   /*
@@ -632,7 +719,7 @@ class _ListProductState extends State<ListProductOverstock> {
         //       print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
-        //         productAllModels.clear();
+        //         complainAllModels.clear();
         //         readData();
         //       });
         //     }),
@@ -646,7 +733,7 @@ class _ListProductState extends State<ListProductOverstock> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              productAllModels.clear();
+              complainAllModels.clear();
               readData();
             });
           },
@@ -666,7 +753,7 @@ class _ListProductState extends State<ListProductOverstock> {
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
-              productAllModels.clear();
+              complainAllModels.clear();
               readData();
             });
           }),
@@ -674,12 +761,11 @@ class _ListProductState extends State<ListProductOverstock> {
   }
 
   Widget showContent() {
-    return filterProductAllModels.length == 0
+    return filterComplainAllModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
 
-/*
   Future<void> readCart() async {
     String memberId = myUserModel.id.toString();
     print(memberId);
@@ -696,7 +782,7 @@ class _ListProductState extends State<ListProductOverstock> {
       });
     }
   }
-*/
+
   Widget showCart() {
     return GestureDetector(
       onTap: () {
@@ -737,13 +823,15 @@ class _ListProductState extends State<ListProductOverstock> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: MyStyle().barColor, //Colors.yellow.shade700,
-        title: Text('รายการสินค้าล้นสต๊อก'),
         actions: <Widget>[
-          //  showCart(),
+          Home(),
+          // Logout(),
+          // showCart(),
         ],
+        backgroundColor: MyStyle().barColorAdmin,
+        title: Text('จัดการเรื่องร้องเรียน'),
       ),
-      // body: filterProductAllModels.length == 0
+      // body: filterComplainAllModels.length == 0
       //     ? showProgressIndicate()
       //     : myLayout(),
 
@@ -752,7 +840,6 @@ class _ListProductState extends State<ListProductOverstock> {
           searchForm(),
           sortButton(),
           showContent(),
-          showTotal(),
         ],
       ),
     );

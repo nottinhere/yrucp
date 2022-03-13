@@ -7,7 +7,7 @@ class ComplainAllModel {
   String postby;
   String status;
   String textstatus;
-  String division;
+  String department;
   String staff;
   String staff_name;
   String helper;
@@ -24,7 +24,7 @@ class ComplainAllModel {
       this.postby,
       this.status,
       this.textstatus,
-      this.division,
+      this.department,
       this.staff,
       this.staff_name,
       this.helper,
@@ -41,7 +41,7 @@ class ComplainAllModel {
     postby = json['postby'];
     status = json['status'];
     textstatus = json['textstatus'];
-    division = json['division'];
+    department = json['department'];
     staff = json['staff'];
     staff_name = json['staff_name'];
     helper = json['helper'];
@@ -60,7 +60,7 @@ class ComplainAllModel {
     data['postby'] = this.postby;
     data['status'] = this.status;
     data['textstatus'] = this.textstatus;
-    data['division'] = this.division;
+    data['department'] = this.department;
     data['staff'] = this.staff;
     data['staff_name'] = this.staff_name;
     data['helper'] = this.helper;

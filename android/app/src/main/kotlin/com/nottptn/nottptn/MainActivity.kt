@@ -1,4 +1,4 @@
-package com.yrucp.app
+package com.yrusv.app
 
 import android.os.Bundle
 

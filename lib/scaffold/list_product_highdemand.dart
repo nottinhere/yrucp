@@ -3,9 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/utility/my_style.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/utility/my_style.dart';
 
 import 'detail_view.dart';
 import 'detail_cart.dart';
@@ -107,7 +107,7 @@ class _ListProductState extends State<ListProductHighdemand> {
     // print('url ListProduct ====>>>> $url');
     // print('result ListProduct ========>>>>> $result');
 
-    var itemProducts = result['itemsProduct'];
+    var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
       ProductAllModel productAllModel = ProductAllModel.fromJson(map);

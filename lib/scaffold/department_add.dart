@@ -13,32 +13,35 @@ import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widget/home.dart';
 
-class AddUser extends StatefulWidget {
+class AddDept extends StatefulWidget {
   final UserModel userModel;
 
-  AddUser({Key key, this.userModel}) : super(key: key);
+  AddDept({Key key, this.userModel}) : super(key: key);
 
   @override
-  _AddUserState createState() => _AddUserState();
+  _AddDeptState createState() => _AddDeptState();
 }
 
-class _AddUserState extends State<AddUser> {
+class _AddDeptState extends State<AddDept> {
   // Explicit
 
-  StaffModel staffAllModel;
-  // DepartmentModel divisionModel;
+  DepartmentModel departmentAllModel;
+  // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
+  DepartmentModel myDeptModel;
   String id; // productID
 
-  String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
+  String txtname = '';
   String memberID;
   String strhelperID;
 
   int page = 1, dp = 1;
   String searchString = '';
-  String _mySelection, _myHelperSelection;
+
+  List<StaffModel> staffModels = List(); // set array
+  List<StaffModel> filterStaffModels = List();
 
   // static List<StaffModel> _helpers = [];
   var _items;
@@ -50,7 +53,6 @@ class _AddUserState extends State<AddUser> {
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
-    // _selectedHelper = _helpers;
     setState(() {
       readDepartment();
     });
@@ -59,30 +61,38 @@ class _AddUserState extends State<AddUser> {
   List dataDV;
   Future<void> readDepartment() async {
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_division.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDepartments = result['itemsData'];
+    var itemDivisions = result['itemsData'];
 
     setState(() {
-      for (var map in itemDepartments) {
-        String dpID = map['dp_id'];
-        String dpName = map['dp_name'];
+      for (var map in itemDivisions) {
+        String dvID = map['dv_id'];
+        String dvName = map['dv_name'];
       } // for
     });
 
     setState(() {
-      dataDV = itemDepartments;
+      dataDV = itemDivisions;
     });
     print('dataDV >> $dataDV');
   }
 
-  Future<void> logOut() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
-    exit(0);
+  Widget showSubject() {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          child: Text(
+            'xxxxxxxxxxxxxxx',
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget mySizebox() {
@@ -104,29 +114,7 @@ class _AddUserState extends State<AddUser> {
             children: [
               Row(
                 children: <Widget>[
-                  Text('User :'),
-                  mySizebox(),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      onChanged: (string) {
-                        txtuser = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'User',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
-                  Text('ชื่อ - นามสกุล :'),
+                  Text('แผนก :'),
                   mySizebox(),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
@@ -142,54 +130,13 @@ class _AddUserState extends State<AddUser> {
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'ชื่อ - นามสกุล',
+                        hintText: 'แผนก',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
                 ],
               ),
-              Row(
-                children: <Widget>[
-                  Text('เบอร์ติดต่อ :'),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      keyboardType: TextInputType.number,
-                      onChanged: (string) {
-                        txtcontact = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'เบอร์ติดต่อ',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
-                  Text('แผนก :'),
-                  Center(
-                    child: DropdownButton(
-                      value: _mySelection,
-                      onChanged: (String newVal) {
-                        setState(() => _mySelection = newVal);
-                      },
-                      items: dataDV.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item['dp_name']),
-                          value: item['dp_id'].toString(),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
@@ -200,7 +147,7 @@ class _AddUserState extends State<AddUser> {
   Future<void> submitThread() async {
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -240,10 +187,9 @@ class _AddUserState extends State<AddUser> {
           child: RaisedButton(
             color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
-              memberID = myUserModel.id.toString();
+              // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
+              // print('deptId=$deptID&action=add&name=$txtname');
 
               submitThread();
             },
@@ -254,24 +200,6 @@ class _AddUserState extends State<AddUser> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget Logout() {
-    return GestureDetector(
-      onTap: () {
-        Logout();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/icon_logout_white.png'),
-          ],
-        ),
-      ),
     );
   }
 
@@ -305,7 +233,7 @@ class _AddUserState extends State<AddUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มรายชื่อผู้ปฎิบัติงาน'),
+        title: Text('เพิ่มข้อมูลแผนก'),
       ),
       body: showController(),
     );
@@ -332,8 +260,8 @@ class _AddUserState extends State<AddUser> {
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
                 onPressed: () {
-                  String productID = id;
-                  String memberID = myUserModel.id.toString();
+                  // String productID = id;
+                  // String deptID = myDeptModel.dpId.toString();
 
                   int index = 0;
                   List<bool> status = List();
@@ -364,6 +292,7 @@ class _AddUserState extends State<AddUser> {
       children: <Widget>[
         formBox(),
         submitButton(),
+        // showPhoto(),
       ],
     );
   }

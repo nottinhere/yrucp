@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/product_all_model.dart';
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/scaffold/detail_cart.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/utility/normal_dialog.dart';
+import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/scaffold/detail_cart.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/utility/normal_dialog.dart';
 
 class DetailView extends StatefulWidget {
   final ProductAllModel productAllModel;
@@ -49,7 +49,7 @@ class _DetailState extends State<DetailView> {
       var result = json.decode(response.body);
       print('result = $result');
 
-      var itemProducts = result['itemsProduct'];
+      var itemProducts = result['itemsData'];
       for (var map in itemProducts) {
         print('map = $map');
 

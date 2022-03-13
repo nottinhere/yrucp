@@ -6,22 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/department_model.dart';
+import 'package:yrusv/scaffold/department_add.dart';
+import 'package:yrusv/scaffold/department_edit.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widget/home.dart';
-import 'package:yrusv/scaffold/staff_add.dart';
-import 'package:yrusv/scaffold/staff_edit.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 
-class ListUser extends StatefulWidget {
+class ListDept extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListUser({Key key, this.index, this.userModel}) : super(key: key);
+
+  ListDept({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListUserState createState() => _ListUserState();
+  _ListDeptState createState() => _ListDeptState();
 }
 
 //class
@@ -43,10 +45,11 @@ class Debouncer {
   }
 }
 
-class _ListUserState extends State<ListUser> {
+class _ListDeptState extends State<ListDept> {
   List<UserModel> userModels = List(); // set array
-  List<UserModel> filterUserModels = List();
-  UserModel selectUserModel;
+  List<DepartmentModel> deptModels = List(); // set array
+  List<DepartmentModel> filterDeptModels = List();
+  DepartmentModel selectDeptModel;
 
   // Explicit
   int myIndex;
@@ -55,13 +58,13 @@ class _ListUserState extends State<ListUser> {
   UserModel myUserModel;
   String searchString = '';
 
-  int amountListView = 6, page = 1;
+  int amountListView = 50, page = 1;
   String sort = 'asc';
   ScrollController scrollController = ScrollController();
   final Debouncer debouncer =
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
-
+  bool visible = true;
   // Method
   @override
   void initState() {
@@ -73,7 +76,7 @@ class _ListUserState extends State<ListUser> {
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readStaff(); // read  ข้อมูลมาแสดง
+      readDept(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -82,56 +85,54 @@ class _ListUserState extends State<ListUser> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readStaff();
+        readDept();
 
         // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
-        //   if (amountListView > filterProductAllModels.length) {
-        //     amountListView = filterProductAllModels.length;
+        //   if (amountListView > filterComplainAllModels.length) {
+        //     amountListView = filterComplainAllModels.length;
         //   }
         // });
       }
     });
   }
 
-  Future<void> readStaff() async {
+  Future<void> readDept() async {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
-
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php?memberId=$memberId&searchKey=$searchString&page=$page';
+    print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
-      UserModel userModel = UserModel.fromJson(map);
+      DepartmentModel deptModel = DepartmentModel.fromJson(map);
       setState(() {
-        userModels.add(userModel);
-        filterUserModels = userModels;
+        deptModels.add(deptModel);
+        filterDeptModels = deptModels;
       });
     }
-    print('Count row >> ${filterUserModels.length}');
+    print('Count row >> ${filterDeptModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
+    String selectId = filterDeptModels[index].dpId;
 
-    String memberId = myUserModel.id.toString();
-    int selectId = filterUserModels[index].id;
-    String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+    String urlSL =
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_department.php?selectId=$selectId';
 
-    http.Response response = await http.get(urlST);
-    var resultSL = json.decode(response.body);
+    http.Response responseSL = await http.get(urlSL);
+    var resultSL = json.decode(responseSL.body);
     var itemSelect = resultSL['data'];
 
-    selectUserModel = UserModel.fromJson(itemSelect);
+    selectDeptModel = DepartmentModel.fromJson(itemSelect);
     setState(() {
-      filterUserModels[index].personName = selectUserModel.personName;
-      filterUserModels[index].personContact = selectUserModel.personContact;
+      print('itemSelect = ${selectDeptModel.dpName}');
+      filterDeptModels[index].dpName = selectDeptModel.dpName;
     });
   }
 
@@ -160,7 +161,7 @@ class _ListUserState extends State<ListUser> {
   }
 
   void confirmDelete(int index) {
-    String titleName = filterUserModels[index].personName;
+    String titleName = filterDeptModels[index].dpName;
 
     showDialog(
         context: context,
@@ -189,16 +190,16 @@ class _ListUserState extends State<ListUser> {
   }
 
   Future<void> deleteCart(int index) async {
-    String selectId = filterUserModels[index].id.toString();
+    String selectId = filterDeptModels[index].dpId.toString();
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readStaff();
+      readDept();
     });
   }
 
@@ -229,11 +230,12 @@ class _ListUserState extends State<ListUser> {
           print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditUser(
-              userAllModel: filterUserModels[index],
+            return EditDept(
+              deptAllModel: filterDeptModels[index],
               userModel: myUserModel,
             );
           });
+          // Navigator.of(context).push(materialPageRoute);
           Navigator.of(context)
               .push(materialPageRoute)
               .then((value) => setState(() {
@@ -287,19 +289,11 @@ class _ListUserState extends State<ListUser> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Name : ' + filterUserModels[index].personName,
+                'ชื่อแผนก : ' + filterDeptModels[index].dpName,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 16, 149, 161),
-                ),
-              ),
-              Text(
-                'Contact : ' + filterUserModels[index].personContact,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  // fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
               Row(
@@ -318,7 +312,7 @@ class _ListUserState extends State<ListUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterUserModels[index].department.toString(),
+            'Dept : ' + filterDeptModels[index].dpName.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -335,7 +329,7 @@ class _ListUserState extends State<ListUser> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showPercentStock(index),
-          // showName(index),
+          showName(index),
         ],
       ),
     );
@@ -363,12 +357,12 @@ class _ListUserState extends State<ListUser> {
     );
   }
 
-  Widget AddStaff() {
+  Widget AddDepartment() {
     return GestureDetector(
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddUser(
+          return AddDept(
             userModel: myUserModel,
           );
         });
@@ -408,7 +402,7 @@ class _ListUserState extends State<ListUser> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: userModels.length,
+        itemCount: filterDeptModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -476,7 +470,7 @@ class _ListUserState extends State<ListUser> {
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
-        //         readStaff();
+        //         readDept();
         //       });
         //     }),
         title: TextField(
@@ -519,10 +513,10 @@ class _ListUserState extends State<ListUser> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('รายชื่อผู้ปฎิบัติงาน'),
+        title: Text('จัดการข้อมูลแผนก'),
         actions: <Widget>[
           Home(),
-          AddStaff(),
+          AddDepartment(),
         ],
       ),
       // body: filterProductAllModels.length == 0

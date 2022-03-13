@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
-project(yrucp LANGUAGES CXX)
+project(yrusv LANGUAGES CXX)
 
-set(BINARY_NAME "yrucp")
+set(BINARY_NAME "yrusv")
 
 cmake_policy(SET CMP0063 NEW)
 

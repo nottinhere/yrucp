@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:yrucp/scaffold/authen.dart';
+import 'package:yrusv/scaffold/authen.dart';
 
 void main() {
   runApp(MyApp());

@@ -6,22 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/faq_model.dart';
+import 'package:yrusv/scaffold/faq_add.dart';
+import 'package:yrusv/scaffold/faq_edit.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widget/home.dart';
-import 'package:yrusv/scaffold/staff_add.dart';
-import 'package:yrusv/scaffold/staff_edit.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 
-class ListUser extends StatefulWidget {
+class ListFaq extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListUser({Key key, this.index, this.userModel}) : super(key: key);
+
+  ListFaq({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListUserState createState() => _ListUserState();
+  _ListFaqState createState() => _ListFaqState();
 }
 
 //class
@@ -43,11 +45,11 @@ class Debouncer {
   }
 }
 
-class _ListUserState extends State<ListUser> {
+class _ListFaqState extends State<ListFaq> {
   List<UserModel> userModels = List(); // set array
-  List<UserModel> filterUserModels = List();
-  UserModel selectUserModel;
-
+  List<FaqModel> faqModels = List(); // set array
+  List<FaqModel> filterFaqModels = List();
+  FaqModel selectFaqModel;
   // Explicit
   int myIndex;
 
@@ -73,7 +75,7 @@ class _ListUserState extends State<ListUser> {
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readStaff(); // read  ข้อมูลมาแสดง
+      readFaq(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -82,7 +84,7 @@ class _ListUserState extends State<ListUser> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readStaff();
+        readFaq();
 
         // print('in the end');
 
@@ -96,42 +98,40 @@ class _ListUserState extends State<ListUser> {
     });
   }
 
-  Future<void> readStaff() async {
+  Future<void> readFaq() async {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
-
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_faq.php?memberId=$memberId&searchKey=$searchString&page=$page';
+    print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
-      UserModel userModel = UserModel.fromJson(map);
+      FaqModel faqModel = FaqModel.fromJson(map);
       setState(() {
-        userModels.add(userModel);
-        filterUserModels = userModels;
+        faqModels.add(faqModel);
+        filterFaqModels = faqModels;
       });
     }
-    print('Count row >> ${filterUserModels.length}');
+    print('Count row >> ${filterFaqModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
     print('Here is updateDatalist function');
-
-    String memberId = myUserModel.id.toString();
-    int selectId = filterUserModels[index].id;
+    String id = filterFaqModels[index].id.toString();
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_faq.php?selectId=$id';
 
-    http.Response response = await http.get(urlST);
-    var resultSL = json.decode(response.body);
+    http.Response responseSL = await http.get(urlST);
+    var resultSL = json.decode(responseSL.body);
     var itemSelect = resultSL['data'];
 
-    selectUserModel = UserModel.fromJson(itemSelect);
+    selectFaqModel = FaqModel.fromJson(itemSelect);
     setState(() {
-      filterUserModels[index].personName = selectUserModel.personName;
-      filterUserModels[index].personContact = selectUserModel.personContact;
+      print('itemSelect = ${selectFaqModel.question}');
+      filterFaqModels[index].question = selectFaqModel.question;
     });
   }
 
@@ -160,14 +160,14 @@ class _ListUserState extends State<ListUser> {
   }
 
   void confirmDelete(int index) {
-    String titleName = filterUserModels[index].personName;
+    String titleQues = filterFaqModels[index].question;
 
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
+            content: Text('Do you want delete : $titleQues'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -189,16 +189,16 @@ class _ListUserState extends State<ListUser> {
   }
 
   Future<void> deleteCart(int index) async {
-    String selectId = filterUserModels[index].id.toString();
+    String selectId = filterFaqModels[index].id.toString();
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readStaff();
+      readFaq();
     });
   }
 
@@ -229,8 +229,8 @@ class _ListUserState extends State<ListUser> {
           print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditUser(
-              userAllModel: filterUserModels[index],
+            return EditFaq(
+              faqAllModel: filterFaqModels[index],
               userModel: myUserModel,
             );
           });
@@ -287,19 +287,11 @@ class _ListUserState extends State<ListUser> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Name : ' + filterUserModels[index].personName,
+                'Question : ' + filterFaqModels[index].question,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 16, 149, 161),
-                ),
-              ),
-              Text(
-                'Contact : ' + filterUserModels[index].personContact,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  // fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
               Row(
@@ -318,7 +310,7 @@ class _ListUserState extends State<ListUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterUserModels[index].department.toString(),
+            'Ques : ' + filterFaqModels[index].question.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -335,7 +327,7 @@ class _ListUserState extends State<ListUser> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showPercentStock(index),
-          // showName(index),
+          showName(index),
         ],
       ),
     );
@@ -363,12 +355,12 @@ class _ListUserState extends State<ListUser> {
     );
   }
 
-  Widget AddStaff() {
+  Widget BTNAddFaq() {
     return GestureDetector(
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddUser(
+          return AddFaq(
             userModel: myUserModel,
           );
         });
@@ -408,7 +400,7 @@ class _ListUserState extends State<ListUser> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: userModels.length,
+        itemCount: filterFaqModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -429,16 +421,6 @@ class _ListUserState extends State<ListUser> {
                 ),
               ),
             ),
-            onTap: () {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return Detail(
-              //     productAllModel: filterProductAllModels[index],
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
-            },
           );
         },
       ),
@@ -476,7 +458,7 @@ class _ListUserState extends State<ListUser> {
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
-        //         readStaff();
+        //         readFaq();
         //       });
         //     }),
         title: TextField(
@@ -519,10 +501,10 @@ class _ListUserState extends State<ListUser> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('รายชื่อผู้ปฎิบัติงาน'),
+        title: Text('ข้อมูลถาม-ตอบ'),
         actions: <Widget>[
           Home(),
-          AddStaff(),
+          BTNAddFaq(),
         ],
       ),
       // body: filterProductAllModels.length == 0

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrucp/models/user_model.dart';
-import 'package:yrucp/utility/my_style.dart';
-import 'package:yrucp/models/news_model.dart';
+import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/utility/my_style.dart';
+import 'package:yrusv/models/news_model.dart';
 
 class DetailNews extends StatefulWidget {
   final NewsModel newsModel;

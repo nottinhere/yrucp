@@ -6,6 +6,8 @@ class MyStyle {
   Color textColor = Colors.blueGrey.shade500;
   Color bgColor = Colors.lightBlue.shade100;
   Color barColor = Color.fromARGB(0xff, 0x67, 0x62, 0x65); // Colors.lightBlue;
+  Color barColorAdmin =
+      Color.fromARGB(0xff, 0x92, 0x57, 0x46); // Colors.lightBlue;
 
   TextStyle h1Style = TextStyle(
     fontSize: 24.0,
@@ -54,7 +56,7 @@ class MyStyle {
   String readProductWhereMode =
       'http://www.ptnpharma.com/apisupplier/json_product.php?searchKey=';
   String getUserWhereUserAndPass =
-      'http://www.nottinhere.com/demo/yru/yrucp/apiyrucp/json_authen.php'; // json_login.php
+      'http://www.nottinhere.com/demo/yru/yrusv/apiyrusv/json_authen.php'; // json_login.php
   String getProductWhereId =
       'http://www.ptnpharma.com/apisupplier/json_productdetail.php?id=';
 
