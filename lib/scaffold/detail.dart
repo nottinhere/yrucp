@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
@@ -13,7 +12,9 @@ import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:uipickers/uipickers.dart';
+import 'package:time_picker_widget/time_picker_widget.dart';
+import 'package:intl/intl.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -61,6 +62,53 @@ class _DetailState extends State<Detail> {
   String _mySelection, _myHelperSelection;
 
   // static List<StaffModel> _helpers = [];
+
+  int selectedItem = 0;
+  DateTime selectedDate; //  = DateTime.now()
+
+  String selectedTime;
+
+  List<int> _availableHours = [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ];
+  List<int> _availableMinutes = [
+    0,
+    5,
+    10,
+    15,
+    20,
+    25,
+    30,
+    35,
+    40,
+    45,
+    50,
+    55,
+  ];
+
   var _items;
 
   final _multiSelectKey = GlobalKey<FormFieldState>();
@@ -79,6 +127,62 @@ class _DetailState extends State<Detail> {
     });
   }
 
+  showMessage(BuildContext context, String message) => showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 16,
+              ),
+              Icon(
+                Icons.warning,
+                color: Colors.amber,
+                size: 56,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Color(0xFF231F20),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              InkWell(
+                onTap: () => Navigator.of(context).pop(),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                      border:
+                          Border(top: BorderSide(color: Color(0xFFE8ECF3)))),
+                  child: Text(
+                    'Cerrar',
+                    style: TextStyle(
+                        color: Color(0xFF2058CA),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      });
+
   Future<void> getProductWhereID() async {
     if (currentComplainAllModel != null) {
       id = currentComplainAllModel.id.toString();
@@ -87,22 +191,43 @@ class _DetailState extends State<Detail> {
       print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
-      print('result = $result');
 
       var itemProducts = result['itemsData'];
+
+      // var inputFormat = DateFormat('MMM  dd,yyyy');
+      // DateTime inputDate = DateTime.parse(complainAllModel.appointdate);
+
+      // var outputFormat = DateFormat('MMM  dd,yyyy');
+      // var outputDate = outputFormat.format(inputDate);
+
       for (var map in itemProducts) {
         setState(() {
           complainAllModel = ComplainAllModel.fromJson(map);
-          Map<String, dynamic> priceListMap = map['price_list'];
+
+          // DateTime outputDate = new DateFormat("MM dd,yyyy").parse('20220322');
+
+          // print('outputDate >> $outputDate');
+
+          // Map<String, dynamic> priceListMap = map['price_list'];
           _mySelection =
               (complainAllModel.staff == '-') ? null : complainAllModel.staff;
           _myHelperSelection =
               (complainAllModel.helper == '-') ? '' : complainAllModel.helper;
 
-          // currentComplainAllModel.helper = (complainAllModel.helper == '-' ||
-          //         complainAllModel.helper == 'null')
-          //     ? null
-          //     : complainAllModel.helper;
+          strhelperID =
+              (complainAllModel.helper == '-') ? '' : complainAllModel.helper;
+
+          if (complainAllModel.appointdate == '-') {
+            selectedDate = DateTime.now();
+          } else {
+            DateTime dateApt =
+                DateTime.parse((complainAllModel.appointdate).toString());
+            selectedDate = dateApt;
+          }
+
+          selectedTime = (complainAllModel.appointtime == '-')
+              ? '00:00'
+              : complainAllModel.appointtime;
         });
       } // for
     }
@@ -114,21 +239,16 @@ class _DetailState extends State<Detail> {
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
-    print(
-        'currentComplainAllModel.helper >> ${currentComplainAllModel.helper}');
-
     String urlDV =
         'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
     print('urlDV = $urlDV');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemDivisions = result['itemsData'];
-    print('myDBhelper >> $myDBhelper');
 
     if (myDBhelper != '-') {
       listHelperDB = myDBhelper.split(',').toList();
     }
-    print('listHelperDB >> $listHelperDB');
 
     _selectedDBHelper.clear();
 
@@ -151,10 +271,6 @@ class _DetailState extends State<Detail> {
         }
         i = i + 1;
       } // for
-
-      // print('[0] >> ${_selectedDBHelper[0].subject}');
-      // print('[1] >> ${_selectedDBHelper[1].subject}');
-      // print('[2] >> ${_selectedDBHelper[2].subject}');
     });
 
     setState(() {
@@ -385,20 +501,6 @@ class _DetailState extends State<Detail> {
         ),
         Column(
           children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('วันนัดหมาย'),
-            Text(
-              complainAllModel.appointdate,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
             // Icon(Icons.timer, color: Colors.green[500]),
             Text('แผนกรับผิดชอบ'),
             Text(
@@ -417,10 +519,7 @@ class _DetailState extends State<Detail> {
   }
 
   Widget showResponsible_staff() {
-    print('_selectedDBHelper in >> $_selectedDBHelper');
-    // print('[0] >> ${_selectedDBHelper[0].subject}');
-    // print('[1] >> ${_selectedDBHelper[1].subject}');
-    // print('[2] >> ${_selectedDBHelper[2].subject}');
+    // print('_selectedDBHelper in >> $_selectedDBHelper');
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -441,6 +540,65 @@ class _DetailState extends State<Detail> {
                     value: item['id'].toString(),
                   );
                 }).toList(),
+              ),
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Text('วันนัดหมาย'),
+            SizedBox(
+                width: 150,
+                height: 34,
+                child: AdaptiveDatePicker(
+                  //type: AdaptiveDatePickerType.material,
+                  initialDate: selectedDate,
+                  firstDate: DateTime.now().add(Duration(days: -365)),
+                  lastDate: DateTime.now().add(Duration(days: 1460)),
+                  onChanged: (date) {
+                    setState(() => selectedDate = date);
+                  },
+                )),
+          ],
+        ),
+        Column(
+          children: [
+            // Icon(Icons.restaurant, color: Colors.green[500]),
+            Text('เวลานัดหมาย'),
+            Center(
+              child: InkWell(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      selectedTime ??
+                          complainAllModel
+                              .appointtime, // selectedTime ?? '00.00',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    color: Colors.grey.shade200,
+                  ),
+                  width: 150,
+                  height: 35,
+                ),
+
+                onTap: () =>
+                    // DEMO --------------
+                    showCustomTimePicker(
+                        context: context,
+                        onFailValidation: (context) =>
+                            showMessage(context, 'Unavailable selection.'),
+                        initialTime: TimeOfDay(
+                            hour: _availableHours.first,
+                            minute: _availableMinutes.first),
+                        selectableTimePredicate: (time) =>
+                            _availableHours.indexOf(time.hour) != -1 &&
+                            _availableMinutes.indexOf(time.minute) !=
+                                -1).then((time) =>
+                        setState(() => selectedTime = time?.format(context))),
+                // --------------
               ),
             ),
           ],
@@ -637,24 +795,6 @@ class _DetailState extends State<Detail> {
               ],
             ),
             mySizebox(),
-            // Text('ราคา :'),
-            // TextFormField(
-            //   style: TextStyle(color: Colors.black),
-            //   initialValue: complainAllModel.postby, // set default value
-            //   keyboardType: TextInputType.number,
-            //   onChanged: (string) {
-            //     txtprice = string.trim();
-            //   },
-            //   decoration: InputDecoration(
-            //     contentPadding: EdgeInsets.only(
-            //       top: 6.0,
-            //     ),
-            //     prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-            //     // border: InputBorder.none,
-            //     hintText: 'ราคา',
-            //     hintStyle: TextStyle(color: Colors.grey),
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -666,7 +806,7 @@ class _DetailState extends State<Detail> {
     return Container(
         child: Column(children: <Widget>[
       Text(
-        complainAllModel.staff,
+        complainAllModel.startdate_fix,
         style: TextStyle(
           fontSize: 16.0,
           fontWeight: FontWeight.bold,
@@ -722,7 +862,7 @@ class _DetailState extends State<Detail> {
             ),
           ),
           Text(
-            complainAllModel.staff,
+            complainAllModel.enddate_fix,
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,
@@ -802,7 +942,7 @@ class _DetailState extends State<Detail> {
       currentComplainAllModel.helper = strhelperID;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID'; //'';
+          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID&selectedDate=$selectedDate&selectedTime=$selectedTime'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -992,64 +1132,64 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Widget addButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: RaisedButton(
-                color: Colors.lightGreen,
-                child: Text(
-                  'Update deal',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  String productID = id;
-                  String memberID = myUserModel.id.toString();
+  // Widget addButton() {
+  //   return Column(
+  //     mainAxisAlignment: MainAxisAlignment.end,
+  //     children: <Widget>[
+  //       Row(
+  //         children: <Widget>[
+  //           Expanded(
+  //             child: RaisedButton(
+  //               color: Colors.lightGreen,
+  //               child: Text(
+  //                 'Update deal',
+  //                 style: TextStyle(
+  //                     color: Colors.black, fontWeight: FontWeight.bold),
+  //               ),
+  //               onPressed: () {
+  //                 String productID = id;
+  //                 String memberID = myUserModel.id.toString();
 
-                  int index = 0;
-                  List<bool> status = List();
+  //                 int index = 0;
+  //                 List<bool> status = List();
 
-                  bool sumStatus = true;
-                  if (status.length == 1) {
-                    sumStatus = status[0];
-                  } else {
-                    sumStatus = status[0] && status[1];
-                  }
+  //                 bool sumStatus = true;
+  //                 if (status.length == 1) {
+  //                   sumStatus = status[0];
+  //                 } else {
+  //                   sumStatus = status[0] && status[1];
+  //                 }
 
-                  if (sumStatus) {
-                    normalDialog(
-                        context, 'Do not choose item', 'Please choose item');
-                  } else {}
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  //                 if (sumStatus) {
+  //                   normalDialog(
+  //                       context, 'Do not choose item', 'Please choose item');
+  //                 } else {}
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  // }
 
-  Future<void> addCart(
-      String productID, String unitSize, int qTY, String memberID) async {
-    String url =
-        'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
+  // Future<void> addCart(
+  //     String productID, String unitSize, int qTY, String memberID) async {
+  //   String url =
+  //       'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
 
-    http.Response response = await http.get(url).then((response) {
-      print('upload ok');
-      readCart();
-      MaterialPageRoute materialPageRoute =
-          MaterialPageRoute(builder: (BuildContext buildContext) {
-        return DetailCart(
-          userModel: myUserModel,
-        );
-      });
-      Navigator.of(context).push(materialPageRoute);
-    });
-  }
+  //   http.Response response = await http.get(url).then((response) {
+  //     print('upload ok');
+  //     readCart();
+  //     MaterialPageRoute materialPageRoute =
+  //         MaterialPageRoute(builder: (BuildContext buildContext) {
+  //       return DetailCart(
+  //         userModel: myUserModel,
+  //       );
+  //     });
+  //     Navigator.of(context).push(materialPageRoute);
+  //   });
+  // }
 
   Widget showDetailList() {
     return Stack(

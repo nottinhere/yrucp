@@ -38,7 +38,9 @@ dependencies:
   loading: ^1.0.2
   loadmore: ^1.0.4
   multi_select_flutter: ^4.0.0
-  date_time_picker: ^2.1.0
+  uipickers: ^0.0.3
+  time_picker_widget: ^1.0.0+10
+
 
 dev_dependencies:
   flutter_test:

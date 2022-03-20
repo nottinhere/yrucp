@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/scaffold/detail.dart';
@@ -12,6 +11,7 @@ import 'package:yrusv/scaffold/detail_staff.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widget/home.dart';
+import 'package:intl/intl.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -142,7 +142,7 @@ class _ListComplainState extends State<ListComplain> {
     String id = filterComplainAllModels[index].id.toString();
     String url =
         'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
-    print('url = $url');
+    // print('url = $url');
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
 
@@ -151,7 +151,11 @@ class _ListComplainState extends State<ListComplain> {
       setState(() {
         complainAllModel = ComplainAllModel.fromJson(map);
         filterComplainAllModels[index].staff_name = complainAllModel.staff_name;
-        print('staff_name = ${complainAllModel.staff_name}');
+        filterComplainAllModels[index].appointdate =
+            complainAllModel.appointdate;
+        filterComplainAllModels[index].appointtime =
+            complainAllModel.appointtime;
+        // print('staff_name = ${complainAllModel.staff_name}');
       });
     } // for
   }
@@ -516,6 +520,17 @@ class _ListComplainState extends State<ListComplain> {
   }
 
   Widget showNumber(int index) {
+    String selectedDate;
+
+    if (filterComplainAllModels[index].appointdate == '-') {
+      selectedDate = '-';
+    } else {
+      DateTime dateApt = DateTime.parse(
+          (filterComplainAllModels[index].appointdate).toString());
+      selectedDate = DateFormat('dd/MM/yyyy').format(dateApt);
+      ;
+    }
+
     return Row(
       children: <Widget>[
         Container(
@@ -533,6 +548,14 @@ class _ListComplainState extends State<ListComplain> {
               ),
               Text(
                 'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
+                style: TextStyle(
+                  fontSize: 11.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+              Text(
+                'วันที่นัดหมาย :   ${selectedDate}   ${filterComplainAllModels[index].appointtime} ',
                 style: TextStyle(
                   fontSize: 16.0,
                   // fontWeight: FontWeight.bold,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -45,6 +46,9 @@ class _DetailStaffState extends State<DetailStaff> {
   List<StaffModel> filterStaffModels = List();
   String _mySelection;
 
+  bool isButtonCheckinActive = true;
+  bool isButtonCheckoutActive = true;
+
   // Method
   @override
   void initState() {
@@ -77,6 +81,10 @@ class _DetailStaffState extends State<DetailStaff> {
           Map<String, dynamic> priceListMap = map['price_list'];
           _mySelection =
               (complainAllModel.staff == '-') ? null : complainAllModel.staff;
+          isButtonCheckinActive =
+              (complainAllModel.startdate_fix == '-') ? true : false;
+          isButtonCheckoutActive =
+              (complainAllModel.enddate_fix == '-') ? true : false;
         });
       } // for
 
@@ -317,6 +325,16 @@ class _DetailStaffState extends State<DetailStaff> {
   }
 
   Widget showResponsible() {
+    String selectedDate;
+
+    if (complainAllModel.appointdate == '-') {
+      selectedDate = '-';
+    } else {
+      DateTime dateApt =
+          DateTime.parse((complainAllModel.appointdate).toString());
+      selectedDate = DateFormat('dd/MM/yyyy').format(dateApt);
+      ;
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -339,7 +357,7 @@ class _DetailStaffState extends State<DetailStaff> {
             // Icon(Icons.restaurant, color: Colors.green[500]),
             Text('วันนัดหมาย'),
             Text(
-              complainAllModel.appointdate,
+              '${selectedDate}  ${complainAllModel.appointtime}',
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
@@ -533,11 +551,23 @@ class _DetailStaffState extends State<DetailStaff> {
       // height: 80.0,
       child: GestureDetector(
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            onSurface: Colors.green,
+          ),
           child: const Text('ลงเวลาเข้า'),
-          onPressed: () {
-            print('You click checkin');
-            checkIn();
-          },
+          onPressed: isButtonCheckinActive
+              ? () {
+                  print('You click checkin');
+                  checkIn();
+                  setState(() {
+                    isButtonCheckinActive = false;
+                    DateTime now = DateTime.now();
+                    complainAllModel.startdate_fix =
+                        DateFormat('dd/MM/yyyy HH:mm').format(now).toString();
+                    // startdateShow();
+                  });
+                }
+              : null,
         ),
       ),
     );
@@ -575,7 +605,7 @@ class _DetailStaffState extends State<DetailStaff> {
       child: Column(
         children: <Widget>[
           Text(
-            'วันนัดหมาย',
+            'วันเริ่มงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
@@ -594,11 +624,24 @@ class _DetailStaffState extends State<DetailStaff> {
       // height: 80.0,
       child: GestureDetector(
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            onSurface:
+                (isButtonCheckinActive == true) ? Colors.black : Colors.green,
+          ),
           child: const Text('ลงเวลาออก'),
-          onPressed: () {
-            print('You click checkout');
-            checkOut();
-          },
+          onPressed: (isButtonCheckoutActive && isButtonCheckinActive == false)
+              ? () {
+                  print('You click checkout');
+                  checkOut();
+                  setState(() {
+                    isButtonCheckoutActive = false;
+                    DateTime now = DateTime.now();
+                    complainAllModel.enddate_fix =
+                        DateFormat('dd/MM/yyyy HH:mm').format(now).toString();
+                    // startdateShow();
+                  });
+                }
+              : null,
         ),
       ),
     );

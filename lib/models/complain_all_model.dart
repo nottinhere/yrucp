@@ -3,6 +3,7 @@ class ComplainAllModel {
   String detail;
   String location;
   String appointdate;
+  String appointtime;
   String postdate;
   String postby;
   String status;
@@ -20,6 +21,7 @@ class ComplainAllModel {
       this.detail,
       this.location,
       this.appointdate,
+      this.appointtime,
       this.postdate,
       this.postby,
       this.status,
@@ -37,6 +39,7 @@ class ComplainAllModel {
     detail = json['detail'];
     location = json['location'];
     appointdate = json['appointdate'];
+    appointtime = json['appointtime'];
     postdate = json['postdate'];
     postby = json['postby'];
     status = json['status'];
@@ -56,6 +59,7 @@ class ComplainAllModel {
     data['detail'] = this.detail;
     data['location'] = this.location;
     data['appointdate'] = this.appointdate;
+    data['appointtime'] = this.appointtime;
     data['postdate'] = this.postdate;
     data['postby'] = this.postby;
     data['status'] = this.status;
