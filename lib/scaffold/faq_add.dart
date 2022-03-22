@@ -40,14 +40,6 @@ class _AddFaqState extends State<AddFaq> {
   int page = 1, dp = 1;
   String searchString = '';
 
-  List<StaffModel> staffModels = List(); // set array
-  List<StaffModel> filterStaffModels = List();
-
-  // static List<StaffModel> _helpers = [];
-  var _items;
-
-  final _multiSelectKey = GlobalKey<FormFieldState>();
-
   // Method
   @override
   void initState() {
@@ -261,47 +253,6 @@ class _AddFaqState extends State<AddFaq> {
   Widget showProgress() {
     return Center(
       child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget addButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: RaisedButton(
-                color: Colors.lightGreen,
-                child: Text(
-                  'Update deal',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  // String productID = id;
-                  // String faqID = myFaqModel.dpId.toString();
-
-                  int index = 0;
-                  List<bool> status = List();
-
-                  bool sumStatus = true;
-                  if (status.length == 1) {
-                    sumStatus = status[0];
-                  } else {
-                    sumStatus = status[0] && status[1];
-                  }
-
-                  if (sumStatus) {
-                    normalDialog(
-                        context, 'Do not choose item', 'Please choose item');
-                  } else {}
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

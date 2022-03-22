@@ -48,8 +48,8 @@ class Debouncer {
 class _ListComplainState extends State<ListComplain> {
   // Explicit
   int myIndex;
-  List<ComplainAllModel> complainAllModels = List(); // set array
-  List<ComplainAllModel> filterComplainAllModels = List();
+  List<ComplainAllModel> complainAllModels = []; // set array
+  List<ComplainAllModel> filterComplainAllModels = [];
   ComplainAllModel currentComplainAllModel;
   ComplainAllModel complainAllModel;
   int amontCart = 0;
@@ -97,11 +97,7 @@ class _ListComplainState extends State<ListComplain> {
   }
 
   Future<void> readData() async {
-    // String url = MyStyle().readAllProduct;
     int memberId = myUserModel.id;
-    // String url =
-    //     'http://ptnpharma.com/apisupplier/json_data_product.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
-
     String url =
         'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
@@ -112,9 +108,6 @@ class _ListComplainState extends State<ListComplain> {
     http.Response response = await http.get(url);
     print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListComplain ====>>>> $url');
-    // print('result ListComplain ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -135,8 +128,6 @@ class _ListComplainState extends State<ListComplain> {
   }
 
   Future<void> updateDatalist(index) async {
-    // List<ProductAllModel> productAllModels_buffer = List(); // []; //
-    // String url = MyStyle().readAllProduct;
     print('Here is updateDatalist function');
 
     String id = filterComplainAllModels[index].id.toString();
@@ -155,7 +146,6 @@ class _ListComplainState extends State<ListComplain> {
             complainAllModel.appointdate;
         filterComplainAllModels[index].appointtime =
             complainAllModel.appointtime;
-        // print('staff_name = ${complainAllModel.staff_name}');
       });
     } // for
   }

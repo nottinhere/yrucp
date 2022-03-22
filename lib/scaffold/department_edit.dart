@@ -43,11 +43,6 @@ class _EditDeptState extends State<EditDept> {
   int page = 1, dp = 1;
   String searchString = '';
 
-  List<StaffModel> staffModels = List(); // set array
-  List<StaffModel> filterStaffModels = List();
-
-  var _items;
-
   // Method
   @override
   void initState() {
@@ -60,29 +55,6 @@ class _EditDeptState extends State<EditDept> {
       // readStaff();
     });
   }
-
-  // List dataDV;
-  // Future<void> readDepartment() async {
-  //   String urlDV =
-  //       'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_division.php';
-  //   print('urlDV >> $urlDV');
-
-  //   http.Response response = await http.get(urlDV);
-  //   var result = json.decode(response.body);
-  //   var itemDivisions = result['itemsData'];
-
-  //   setState(() {
-  //     for (var map in itemDivisions) {
-  //       String dvID = map['dv_id'];
-  //       String dvName = map['dv_name'];
-  //     } // for
-  //   });
-
-  //   setState(() {
-  //     dataDV = itemDivisions;
-  //   });
-  //   // print('dataDV >> $dataDV');
-  // }
 
   List dataST;
   Future<void> readDepartment() async {
@@ -273,47 +245,6 @@ class _EditDeptState extends State<EditDept> {
   Widget showProgress() {
     return Center(
       child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget addButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: RaisedButton(
-                color: Colors.lightGreen,
-                child: Text(
-                  'Update deal',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  String productID = id;
-                  String memberID = myUserModel.id.toString();
-
-                  int index = 0;
-                  List<bool> status = List();
-
-                  bool sumStatus = true;
-                  if (status.length == 1) {
-                    sumStatus = status[0];
-                  } else {
-                    sumStatus = status[0] && status[1];
-                  }
-
-                  if (sumStatus) {
-                    normalDialog(
-                        context, 'Do not choose item', 'Please choose item');
-                  } else {}
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 

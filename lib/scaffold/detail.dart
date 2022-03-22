@@ -122,7 +122,6 @@ class _DetailState extends State<Detail> {
     // _selectedHelper = _helpers;
     setState(() {
       getProductWhereID();
-      readCart();
       readStaff();
     });
   }
@@ -239,13 +238,16 @@ class _DetailState extends State<Detail> {
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
-    String urlDV =
+    String urlST =
         'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
-    print('urlDV = $urlDV');
-    http.Response response = await http.get(urlDV);
-    var result = json.decode(response.body);
-    var itemDivisions = result['itemsData'];
+    print('urlST = $urlST');
 
+    print('Here is error');
+    http.Response responseST = await http.get(urlST);
+    print('Here is error');
+
+    var result = json.decode(responseST.body);
+    var itemDivisions = result['itemsData'];
     if (myDBhelper != '-') {
       listHelperDB = myDBhelper.split(',').toList();
     }
@@ -1046,22 +1048,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  Future<void> readCart() async {
-    amontCart = 0;
-    String memberId = myUserModel.id.toString();
-    String url = 'http://yrusv.com/api/json_loadmycart.php?memberId=$memberId';
-
-    http.Response response = await http.get(url);
-    var result = json.decode(response.body);
-    var cartList = result['cart'];
-
-    for (var map in cartList) {
-      setState(() {
-        amontCart++;
-      });
-    }
-  }
-
   Widget Logout() {
     return GestureDetector(
       onTap: () {
@@ -1102,16 +1088,6 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  void routeToDetailCart() {
-    MaterialPageRoute materialPageRoute =
-        MaterialPageRoute(builder: (BuildContext buildContext) {
-      return DetailCart(
-        userModel: myUserModel,
-      );
-    });
-    Navigator.of(context).push(materialPageRoute);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1131,65 +1107,6 @@ class _DetailState extends State<Detail> {
       child: CircularProgressIndicator(),
     );
   }
-
-  // Widget addButton() {
-  //   return Column(
-  //     mainAxisAlignment: MainAxisAlignment.end,
-  //     children: <Widget>[
-  //       Row(
-  //         children: <Widget>[
-  //           Expanded(
-  //             child: RaisedButton(
-  //               color: Colors.lightGreen,
-  //               child: Text(
-  //                 'Update deal',
-  //                 style: TextStyle(
-  //                     color: Colors.black, fontWeight: FontWeight.bold),
-  //               ),
-  //               onPressed: () {
-  //                 String productID = id;
-  //                 String memberID = myUserModel.id.toString();
-
-  //                 int index = 0;
-  //                 List<bool> status = List();
-
-  //                 bool sumStatus = true;
-  //                 if (status.length == 1) {
-  //                   sumStatus = status[0];
-  //                 } else {
-  //                   sumStatus = status[0] && status[1];
-  //                 }
-
-  //                 if (sumStatus) {
-  //                   normalDialog(
-  //                       context, 'Do not choose item', 'Please choose item');
-  //                 } else {}
-  //               },
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  // Future<void> addCart(
-  //     String productID, String unitSize, int qTY, String memberID) async {
-  //   String url =
-  //       'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
-
-  //   http.Response response = await http.get(url).then((response) {
-  //     print('upload ok');
-  //     readCart();
-  //     MaterialPageRoute materialPageRoute =
-  //         MaterialPageRoute(builder: (BuildContext buildContext) {
-  //       return DetailCart(
-  //         userModel: myUserModel,
-  //       );
-  //     });
-  //     Navigator.of(context).push(materialPageRoute);
-  //   });
-  // }
 
   Widget showDetailList() {
     return Stack(
