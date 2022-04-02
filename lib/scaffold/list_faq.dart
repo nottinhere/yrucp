@@ -102,7 +102,7 @@ class _ListFaqState extends State<ListFaq> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_faq.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_faq.php?memberId=$memberId&searchKey=$searchString&page=$page';
     print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -122,7 +122,7 @@ class _ListFaqState extends State<ListFaq> {
     print('Here is updateDatalist function');
     String id = filterFaqModels[index].id.toString();
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_faq.php?selectId=$id';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?selectId=$id';
 
     http.Response responseSL = await http.get(urlST);
     var resultSL = json.decode(responseSL.body);
@@ -193,7 +193,7 @@ class _ListFaqState extends State<ListFaq> {
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 

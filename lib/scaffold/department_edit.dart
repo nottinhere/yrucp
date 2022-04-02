@@ -62,7 +62,7 @@ class _EditDeptState extends State<EditDept> {
     String selectId = selectDeptModel.dpId.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php&selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php&selectId=$selectId';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     setState(() {
@@ -147,7 +147,7 @@ class _EditDeptState extends State<EditDept> {
 
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();

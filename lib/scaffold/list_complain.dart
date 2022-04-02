@@ -99,7 +99,7 @@ class _ListComplainState extends State<ListComplain> {
   Future<void> readData() async {
     int memberId = myUserModel.id;
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
 
     if (myIndex != 0) {
       url = '${MyStyle().readProductWhereMode}$myIndex';
@@ -132,7 +132,7 @@ class _ListComplainState extends State<ListComplain> {
 
     String id = filterComplainAllModels[index].id.toString();
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
     // print('url = $url');
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -801,6 +801,24 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
+  Widget refreshButton() {
+    return Container(
+      child: FlatButton.icon(
+          // color: Colors.red,
+          icon: Icon(Icons.refresh), //`Icon` to display
+          label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
+          onPressed: () {
+            print('searchString ===>>> $searchString');
+            setState(() {
+              page = 1;
+              // sort = (sort == 'asc') ? 'desc' : 'asc';
+              // complainAllModels.clear();
+              readData();
+            });
+          }),
+    );
+  }
+
   Widget showContent() {
     return filterComplainAllModels.length == 0
         ? showProductItem() // showProgressIndicate()
@@ -853,7 +871,7 @@ class _ListComplainState extends State<ListComplain> {
           // showCart(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('เรื่องร้องเรียน'),
+        title: Text('ขอใช้บริการ'),
       ),
       // body: filterComplainAllModels.length == 0
       //     ? showProgressIndicate()
@@ -862,7 +880,7 @@ class _ListComplainState extends State<ListComplain> {
       body: Column(
         children: <Widget>[
           searchForm(),
-          sortButton(),
+          refreshButton(),
           showContent(),
         ],
       ),

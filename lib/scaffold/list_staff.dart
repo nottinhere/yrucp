@@ -100,7 +100,7 @@ class _ListUserState extends State<ListUser> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -122,7 +122,7 @@ class _ListUserState extends State<ListUser> {
     String memberId = myUserModel.id.toString();
     int selectId = filterUserModels[index].id;
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_staff.php?memberId=$memberId&selectId=$selectId';
 
     http.Response response = await http.get(urlST);
     var resultSL = json.decode(response.body);
@@ -193,7 +193,7 @@ class _ListUserState extends State<ListUser> {
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 

@@ -74,7 +74,7 @@ class _EditUserState extends State<EditUser> {
   List dataDV;
   Future<void> readDepartment() async {
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -99,7 +99,7 @@ class _EditUserState extends State<EditUser> {
     int memberId = myUserModel.id;
     String selectId = selectUserModel.id.toString();
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_staff.php?memberId=$memberId&selectId=$selectId';
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
     setState(() {
@@ -242,7 +242,7 @@ class _EditUserState extends State<EditUser> {
 
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();

@@ -54,7 +54,7 @@ class _AddUserState extends State<AddUser> {
   List dataDV;
   Future<void> readDepartment() async {
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -195,7 +195,7 @@ class _AddUserState extends State<AddUser> {
   Future<void> submitThread() async {
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();

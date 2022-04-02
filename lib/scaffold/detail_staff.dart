@@ -36,7 +36,7 @@ class _DetailStaffState extends State<DetailStaff> {
   UserModel myUserModel;
   String id; // productID
 
-  String txtdeal = '', txtfree = '', txtprice = '', txtnote = '';
+  String txtdeal = '', txtfree = '', txtprice = '', txtreply = '';
   String memberID;
 
   int page = 1, dp = 1;
@@ -68,7 +68,7 @@ class _DetailStaffState extends State<DetailStaff> {
       id = currentComplainAllModel.id.toString();
       // String url = '${MyStyle().getProductWhereId}$id';
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
       print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
@@ -95,7 +95,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemDivisions = result['itemsData'];
@@ -520,24 +520,6 @@ class _DetailStaffState extends State<DetailStaff> {
               ],
             ),
             mySizebox(),
-            Text('ราคา :'),
-            TextFormField(
-              style: TextStyle(color: Colors.black),
-              initialValue: complainAllModel.postby, // set default value
-              keyboardType: TextInputType.number,
-              onChanged: (string) {
-                txtprice = string.trim();
-              },
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(
-                  top: 6.0,
-                ),
-                prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                // border: InputBorder.none,
-                hintText: 'ราคา',
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
-            ),
           ],
         ),
       ),
@@ -578,7 +560,7 @@ class _DetailStaffState extends State<DetailStaff> {
     var cpID = currentComplainAllModel.id;
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_checkin.php?memberId=$memberID&cpID=$cpID'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_checkin.php?memberId=$memberID&cpID=$cpID'; //'';
 
     await http.get(url).then((value) {
       // confirmSubmit();
@@ -685,7 +667,7 @@ class _DetailStaffState extends State<DetailStaff> {
     var cpID = currentComplainAllModel.id;
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_checkout.php?memberId=$memberID&cpID=$cpID'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_checkout.php?memberId=$memberID&cpID=$cpID'; //'';
 
     await http.get(url).then((value) {
       // confirmSubmit();
@@ -721,21 +703,56 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
-  // Widget noteBox() {
-  //   return Container(
-  //     margin: EdgeInsets.only(left: 10.0, right: 10.0),
-  //     child: TextField(
-  //       onChanged: (value) {
-  //         txtnote = value.trim();
-  //       },
-  //       keyboardType: TextInputType.multiline,
-  //       maxLines: 2,
-  //       decoration: InputDecoration(
-  //           prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-  //           labelText: 'Note :'),
-  //     ),
-  //   );
-  // }
+  Widget noteBox() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อมูลเพิ่มเติม',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Text(
+            complainAllModel.note,
+            style: TextStyle(
+              fontSize: 16.0,
+              // fontWeight: FontWeight.bold,
+              color: Color.fromARGB(0xff, 0, 0, 0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget replyBox() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          Text(
+            'ข้อความตอบกลับ',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          TextField(
+            onChanged: (value) {
+              txtreply = value.trim();
+            },
+            keyboardType: TextInputType.multiline,
+            maxLines: 2,
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                labelText: 'reply :'),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget showFormDeal() {
     return Card(
@@ -744,7 +761,8 @@ class _DetailStaffState extends State<DetailStaff> {
           Row(
             children: <Widget>[complainBox(), showAppoint()],
           ),
-          // noteBox(),
+          noteBox(),
+          replyBox(),
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
         ],
@@ -758,8 +776,7 @@ class _DetailStaffState extends State<DetailStaff> {
       var cpID = currentComplainAllModel.id;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote'; //'';
-
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_reply.php?memberId=$memberID&cpID=$cpID&reply=$txtreply'; //'';
       await http.get(url).then((value) {
         confirmSubmit();
       });
@@ -800,9 +817,7 @@ class _DetailStaffState extends State<DetailStaff> {
             onPressed: () {
               memberID = myUserModel.id.toString();
               var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote');
-
+              print('memberId=$memberID&cpID=$cpID&reply=$txtreply');
               submitThread();
             },
             child: Text(
@@ -913,7 +928,7 @@ class _DetailStaffState extends State<DetailStaff> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('เรื่องร้องเรียน :: รายละเอียดงาน'),
+        title: Text('ขอใช้บริการ :: รายละเอียดงาน'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailStaffList(),
     );

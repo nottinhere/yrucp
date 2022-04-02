@@ -52,8 +52,7 @@ class _AddDeptState extends State<AddDept> {
 
   List dataDV;
   Future<void> readDepartment() async {
-    String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_division.php';
+    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -139,7 +138,7 @@ class _AddDeptState extends State<AddDept> {
   Future<void> submitThread() async {
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();

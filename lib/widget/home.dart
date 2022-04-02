@@ -383,7 +383,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_checkmark.png'),
                 ),
                 Text(
-                  'เรื่องร้องเรียน',
+                  'ขอใช้บริการ',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -420,7 +420,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_checkmark_admin.png'),
                 ),
                 Text(
-                  'เรื่องร้องเรียน',
+                  'ขอใช้บริการ',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

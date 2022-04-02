@@ -14,6 +14,8 @@ class ComplainAllModel {
   String helper;
   String startdate_fix;
   String enddate_fix;
+  String note;
+  String reply;
   int id;
 
   ComplainAllModel(
@@ -32,6 +34,8 @@ class ComplainAllModel {
       this.helper,
       this.startdate_fix,
       this.enddate_fix,
+      this.note,
+      this.reply,
       this.id});
 
   ComplainAllModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,8 @@ class ComplainAllModel {
     helper = json['helper'];
     startdate_fix = json['startdate_fix'];
     enddate_fix = json['enddate_fix'];
+    note = json['note'];
+    reply = json['reply'];
     id = json['id'];
   }
 
@@ -70,6 +76,8 @@ class ComplainAllModel {
     data['helper'] = this.helper;
     data['startdate_fix'] = this.startdate_fix;
     data['enddate_fix'] = this.enddate_fix;
+    data['note'] = this.note;
+    data['reply'] = this.reply;
     data['id'] = this.id;
     return data;
   }

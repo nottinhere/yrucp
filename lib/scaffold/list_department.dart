@@ -103,7 +103,7 @@ class _ListDeptState extends State<ListDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_department.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php?memberId=$memberId&searchKey=$searchString&page=$page';
     print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -123,7 +123,7 @@ class _ListDeptState extends State<ListDept> {
     String selectId = filterDeptModels[index].dpId;
 
     String urlSL =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_department.php?selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_department.php?selectId=$selectId';
 
     http.Response responseSL = await http.get(urlSL);
     var resultSL = json.decode(responseSL.body);
@@ -194,7 +194,7 @@ class _ListDeptState extends State<ListDept> {
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 

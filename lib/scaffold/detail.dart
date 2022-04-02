@@ -186,7 +186,7 @@ class _DetailState extends State<Detail> {
     if (currentComplainAllModel != null) {
       id = currentComplainAllModel.id.toString();
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_complaindetail.php?id=$id';
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
       print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
@@ -239,7 +239,7 @@ class _DetailState extends State<Detail> {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
     print('urlST = $urlST');
 
     print('Here is error');
@@ -905,21 +905,56 @@ class _DetailState extends State<Detail> {
     );
   }
 
-  // Widget noteBox() {
-  //   return Container(
-  //     margin: EdgeInsets.only(left: 10.0, right: 10.0),
-  //     child: TextField(
-  //       onChanged: (value) {
-  //         txtnote = value.trim();
-  //       },
-  //       keyboardType: TextInputType.multiline,
-  //       maxLines: 2,
-  //       decoration: InputDecoration(
-  //           prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-  //           labelText: 'Note :'),
-  //     ),
-  //   );
-  // }
+  Widget noteBox() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          Text(
+            'ข้อมูลเพิ่มเติม',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          TextField(
+            onChanged: (value) {
+              txtnote = value.trim();
+            },
+            keyboardType: TextInputType.multiline,
+            maxLines: 2,
+            decoration: InputDecoration(
+                prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                labelText: 'Note :'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget replyBox() {
+    return Container(
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความตอบกลับ',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Text(
+            complainAllModel.reply,
+            style: TextStyle(
+              fontSize: 16.0,
+              // fontWeight: FontWeight.bold,
+              color: Color.fromARGB(0xff, 0, 0, 0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget showFormDeal() {
     return Card(
@@ -928,7 +963,9 @@ class _DetailState extends State<Detail> {
           Row(
             children: <Widget>[complainBox(), showAppoint()],
           ),
-          // noteBox(),
+          noteBox(),
+          replyBox(),
+
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
         ],
@@ -944,7 +981,7 @@ class _DetailState extends State<Detail> {
       currentComplainAllModel.helper = strhelperID;
 
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID&selectedDate=$selectedDate&selectedTime=$selectedTime'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_staff.php?memberId=$memberID&cpID=$cpID&assignTo=$_mySelection&note=$txtnote&helper=$strhelperID&selectedDate=$selectedDate&selectedTime=$selectedTime'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -1096,7 +1133,7 @@ class _DetailState extends State<Detail> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('เรื่องร้องเรียน :: กำหนดผู้ปฏิบัติงาน'),
+        title: Text('ขอใช้บริการ :: กำหนดผู้ปฏิบัติงาน'),
       ),
       body: complainAllModel == null ? showProgress() : showDetailList(),
     );

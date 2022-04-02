@@ -64,7 +64,7 @@ class _EditFaqState extends State<EditFaq> {
     int memberId = myUserModel.id;
     String selectId = selectFaqModel.id.toString();
     String urlST =
-        'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_select_faq.php?memberId=$memberId&selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?memberId=$memberId&selectId=$selectId';
     print('urlST >> $urlST');
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
@@ -171,7 +171,7 @@ class _EditFaqState extends State<EditFaq> {
 
     try {
       String url =
-          'https://nottinhere.com/demo/yru/yrusv/apiyrusv/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
