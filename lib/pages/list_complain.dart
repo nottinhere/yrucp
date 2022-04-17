@@ -185,28 +185,6 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
-  Widget Home() {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return Home();
-        });
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/home.png'),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget unreadTag() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
@@ -337,7 +315,7 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -399,12 +377,16 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
                 Text(
                   'กำหนดงาน',
                   style: TextStyle(
@@ -443,12 +425,16 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.speaker_notes_outlined,
+                  color: Colors.white,
+                ),
                 Text(
                   'รายละเอียดงาน',
                   style: TextStyle(
@@ -868,7 +854,7 @@ class _ListComplainState extends State<ListComplain> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Home(),
+          // Home(),
         ],
         backgroundColor: MyStyle().barColor,
         title: Text('ขอใช้บริการ'),

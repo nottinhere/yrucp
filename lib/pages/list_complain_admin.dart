@@ -160,28 +160,6 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     );
   }
 
-  Widget Home() {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return Home();
-        });
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/home.png'),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget unreadTag() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
@@ -312,7 +290,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -374,12 +352,16 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.speaker_notes_outlined,
+                  color: Colors.white,
+                ),
                 Text(
                   'รายละเอียด',
                   style: TextStyle(
@@ -419,12 +401,16 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
                 Text(
                   'ลบข้อมูล',
                   style: TextStyle(
@@ -843,7 +829,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     return Scaffold(
       appBar: AppBar(
         actions: <Widget>[
-          Home(),
+          // Home(),
           // Logout(),
           // showCart(),
         ],

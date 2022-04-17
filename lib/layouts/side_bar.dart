@@ -29,7 +29,7 @@ class SideBar extends StatefulWidget {
 
 class _SideBarState extends State<SideBar> {
   UserModel myUserModel;
-  // PageController page = PageController();
+  PageController page = PageController();
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _SideBarState extends State<SideBar> {
     return Row(
       children: [
         SideMenu(
-          // controller: page,
+          controller: page,
           style: SideMenuStyle(
             displayMode: SideMenuDisplayMode.auto,
             hoverColor: Colors.blue[100],
@@ -87,16 +87,6 @@ class _SideBarState extends State<SideBar> {
             ),
           ),
           items: [
-            // SideMenuItem(
-            //   priority: 0,
-            //   title: 'Dashboard',
-            //   onTap: () {},
-            //   icon: Icon(Icons.home),
-            //   badgeContent: Text(
-            //     '3',
-            //     style: TextStyle(color: Colors.white),
-            //   ),
-            // ),
             SideMenuItem(
               priority: 1,
               title: 'หน้าหลัก',

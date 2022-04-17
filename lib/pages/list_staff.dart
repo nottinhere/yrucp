@@ -209,14 +209,18 @@ class _ListUserState extends State<ListUser> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
                 Text(
-                  'แก้ไขข้อมูล',
+                  ' แก้ไขข้อมูล',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -254,12 +258,16 @@ class _ListUserState extends State<ListUser> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
+            child: Row(
               children: <Widget>[
+                Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
                 Text(
                   'ลบข้อมูล',
                   style: TextStyle(
@@ -342,28 +350,6 @@ class _ListUserState extends State<ListUser> {
     );
   }
 
-  Widget Home() {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return Home();
-        });
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/home.png'),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget AddStaff() {
     return GestureDetector(
       onTap: () {
@@ -375,14 +361,27 @@ class _ListUserState extends State<ListUser> {
         });
         Navigator.of(context).push(materialPageRoute);
       },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/add-icon.png'),
-          ],
+      child: Card(
+        color: Colors.blue.shade600,
+        child: Container(
+          height: 50,
+          // padding: EdgeInsets.all(2.0),
+          // alignment: AlignmentDirectional(0.0, 0.0),
+          child: Row(
+            children: <Widget>[
+              Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              Text(
+                ' เพิ่มข้อมูล',
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -522,7 +521,6 @@ class _ListUserState extends State<ListUser> {
         backgroundColor: MyStyle().barColorAdmin,
         title: Text('รายชื่อผู้ปฎิบัติงาน'),
         actions: <Widget>[
-          Home(),
           AddStaff(),
         ],
       ),

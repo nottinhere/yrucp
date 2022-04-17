@@ -422,7 +422,7 @@ class _DetailState extends State<Detail> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.grey.shade600,
+          color: Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
