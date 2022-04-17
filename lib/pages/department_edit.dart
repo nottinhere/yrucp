@@ -5,77 +5,71 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/faq_model.dart';
+import 'package:yrusv/models/department_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
-class EditFaq extends StatefulWidget {
-  final FaqModel faqAllModel;
+class EditDept extends StatefulWidget {
+  final DepartmentModel deptAllModel;
 
   UserModel userModel;
 
-  EditFaq({Key key, this.faqAllModel, this.userModel}) : super(key: key);
+  EditDept({Key key, this.deptAllModel, this.userModel}) : super(key: key);
 
   @override
-  _EditFaqState createState() => _EditFaqState();
+  _EditDeptState createState() => _EditDeptState();
 }
 
-class _EditFaqState extends State<EditFaq> {
+class _EditDeptState extends State<EditDept> {
   // Explicit
 
-  FaqModel faqAllModel;
+  StaffModel staffAllModel;
   // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
-  FaqModel selectFaqModel;
+  DepartmentModel selectDeptModel;
 
   String id; // productID
 
-  String txtquestion = '', txtanswer = '';
+  String txtname = '';
   String memberID;
   String strhelperID;
 
   int page = 1, dp = 1;
   String searchString = '';
 
-  List<FaqModel> faqModels = []; // set array
-  List<FaqModel> filterFaqModels = [];
-
-  var _items;
-
   // Method
   @override
   void initState() {
     super.initState();
-    selectFaqModel = widget.faqAllModel;
+    selectDeptModel = widget.deptAllModel;
     myUserModel = widget.userModel;
     // _selectedHelper = _helpers;
     setState(() {
-      readFaq();
+      readDepartment();
+      // readStaff();
     });
   }
 
   List dataST;
-  Future<void> readFaq() async {
+  Future<void> readDepartment() async {
     int memberId = myUserModel.id;
-    String selectId = selectFaqModel.id.toString();
-    String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?memberId=$memberId&selectId=$selectId';
-    print('urlST >> $urlST');
-    http.Response response = await http.get(urlST);
-    var result = json.decode(response.body);
-    print('result >> $result');
+    String selectId = selectDeptModel.dpId.toString();
 
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php&selectId=$selectId';
+    http.Response response = await http.get(urlDV);
+    var result = json.decode(response.body);
     setState(() {
       Map<String, dynamic> map = result['data'];
-      FaqModel selectFaqModel = FaqModel.fromJson(map);
-      txtquestion = selectFaqModel.question;
-      txtanswer = selectFaqModel.answer;
-      print('$txtquestion >> $txtanswer');
+      DepartmentModel selectDeptModel = DepartmentModel.fromJson(map);
+      txtname = selectDeptModel.dpName;
     });
   }
 
@@ -83,6 +77,20 @@ class _EditFaqState extends State<EditFaq> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     exit(0);
+  }
+
+  Widget showSubject() {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          child: Text(
+            'xxxxxxxxxxxxxxx',
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
   }
 
   Widget mySizebox() {
@@ -96,63 +104,45 @@ class _EditFaqState extends State<EditFaq> {
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
-        // height: 35.0,
 
-        width: MediaQuery.of(context).size.width * 0.90,
+        width: MediaQuery.of(context).size.width * 0.63,
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
-                  Text('คำถาม :'),
+                  Text('แผนก :'),
                   mySizebox(),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
-                      initialValue:
-                          selectFaqModel.question, // set default value
+                      initialValue: selectDeptModel.dpName, // set default value
                       onChanged: (string) {
-                        txtquestion = string.trim();
+                        txtname = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'คำถาม',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Text('คำตอบ :'),
-                  mySizebox(),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    child: TextFormField(
-                      minLines:
-                          6, // any number you need (It works as the rows for the textarea)
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      style: TextStyle(color: Colors.black),
-                      initialValue: selectFaqModel.answer, // set default value
-                      onChanged: (string) {
-                        txtanswer = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'คำตอบ',
+                        hintText: 'ชื่อ - นามสกุล',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -167,11 +157,11 @@ class _EditFaqState extends State<EditFaq> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectFaqModel.id.toString();
+    String selectId = selectDeptModel.dpId.toString();
 
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -203,7 +193,7 @@ class _EditFaqState extends State<EditFaq> {
   }
 
   Widget submitButton() {
-    String selectId = selectFaqModel.id.toString();
+    String selectId = selectDeptModel.dpId.toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -216,12 +206,12 @@ class _EditFaqState extends State<EditFaq> {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer');
+                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname');
 
               submitThread();
             },
             child: Text(
-              'แก้ไขข้อมูล',
+              'แก้ไขชื่อแผนก',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -260,9 +250,14 @@ class _EditFaqState extends State<EditFaq> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขข้อมูลถาม-ตอบ'),
+        title: Text('แก้ไขข้อมูลแผนก'),
       ),
-      body: showController(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showController()),
+        ],
+      ),
     );
   }
 
@@ -278,6 +273,7 @@ class _EditFaqState extends State<EditFaq> {
       children: <Widget>[
         formBox(),
         submitButton(),
+        // showPhoto(),
       ],
     );
   }

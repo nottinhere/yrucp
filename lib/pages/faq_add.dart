@@ -7,33 +7,34 @@ import 'package:http/http.dart' as http;
 
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/department_model.dart';
+import 'package:yrusv/models/faq_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
-class AddDept extends StatefulWidget {
+class AddFaq extends StatefulWidget {
   final UserModel userModel;
 
-  AddDept({Key key, this.userModel}) : super(key: key);
+  AddFaq({Key key, this.userModel}) : super(key: key);
 
   @override
-  _AddDeptState createState() => _AddDeptState();
+  _AddFaqState createState() => _AddFaqState();
 }
 
-class _AddDeptState extends State<AddDept> {
+class _AddFaqState extends State<AddFaq> {
   // Explicit
 
-  DepartmentModel departmentAllModel;
+  FaqModel faqAllModel;
   // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
-  DepartmentModel myDeptModel;
+  FaqModel myFaqModel;
   String id; // productID
 
-  String txtname = '';
+  String txtquestion = '', txtanswer = '';
   String memberID;
   String strhelperID;
 
@@ -46,12 +47,12 @@ class _AddDeptState extends State<AddDept> {
     super.initState();
     myUserModel = widget.userModel;
     setState(() {
-      readDepartment();
+      readFaq();
     });
   }
 
   List dataDV;
-  Future<void> readDepartment() async {
+  Future<void> readFaq() async {
     String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
     print('urlDV >> $urlDV');
 
@@ -72,20 +73,6 @@ class _AddDeptState extends State<AddDept> {
     print('dataDV >> $dataDV');
   }
 
-  Widget showSubject() {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-          child: Text(
-            'xxxxxxxxxxxxxxx',
-            style: MyStyle().h3bStyle,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget mySizebox() {
     return SizedBox(
       width: 10.0,
@@ -97,31 +84,86 @@ class _AddDeptState extends State<AddDept> {
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
-        width: MediaQuery.of(context).size.width * 0.63,
+        // height: 35.0,
+
+        width: MediaQuery.of(context).size.width * 0.90,
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
-                  Text('แผนก :'),
-                  mySizebox(),
+                  Text('คำถาม :'),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
                       // initialValue: complainAllModel.postby, // set default value
                       onChanged: (string) {
-                        txtname = string.trim();
+                        txtquestion = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'แผนก',
+                        hintText: 'คำถาม',
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: <Widget>[
+                  Text('คำตอบ :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    child: TextFormField(
+                      minLines:
+                          6, // any number you need (It works as the rows for the textarea)
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: TextStyle(color: Colors.black),
+                      // initialValue: complainAllModel.postby, // set default value
+                      onChanged: (string) {
+                        txtanswer = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'คำตอบ',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -136,9 +178,11 @@ class _AddDeptState extends State<AddDept> {
   }
 
   Future<void> submitThread() async {
+    String memberID = myUserModel.id.toString();
+
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&action=add&question=$txtquestion&answer=$txtanswer'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -178,14 +222,14 @@ class _AddDeptState extends State<AddDept> {
           child: RaisedButton(
             color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
-              // var deptID = myDeptModel.dpId.toString();
+              // var faqID = myFaqModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('deptId=$deptID&action=add&name=$txtname');
+              // print('faqId=$faqID&action=add&name=$txtname');
 
               submitThread();
             },
             child: Text(
-              'เพิ่มรายชื่อ',
+              'เพิ่มข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -224,9 +268,14 @@ class _AddDeptState extends State<AddDept> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มข้อมูลแผนก'),
+        title: Text('เพิ่มข้อมูลถาม-ตอบ'),
       ),
-      body: showController(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showController()),
+        ],
+      ),
     );
   }
 
@@ -242,7 +291,6 @@ class _AddDeptState extends State<AddDept> {
       children: <Widget>[
         formBox(),
         submitButton(),
-        // showPhoto(),
       ],
     );
   }

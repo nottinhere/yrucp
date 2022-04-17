@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/models/popup_model.dart';
-import 'package:yrusv/scaffold/detail_cart.dart';
-import 'package:yrusv/scaffold/list_product.dart';
+import 'package:yrusv/pages/detail_cart.dart';
+import 'package:yrusv/pages/list_product.dart';
 import 'my_service.dart';
 
 class DetailPopup extends StatefulWidget {

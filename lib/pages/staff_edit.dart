@@ -11,7 +11,8 @@ import 'package:yrusv/models/department_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
 class EditUser extends StatefulWidget {
   final UserModel userAllModel;
@@ -138,12 +139,11 @@ class _EditUserState extends State<EditUser> {
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Column(
+          child: Row(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
                   Text('User :'),
-                  mySizebox(),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
@@ -153,6 +153,19 @@ class _EditUserState extends State<EditUser> {
                         txtuser = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
@@ -165,7 +178,6 @@ class _EditUserState extends State<EditUser> {
                   ),
                   mySizebox(),
                   Text('ชื่อ - นามสกุล :'),
-                  mySizebox(),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
@@ -176,6 +188,19 @@ class _EditUserState extends State<EditUser> {
                         txtname = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
@@ -188,7 +213,7 @@ class _EditUserState extends State<EditUser> {
                   ),
                 ],
               ),
-              Row(
+              Column(
                 children: <Widget>[
                   Text('เบอร์ติดต่อ :'),
                   Container(
@@ -202,6 +227,19 @@ class _EditUserState extends State<EditUser> {
                         txtcontact = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
@@ -213,20 +251,34 @@ class _EditUserState extends State<EditUser> {
                     ),
                   ),
                   mySizebox(),
-                  Text('แผนก :'),
-                  Center(
-                    child: DropdownButton(
-                      value: _mySelection,
-                      onChanged: (String newVal) {
-                        setState(() => _mySelection = newVal);
-                      },
-                      items: dataDV.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item['dp_name']),
-                          value: item['dp_id'].toString(),
-                        );
-                      }).toList(),
-                    ),
+                  Column(
+                    children: [
+                      Text('แผนก :'),
+                      Container(
+                        width: 400,
+                        height: 47,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.grey.shade200,
+                        ),
+                        child: Center(
+                          child: DropdownButton(
+                            alignment: Alignment.center,
+                            underline: Container(color: Colors.transparent),
+                            value: _mySelection,
+                            onChanged: (String newVal) {
+                              setState(() => _mySelection = newVal);
+                            },
+                            items: dataDV.map((item) {
+                              return new DropdownMenuItem(
+                                child: new Text(item['dp_name']),
+                                value: item['dp_id'].toString(),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               )
@@ -351,7 +403,12 @@ class _EditUserState extends State<EditUser> {
         backgroundColor: MyStyle().barColorAdmin,
         title: Text('แก้ไขรายชื่อผู้ปฎิบัติงาน'),
       ),
-      body: showController(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showController()),
+        ],
+      ),
     );
   }
 

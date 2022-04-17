@@ -8,24 +8,24 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/news_model.dart';
 
-import 'package:yrusv/scaffold/list_complain.dart';
-import 'package:yrusv/scaffold/list_complain_admin.dart';
-import 'package:yrusv/scaffold/list_faq.dart';
-import 'package:yrusv/scaffold/list_staff.dart';
-import 'package:yrusv/scaffold/list_department.dart';
+import 'package:yrusv/pages/list_complain.dart';
+import 'package:yrusv/pages/list_complain_admin.dart';
+import 'package:yrusv/pages/list_faq.dart';
+import 'package:yrusv/pages/list_staff.dart';
+import 'package:yrusv/pages/list_department.dart';
 
-// import 'package:yrusv/scaffold/detail_news.dart';
+// import 'package:yrusv/pages/detail_news.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /*   remove this code  */
-// import 'package:yrusv/scaffold/list_product.dart';
-// import 'package:yrusv/scaffold/list_product_outofstock.dart';
-// import 'package:yrusv/scaffold/list_product_overstock.dart';
-// import 'package:yrusv/scaffold/list_product_losesale.dart';
-// import 'package:yrusv/scaffold/list_product_highdemand.dart';
-// import 'package:yrusv/scaffold/list_product_monthlyreport.dart';
-// import 'package:yrusv/scaffold/list_product_alert.dart';
+// import 'package:yrusv/pages/list_product.dart';
+// import 'package:yrusv/pages/list_product_outofstock.dart';
+// import 'package:yrusv/pages/list_product_overstock.dart';
+// import 'package:yrusv/pages/list_product_losesale.dart';
+// import 'package:yrusv/pages/list_product_highdemand.dart';
+// import 'package:yrusv/pages/list_product_monthlyreport.dart';
+// import 'package:yrusv/pages/list_product_alert.dart';
 /*      ----- -----    */
 
 class Home extends StatefulWidget {

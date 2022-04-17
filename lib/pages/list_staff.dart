@@ -8,12 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
-import 'package:yrusv/scaffold/staff_add.dart';
-import 'package:yrusv/scaffold/staff_edit.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/pages/staff_add.dart';
+import 'package:yrusv/pages/staff_edit.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
 class ListUser extends StatefulWidget {
   final int index;
@@ -529,10 +530,17 @@ class _ListUserState extends State<ListUser> {
       //     ? showProgressIndicate()
       //     : myLayout(),
 
-      body: Column(
-        children: <Widget>[
-          searchForm(),
-          showContent(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                searchForm(),
+                showContent(),
+              ],
+            ),
+          ),
         ],
       ),
     );

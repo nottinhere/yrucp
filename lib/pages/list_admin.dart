@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/scaffold/detail.dart';
-import 'package:yrusv/scaffold/detail_staff.dart';
+import 'package:yrusv/pages/detail.dart';
+import 'package:yrusv/pages/detail_staff.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';

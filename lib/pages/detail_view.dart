@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/scaffold/detail_cart.dart';
+import 'package:yrusv/pages/detail_cart.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 

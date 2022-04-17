@@ -5,73 +5,79 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/department_model.dart';
+import 'package:yrusv/models/faq_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
-class AddUser extends StatefulWidget {
-  final UserModel userModel;
+class EditFaq extends StatefulWidget {
+  final FaqModel faqAllModel;
 
-  AddUser({Key key, this.userModel}) : super(key: key);
+  UserModel userModel;
+
+  EditFaq({Key key, this.faqAllModel, this.userModel}) : super(key: key);
 
   @override
-  _AddUserState createState() => _AddUserState();
+  _EditFaqState createState() => _EditFaqState();
 }
 
-class _AddUserState extends State<AddUser> {
+class _EditFaqState extends State<EditFaq> {
   // Explicit
 
-  StaffModel staffAllModel;
-  // DepartmentModel divisionModel;
+  FaqModel faqAllModel;
+  // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
+  FaqModel selectFaqModel;
+
   String id; // productID
 
-  String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
+  String txtquestion = '', txtanswer = '';
   String memberID;
   String strhelperID;
 
   int page = 1, dp = 1;
   String searchString = '';
-  String _mySelection;
+
+  List<FaqModel> faqModels = []; // set array
+  List<FaqModel> filterFaqModels = [];
+
+  var _items;
 
   // Method
   @override
   void initState() {
     super.initState();
+    selectFaqModel = widget.faqAllModel;
     myUserModel = widget.userModel;
     // _selectedHelper = _helpers;
     setState(() {
-      readDepartment();
+      readFaq();
     });
   }
 
-  List dataDV;
-  Future<void> readDepartment() async {
-    String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
-    print('urlDV >> $urlDV');
-
-    http.Response response = await http.get(urlDV);
+  List dataST;
+  Future<void> readFaq() async {
+    int memberId = myUserModel.id;
+    String selectId = selectFaqModel.id.toString();
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?memberId=$memberId&selectId=$selectId';
+    print('urlST >> $urlST');
+    http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
-    var itemDepartments = result['itemsData'];
+    print('result >> $result');
 
     setState(() {
-      for (var map in itemDepartments) {
-        String dpID = map['dp_id'];
-        String dpName = map['dp_name'];
-      } // for
+      Map<String, dynamic> map = result['data'];
+      FaqModel selectFaqModel = FaqModel.fromJson(map);
+      txtquestion = selectFaqModel.question;
+      txtanswer = selectFaqModel.answer;
+      print('$txtquestion >> $txtanswer');
     });
-
-    setState(() {
-      dataDV = itemDepartments;
-    });
-    print('dataDV >> $dataDV');
   }
 
   Future<void> logOut() async {
@@ -91,100 +97,93 @@ class _AddUserState extends State<AddUser> {
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
-        width: MediaQuery.of(context).size.width * 0.63,
+        // height: 35.0,
+
+        width: MediaQuery.of(context).size.width * 0.90,
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
-                  Text('User :'),
-                  mySizebox(),
+                  Text('คำถาม :'),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
+                      initialValue:
+                          selectFaqModel.question, // set default value
                       onChanged: (string) {
-                        txtuser = string.trim();
+                        txtquestion = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'User',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
-                  Text('ชื่อ - นามสกุล :'),
-                  mySizebox(),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      onChanged: (string) {
-                        txtname = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'ชื่อ - นามสกุล',
+                        hintText: 'คำถาม',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
                 ],
               ),
-              Row(
+              Column(
                 children: <Widget>[
-                  Text('เบอร์ติดต่อ :'),
+                  Text('คำตอบ :'),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
+                      minLines:
+                          6, // any number you need (It works as the rows for the textarea)
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
                       style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      keyboardType: TextInputType.number,
+                      initialValue: selectFaqModel.answer, // set default value
                       onChanged: (string) {
-                        txtcontact = string.trim();
+                        txtanswer = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'เบอร์ติดต่อ',
+                        hintText: 'คำตอบ',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
-                  mySizebox(),
-                  Text('แผนก :'),
-                  Center(
-                    child: DropdownButton(
-                      value: _mySelection,
-                      onChanged: (String newVal) {
-                        setState(() => _mySelection = newVal);
-                      },
-                      items: dataDV.map((item) {
-                        return new DropdownMenuItem(
-                          child: new Text(item['dp_name']),
-                          value: item['dp_id'].toString(),
-                        );
-                      }).toList(),
-                    ),
-                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -193,9 +192,11 @@ class _AddUserState extends State<AddUser> {
   }
 
   Future<void> submitThread() async {
+    String selectId = selectFaqModel.id.toString();
+
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -227,7 +228,9 @@ class _AddUserState extends State<AddUser> {
   }
 
   Widget submitButton() {
-    return Row(
+    String selectId = selectFaqModel.id.toString();
+
+    return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Container(
@@ -238,35 +241,17 @@ class _AddUserState extends State<AddUser> {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
+                  'memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer');
 
               submitThread();
             },
             child: Text(
-              'เพิ่มรายชื่อ',
+              'แก้ไขข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
       ],
-    );
-  }
-
-  Widget Logout() {
-    return GestureDetector(
-      onTap: () {
-        Logout();
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: 15.0, right: 5.0),
-        width: 32.0,
-        height: 32.0,
-        child: Stack(
-          children: <Widget>[
-            Image.asset('images/icon_logout_white.png'),
-          ],
-        ),
-      ),
     );
   }
 
@@ -300,9 +285,14 @@ class _AddUserState extends State<AddUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มรายชื่อผู้ปฎิบัติงาน'),
+        title: Text('แก้ไขข้อมูลถาม-ตอบ'),
       ),
-      body: showController(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showController()),
+        ],
+      ),
     );
   }
 

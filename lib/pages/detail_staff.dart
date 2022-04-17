@@ -9,11 +9,12 @@ import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/scaffold/detail_cart.dart';
+import 'package:yrusv/pages/detail_cart.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
 class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -325,62 +326,103 @@ class _DetailStaffState extends State<DetailStaff> {
   }
 
   Widget showResponsible() {
-    String selectedDate;
+    // print('_selectedDBHelper in >> $_selectedDBHelper');
 
-    if (complainAllModel.appointdate == '-') {
-      selectedDate = '-';
-    } else {
-      DateTime dateApt =
-          DateTime.parse((complainAllModel.appointdate).toString());
-      selectedDate = DateFormat('dd/MM/yyyy').format(dateApt);
-      ;
-    }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
-          children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ผู้แจ้ง'),
-            Text(
-              complainAllModel.postby,
+    return Card(
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+            child: Text(
+              'การนัดหมาย',
               style: TextStyle(
-                fontSize: 16.0,
+                fontSize: 18.0,
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+                color: Color.fromARGB(0xff, 16, 149, 161),
+                // decoration: TextDecoration.underline,
               ),
             ),
-          ],
-        ),
-        Column(
-          children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('วันนัดหมาย'),
-            Text(
-              '${selectedDate}  ${complainAllModel.appointtime}',
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+          ),
+          new Divider(
+            color: Colors.green.shade300,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                height: 170,
+                child: Card(
+                  color: Colors.blueGrey.shade50,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        width: 100.0,
+                        child: Image.asset('images/icon_clock.png'),
+                      ),
+                      Text('วันนัดหมาย'),
+                      Text(complainAllModel.appointdate +
+                          '  ' +
+                          complainAllModel.appointtime),
+                    ],
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            // Icon(Icons.timer, color: Colors.green[500]),
-            Text('แผนกรับผิดชอบ'),
-            Text(
-              complainAllModel.department,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                height: 170,
+                child: Card(
+                  color: Colors.blueGrey.shade50,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        width: 100.0,
+                        child: Image.asset('images/icon_location.png'),
+                      ),
+                      Text('สถานที่นัดหมาย'),
+                      Text(complainAllModel.location),
+                    ],
+                  ),
+                ),
               ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                height: 170,
+                child: Card(
+                  color: Colors.blueGrey.shade50,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        width: 100.0,
+                        child: Image.asset('images/icon_staff.png'),
+                      ),
+                      Text('ผู้รับผิดชอบ'),
+                      Text(complainAllModel.staff),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              children: [
+                Container(
+                  child: Text('ผู้ช่วย' + complainAllModel.helper),
+                ),
+                Container(
+                  child: Text('ข้อมูลเพิ่มเติม : ' + complainAllModel.note),
+                ),
+              ],
             ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
     // return Text('na');
   }
@@ -415,20 +457,53 @@ class _DetailStaffState extends State<DetailStaff> {
                     ),
                   ],
                 ),
+
                 Column(
                   children: <Widget>[
+                    Text('แผนกรับผิดชอบ'),
                     Text(
-                      'วันที่รับแจ้ง : ${complainAllModel.postdate} ',
+                      complainAllModel.department,
                       style: TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-
-                        // color: Color.fromARGB(0xff, 16, 149, 161),
+                        color: Color.fromARGB(0xff, 0, 0, 0),
                       ),
                     ),
                   ],
                 ),
+
+                Column(
+                  children: [
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          'วันที่รับแจ้ง : ${complainAllModel.postdate} ',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            // decoration: TextDecoration.underline,
+
+                            // color: Color.fromARGB(0xff, 16, 149, 161),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        // Icon(Icons.restaurant, color: Colors.green[500]),
+                        Text(
+                          'ผู้แจ้ง : ' + complainAllModel.postby,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(0xff, 0, 0, 0),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+
                 // Image.network(
                 //   complainAllModel.emotical,
                 //   width: MediaQuery.of(context).size.width * 0.16,
@@ -436,12 +511,49 @@ class _DetailStaffState extends State<DetailStaff> {
               ],
             ),
             mySizebox(),
+            new Divider(
+              color: Colors.pink,
+            ),
             Container(
               width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
               child: Text(
-                complainAllModel.subject,
+                'เรื่อง : ' + complainAllModel.subject,
                 style: MyStyle().h3bStyle,
               ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+              child: Text(
+                'สถานที่ : ' + complainAllModel.location,
+                style: MyStyle().h3bStyle,
+              ),
+            ),
+            SizedBox(height: 20),
+            Column(
+              children: [
+                // Icon(Icons.timer, color: Colors.green[500]),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'รายละเอียด',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    complainAllModel.detail,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      // fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 0, 0, 0),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -454,74 +566,184 @@ class _DetailStaffState extends State<DetailStaff> {
       // decoration: MyStyle().boxLightGreen,
       // height: 35.0,
 
-      width: MediaQuery.of(context).size.width * 0.63,
+      width: MediaQuery.of(context).size.width * 0.55,
       padding: EdgeInsets.only(left: 10.0, right: 20.0),
       child: Align(
         alignment: Alignment.topLeft,
         child: Column(
           children: <Widget>[
-            Column(
-              children: [
-                // Icon(Icons.restaurant, color: Colors.green[500]),
-                Text(
-                  'หัวข้อเรื่อง',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                  ),
+            SizedBox(height: 10),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+              child: Text(
+                'ข้อมูลการเข้าปฎิบัติงาน',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 16, 149, 161),
+                  // decoration: TextDecoration.underline,
                 ),
-                Text(
-                  complainAllModel.subject,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    // fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(0xff, 0, 0, 0),
-                  ),
-                ),
-              ],
+              ),
             ),
-            mySizebox(),
-            Column(
-              children: [
-                // Icon(Icons.timer, color: Colors.green[500]),
-                Text(
-                  'รายละเอียด',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                Text(
-                  complainAllModel.detail,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    // fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(0xff, 0, 0, 0),
-                  ),
-                ),
-              ],
+            new Divider(
+              color: Colors.green.shade300,
             ),
-            mySizebox(),
-            Column(
-              children: [
-                // Icon(Icons.kitchen, color: Colors.green[500]),
-                Text(
-                  'สถานที่',
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                Text(
-                  complainAllModel.location,
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    // fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(0xff, 0, 0, 0),
-                  ),
-                ),
-              ],
-            ),
-            mySizebox(),
+            showAppoint()
           ],
         ),
+      ),
+    );
+  }
+
+  Widget showFixStartdate() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'วันเริ่มงาน',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+              child: Column(children: <Widget>[
+            Text(
+              complainAllModel.startdate_fix,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ])),
+        ],
+      ),
+    );
+  }
+
+  Widget showFixEnddate() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'วันจบงาน',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Text(
+            complainAllModel.enddate_fix,
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(0xff, 0, 0, 0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showAppoint() {
+    return Container(
+      // decoration: MyStyle().boxLightGreen,
+      width: MediaQuery.of(context).size.width * 0.25,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'ผู้รับผิดชอบ',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Text(
+            complainAllModel.staff_name,
+            style: TextStyle(
+              fontSize: 16.0,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(0xff, 0, 0, 0),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget replyBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.70,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความตอบกลับ',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          TextField(
+            onChanged: (value) {
+              txtreply = value.trim();
+            },
+            keyboardType: TextInputType.multiline,
+            maxLines: 1,
+            decoration: InputDecoration(
+              // suffixIcon: Icon(Icons.mode_edit, color: Colors.blue),
+              fillColor: Colors.grey.shade100,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: const BorderSide(color: Colors.white, width: 0.0),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: const BorderSide(color: Colors.white, width: 0.0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showFormDeal() {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 10),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+            child: Text(
+              'ข้อมูลการเข้าปฎิบัติงาน',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 16, 149, 161),
+                // decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+          new Divider(
+            color: Colors.green.shade300,
+          ),
+          Row(
+            children: <Widget>[
+              showAppoint(),
+              showAppointStartdate(),
+              showAppointEnddate(),
+            ],
+          ),
+          // noteBox(),
+          replyBox(),
+
+          //  Row(children: <Widget>[priceBox(),priceBox(),],),
+          //  Row(children: <Widget>[noteBox()],),
+        ],
       ),
     );
   }
@@ -583,7 +805,7 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget showAppointStartdate() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.33,
+      width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
           Text(
@@ -645,7 +867,7 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget showAppointEnddate() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.33,
+      width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
           Text(
@@ -672,102 +894,6 @@ class _DetailStaffState extends State<DetailStaff> {
     await http.get(url).then((value) {
       // confirmSubmit();
     });
-  }
-
-  Widget showAppoint() {
-    return Card(
-      // width: MediaQuery.of(context).size.width * 0.33,
-      child: Column(
-        children: <Widget>[
-          Text(
-            'ผู้รับผิดชอบ',
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-            ),
-          ),
-          Text(
-            complainAllModel.staff_name,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
-            ),
-          ),
-          mySizebox(),
-          showAppointStartdate(),
-          mySizebox(),
-          showAppointEnddate(),
-          mySizebox(),
-        ],
-      ),
-    );
-  }
-
-  Widget noteBox() {
-    return Container(
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-      child: Column(
-        children: [
-          // Icon(Icons.kitchen, color: Colors.green[500]),
-          Text(
-            'ข้อมูลเพิ่มเติม',
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-            ),
-          ),
-          Text(
-            complainAllModel.note,
-            style: TextStyle(
-              fontSize: 16.0,
-              // fontWeight: FontWeight.bold,
-              color: Color.fromARGB(0xff, 0, 0, 0),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget replyBox() {
-    return Container(
-      margin: EdgeInsets.only(left: 10.0, right: 10.0),
-      child: Column(
-        children: [
-          Text(
-            'ข้อความตอบกลับ',
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-            ),
-          ),
-          TextField(
-            onChanged: (value) {
-              txtreply = value.trim();
-            },
-            keyboardType: TextInputType.multiline,
-            maxLines: 2,
-            decoration: InputDecoration(
-                prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                labelText: 'reply :'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget showFormDeal() {
-    return Card(
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[complainBox(), showAppoint()],
-          ),
-          noteBox(),
-          replyBox(),
-          //  Row(children: <Widget>[priceBox(),priceBox(),],),
-          //  Row(children: <Widget>[noteBox()],),
-        ],
-      ),
-    );
   }
 
   Future<void> submitThread() async {
@@ -910,16 +1036,6 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
-  void routeToDetailStaffCart() {
-    MaterialPageRoute materialPageRoute =
-        MaterialPageRoute(builder: (BuildContext buildContext) {
-      return DetailCart(
-        userModel: myUserModel,
-      );
-    });
-    Navigator.of(context).push(materialPageRoute);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -930,7 +1046,12 @@ class _DetailStaffState extends State<DetailStaff> {
         backgroundColor: MyStyle().barColor,
         title: Text('ขอใช้บริการ :: รายละเอียดงาน'),
       ),
-      body: complainAllModel == null ? showProgress() : showDetailStaffList(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showDetailStaffList()),
+        ],
+      ),
     );
   }
 
@@ -938,65 +1059,6 @@ class _DetailStaffState extends State<DetailStaff> {
     return Center(
       child: CircularProgressIndicator(),
     );
-  }
-
-  Widget addButton() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              child: RaisedButton(
-                color: Colors.lightGreen,
-                child: Text(
-                  'Update deal',
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ),
-                onPressed: () {
-                  String productID = id;
-                  String memberID = myUserModel.id.toString();
-
-                  int index = 0;
-                  List<bool> status = List();
-
-                  bool sumStatus = true;
-                  if (status.length == 1) {
-                    sumStatus = status[0];
-                  } else {
-                    sumStatus = status[0] && status[1];
-                  }
-
-                  if (sumStatus) {
-                    normalDialog(
-                        context, 'Do not choose item', 'Please choose item');
-                  } else {}
-                },
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Future<void> addCart(
-      String productID, String unitSize, int qTY, String memberID) async {
-    String url =
-        'http://yrusv.com/api/json_savemycart.php?productID=$productID&unitSize=$unitSize&QTY=$qTY&memberID=$memberID';
-
-    http.Response response = await http.get(url).then((response) {
-      print('upload ok');
-      readCart();
-      MaterialPageRoute materialPageRoute =
-          MaterialPageRoute(builder: (BuildContext buildContext) {
-        return DetailCart(
-          userModel: myUserModel,
-        );
-      });
-      Navigator.of(context).push(materialPageRoute);
-    });
   }
 
   Widget showDetailStaffList() {

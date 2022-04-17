@@ -6,24 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/department_model.dart';
-import 'package:yrusv/scaffold/department_add.dart';
-import 'package:yrusv/scaffold/department_edit.dart';
+import 'package:yrusv/models/faq_model.dart';
+import 'package:yrusv/pages/faq_add.dart';
+import 'package:yrusv/pages/faq_edit.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 
-class ListDept extends StatefulWidget {
+import 'package:yrusv/layouts/side_bar.dart';
+
+class ListFaq extends StatefulWidget {
   final int index;
   final UserModel userModel;
 
-  ListDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListFaq({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListDeptState createState() => _ListDeptState();
+  _ListFaqState createState() => _ListFaqState();
 }
 
 //class
@@ -45,12 +47,11 @@ class Debouncer {
   }
 }
 
-class _ListDeptState extends State<ListDept> {
+class _ListFaqState extends State<ListFaq> {
   List<UserModel> userModels = List(); // set array
-  List<DepartmentModel> deptModels = List(); // set array
-  List<DepartmentModel> filterDeptModels = List();
-  DepartmentModel selectDeptModel;
-
+  List<FaqModel> faqModels = List(); // set array
+  List<FaqModel> filterFaqModels = List();
+  FaqModel selectFaqModel;
   // Explicit
   int myIndex;
 
@@ -58,13 +59,13 @@ class _ListDeptState extends State<ListDept> {
   UserModel myUserModel;
   String searchString = '';
 
-  int amountListView = 50, page = 1;
+  int amountListView = 6, page = 1;
   String sort = 'asc';
   ScrollController scrollController = ScrollController();
   final Debouncer debouncer =
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
-  bool visible = true;
+
   // Method
   @override
   void initState() {
@@ -76,7 +77,7 @@ class _ListDeptState extends State<ListDept> {
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readDept(); // read  ข้อมูลมาแสดง
+      readFaq(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -85,54 +86,54 @@ class _ListDeptState extends State<ListDept> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readDept();
+        readFaq();
 
         // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
-        //   if (amountListView > filterComplainAllModels.length) {
-        //     amountListView = filterComplainAllModels.length;
+        //   if (amountListView > filterProductAllModels.length) {
+        //     amountListView = filterProductAllModels.length;
         //   }
         // });
       }
     });
   }
 
-  Future<void> readDept() async {
+  Future<void> readFaq() async {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_faq.php?memberId=$memberId&searchKey=$searchString&page=$page';
     print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
-      DepartmentModel deptModel = DepartmentModel.fromJson(map);
+      FaqModel faqModel = FaqModel.fromJson(map);
       setState(() {
-        deptModels.add(deptModel);
-        filterDeptModels = deptModels;
+        faqModels.add(faqModel);
+        filterFaqModels = faqModels;
       });
     }
-    print('Count row >> ${filterDeptModels.length}');
+    print('Count row >> ${filterFaqModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
-    String selectId = filterDeptModels[index].dpId;
+    print('Here is updateDatalist function');
+    String id = filterFaqModels[index].id.toString();
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?selectId=$id';
 
-    String urlSL =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_department.php?selectId=$selectId';
-
-    http.Response responseSL = await http.get(urlSL);
+    http.Response responseSL = await http.get(urlST);
     var resultSL = json.decode(responseSL.body);
     var itemSelect = resultSL['data'];
 
-    selectDeptModel = DepartmentModel.fromJson(itemSelect);
+    selectFaqModel = FaqModel.fromJson(itemSelect);
     setState(() {
-      print('itemSelect = ${selectDeptModel.dpName}');
-      filterDeptModels[index].dpName = selectDeptModel.dpName;
+      print('itemSelect = ${selectFaqModel.question}');
+      filterFaqModels[index].question = selectFaqModel.question;
     });
   }
 
@@ -161,14 +162,14 @@ class _ListDeptState extends State<ListDept> {
   }
 
   void confirmDelete(int index) {
-    String titleName = filterDeptModels[index].dpName;
+    String titleQues = filterFaqModels[index].question;
 
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
+            content: Text('Do you want delete : $titleQues'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -190,16 +191,16 @@ class _ListDeptState extends State<ListDept> {
   }
 
   Future<void> deleteCart(int index) async {
-    String selectId = filterDeptModels[index].dpId.toString();
+    String selectId = filterFaqModels[index].id.toString();
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readDept();
+      readFaq();
     });
   }
 
@@ -230,12 +231,11 @@ class _ListDeptState extends State<ListDept> {
           print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditDept(
-              deptAllModel: filterDeptModels[index],
+            return EditFaq(
+              faqAllModel: filterFaqModels[index],
               userModel: myUserModel,
             );
           });
-          // Navigator.of(context).push(materialPageRoute);
           Navigator.of(context)
               .push(materialPageRoute)
               .then((value) => setState(() {
@@ -289,7 +289,7 @@ class _ListDeptState extends State<ListDept> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'ชื่อแผนก : ' + filterDeptModels[index].dpName,
+                'Question : ' + filterFaqModels[index].question,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -312,7 +312,7 @@ class _ListDeptState extends State<ListDept> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterDeptModels[index].dpName.toString(),
+            'Ques : ' + filterFaqModels[index].question.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -357,12 +357,12 @@ class _ListDeptState extends State<ListDept> {
     );
   }
 
-  Widget AddDepartment() {
+  Widget BTNAddFaq() {
     return GestureDetector(
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddDept(
+          return AddFaq(
             userModel: myUserModel,
           );
         });
@@ -402,7 +402,7 @@ class _ListDeptState extends State<ListDept> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: filterDeptModels.length,
+        itemCount: filterFaqModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -423,16 +423,6 @@ class _ListDeptState extends State<ListDept> {
                 ),
               ),
             ),
-            onTap: () {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return Detail(
-              //     productAllModel: filterProductAllModels[index],
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
-            },
           );
         },
       ),
@@ -470,7 +460,7 @@ class _ListDeptState extends State<ListDept> {
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
-        //         readDept();
+        //         readFaq();
         //       });
         //     }),
         title: TextField(
@@ -513,20 +503,23 @@ class _ListDeptState extends State<ListDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลแผนก'),
+        title: Text('ข้อมูลถาม-ตอบ'),
         actions: <Widget>[
           Home(),
-          AddDepartment(),
+          BTNAddFaq(),
         ],
       ),
-      // body: filterProductAllModels.length == 0
-      //     ? showProgressIndicate()
-      //     : myLayout(),
-
-      body: Column(
-        children: <Widget>[
-          searchForm(),
-          showContent(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                searchForm(),
+                showContent(),
+              ],
+            ),
+          ),
         ],
       ),
     );

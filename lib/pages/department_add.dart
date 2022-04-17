@@ -11,29 +11,27 @@ import 'package:yrusv/models/department_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widget/home.dart';
+import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 
-class EditDept extends StatefulWidget {
-  final DepartmentModel deptAllModel;
+class AddDept extends StatefulWidget {
+  final UserModel userModel;
 
-  UserModel userModel;
-
-  EditDept({Key key, this.deptAllModel, this.userModel}) : super(key: key);
+  AddDept({Key key, this.userModel}) : super(key: key);
 
   @override
-  _EditDeptState createState() => _EditDeptState();
+  _AddDeptState createState() => _AddDeptState();
 }
 
-class _EditDeptState extends State<EditDept> {
+class _AddDeptState extends State<AddDept> {
   // Explicit
 
-  StaffModel staffAllModel;
+  DepartmentModel departmentAllModel;
   // DivisionModel divisionModel;
 
   int amontCart = 0;
   UserModel myUserModel;
-  DepartmentModel selectDeptModel;
-
+  DepartmentModel myDeptModel;
   String id; // productID
 
   String txtname = '';
@@ -47,35 +45,32 @@ class _EditDeptState extends State<EditDept> {
   @override
   void initState() {
     super.initState();
-    selectDeptModel = widget.deptAllModel;
     myUserModel = widget.userModel;
-    // _selectedHelper = _helpers;
     setState(() {
       readDepartment();
-      // readStaff();
     });
   }
 
-  List dataST;
+  List dataDV;
   Future<void> readDepartment() async {
-    int memberId = myUserModel.id;
-    String selectId = selectDeptModel.dpId.toString();
+    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
+    print('urlDV >> $urlDV');
 
-    String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php&selectId=$selectId';
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    setState(() {
-      Map<String, dynamic> map = result['data'];
-      DepartmentModel selectDeptModel = DepartmentModel.fromJson(map);
-      txtname = selectDeptModel.dpName;
-    });
-  }
+    var itemDivisions = result['itemsData'];
 
-  Future<void> logOut() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.clear();
-    exit(0);
+    setState(() {
+      for (var map in itemDivisions) {
+        String dvID = map['dv_id'];
+        String dvName = map['dv_name'];
+      } // for
+    });
+
+    setState(() {
+      dataDV = itemDivisions;
+    });
+    print('dataDV >> $dataDV');
   }
 
   Widget showSubject() {
@@ -103,14 +98,13 @@ class _EditDeptState extends State<EditDept> {
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
-
         width: MediaQuery.of(context).size.width * 0.63,
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
           child: Column(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
                   Text('แผนก :'),
                   mySizebox(),
@@ -118,17 +112,30 @@ class _EditDeptState extends State<EditDept> {
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
-                      initialValue: selectDeptModel.dpName, // set default value
+                      // initialValue: complainAllModel.postby, // set default value
                       onChanged: (string) {
                         txtname = string.trim();
                       },
                       decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
                         contentPadding: EdgeInsets.only(
                           top: 6.0,
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'ชื่อ - นามสกุล',
+                        hintText: 'แผนก',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -143,11 +150,9 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectDeptModel.dpId.toString();
-
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -179,8 +184,6 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Widget submitButton() {
-    String selectId = selectDeptModel.dpId.toString();
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -189,15 +192,14 @@ class _EditDeptState extends State<EditDept> {
           child: RaisedButton(
             color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
-              memberID = myUserModel.id.toString();
+              // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname');
+              // print('deptId=$deptID&action=add&name=$txtname');
 
               submitThread();
             },
             child: Text(
-              'แก้ไขชื่อแผนก',
+              'เพิ่มรายชื่อ',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -236,9 +238,14 @@ class _EditDeptState extends State<EditDept> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขข้อมูลแผนก'),
+        title: Text('เพิ่มข้อมูลแผนก'),
       ),
-      body: showController(),
+      body: Row(
+        children: [
+          SideBar(userModel: myUserModel),
+          Expanded(child: showController()),
+        ],
+      ),
     );
   }
 
