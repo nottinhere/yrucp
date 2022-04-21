@@ -206,7 +206,7 @@ class _ListDeptState extends State<ListDept> {
 
   Widget edit_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -256,7 +256,7 @@ class _ListDeptState extends State<ListDept> {
 
   Widget delete_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -271,7 +271,7 @@ class _ListDeptState extends State<ListDept> {
                   color: Colors.white,
                 ),
                 Text(
-                  'ลบข้อมูล',
+                  ' ลบข้อมูล',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -407,13 +407,13 @@ class _ListDeptState extends State<ListDept> {
           return GestureDetector(
             child: Container(
               padding:
-                  EdgeInsets.only(top: 3.0, bottom: 3.0, left: 6.0, right: 6.0),
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
               child: Card(
                 // color: Color.fromRGBO(235, 254, 255, 1.0),
 
                 child: Container(
                   decoration: myBoxDecoration(),
-                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
                   child: Row(
                     children: <Widget>[
                       showText(index),

@@ -230,7 +230,7 @@ class _EditFaqState extends State<EditFaq> {
   Widget submitButton() {
     String selectId = selectFaqModel.id.toString();
 
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Container(

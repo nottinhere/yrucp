@@ -886,7 +886,7 @@ class _DetailState extends State<Detail> {
 
   Widget showFixStartdate() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.20,
       child: Column(
         children: <Widget>[
           Text(
@@ -913,7 +913,7 @@ class _DetailState extends State<Detail> {
 
   Widget showFixEnddate() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.20,
       child: Column(
         children: <Widget>[
           Text(
@@ -935,10 +935,38 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  Widget showEvaluation() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'ผลประเมิน',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 80),
+            child: Row(
+              children: <Widget>[
+                for (var i = 0; i < complainAllModel.rating; i++)
+                  Image.asset(
+                    'images/star.png',
+                    width: MediaQuery.of(context).size.width * 0.02,
+                  ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget showAppoint() {
     return Container(
       // decoration: MyStyle().boxLightGreen,
-      width: MediaQuery.of(context).size.width * 0.25,
+      width: MediaQuery.of(context).size.width * 0.19,
       child: Column(
         children: <Widget>[
           Text(
@@ -1057,6 +1085,7 @@ class _DetailState extends State<Detail> {
               showAppoint(),
               showFixStartdate(),
               showFixEnddate(),
+              showEvaluation(),
             ],
           ),
           // noteBox(),
@@ -1091,7 +1120,7 @@ class _DetailState extends State<Detail> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Complete'),
-            content: Text('แก้ไขดีลเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {

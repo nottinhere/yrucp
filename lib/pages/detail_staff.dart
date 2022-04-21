@@ -401,7 +401,7 @@ class _DetailStaffState extends State<DetailStaff> {
                         child: Image.asset('images/icon_staff.png'),
                       ),
                       Text('ผู้รับผิดชอบ'),
-                      Text(complainAllModel.staff),
+                      Text(complainAllModel.staff_name),
                     ],
                   ),
                 ),
@@ -409,14 +409,30 @@ class _DetailStaffState extends State<DetailStaff> {
             ],
           ),
           Container(
-            alignment: Alignment.centerLeft,
+            padding: new EdgeInsets.all(10.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  child: Text('ผู้ช่วย' + complainAllModel.helper),
+                  child: Text(
+                    'ผู้ช่วย :: ' + complainAllModel.helper_name,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      // fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 0, 0, 0),
+                    ),
+                  ),
                 ),
                 Container(
-                  child: Text('ข้อมูลเพิ่มเติม : ' + complainAllModel.note),
+                  child: Text(
+                    'ข้อมูลเพิ่มเติม :: ' + complainAllModel.note,
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      // fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 0, 0, 0),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -915,7 +931,7 @@ class _DetailStaffState extends State<DetailStaff> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Complete'),
-            content: Text('แก้ไขดีลเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {

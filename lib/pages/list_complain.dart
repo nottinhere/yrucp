@@ -187,7 +187,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget unreadTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -218,7 +218,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget openedTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -249,7 +249,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget inprocessTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -280,7 +280,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget completeTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -311,7 +311,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget incompleteTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -373,7 +373,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget L1_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -388,7 +388,7 @@ class _ListComplainState extends State<ListComplain> {
                   color: Colors.white,
                 ),
                 Text(
-                  'กำหนดงาน',
+                  ' กำหนดงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -421,7 +421,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget L2_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -436,7 +436,7 @@ class _ListComplainState extends State<ListComplain> {
                   color: Colors.white,
                 ),
                 Text(
-                  'รายละเอียดงาน',
+                  ' รายละเอียดงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -463,18 +463,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget showTag(index) {
     return Row(
-      // mainAxisAlignment: MainAxisAlignment.spaceAround,
-      // mainAxisSize: MainAxisSize.max,
-      // mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        // SizedBox(
-        //   width: 5.0,
-        //   height: 8.0,
-        // ),
-        // filterComplainAllModels[index].status != 1
-        //     ? cancelTag(index)
-        //     : Container(),
-
         (filterComplainAllModels[index].status == '1')
             ? unreadTag()
             : Container(),
@@ -513,7 +502,7 @@ class _ListComplainState extends State<ListComplain> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.65,
+          width: MediaQuery.of(context).size.width * 0.67,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -566,50 +555,62 @@ class _ListComplainState extends State<ListComplain> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ผู้แจ้ง'),
-            Text(
-              filterComplainAllModels[index].postby,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.14,
+          child: Column(
+            children: [
+              // Icon(Icons.restaurant, color: Colors.green[500]),
+              Text('ผู้แจ้ง'),
+              Text(
+                filterComplainAllModels[index].postby,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          children: [
-            // Icon(Icons.timer, color: Colors.green[500]),
-            Text('แผนกรับผิดชอบ'),
-            Text(
-              filterComplainAllModels[index].department,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.14,
+          child: Column(
+            children: [
+              // Icon(Icons.timer, color: Colors.green[500]),
+              Text('แผนกรับผิดชอบ'),
+              Text(
+                filterComplainAllModels[index].department,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('ผู้รับผิดชอบ'),
-            Text(
-              filterComplainAllModels[index].staff_name,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.28,
+          child: Column(
+            children: [
+              // Icon(Icons.kitchen, color: Colors.green[500]),
+              Text('ผู้รับผิดชอบ'),
+              Text(
+                filterComplainAllModels[index].staff_name,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Row(
-          children: [L1_btn(index), L2_btn(index)],
+        Container(
+          width: MediaQuery.of(context).size.width * 0.2,
+          child: Row(
+            children: [L1_btn(index), L2_btn(index)],
+          ),
         )
       ],
     );
@@ -687,7 +688,7 @@ class _ListComplainState extends State<ListComplain> {
           return GestureDetector(
             child: Container(
               padding:
-                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 6.0, right: 6.0),
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
               child: Card(
                 // color: Color.fromRGBO(235, 254, 255, 1.0),
                 child: Container(
@@ -800,7 +801,7 @@ class _ListComplainState extends State<ListComplain> {
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
-              // complainAllModels.clear();
+              complainAllModels.clear();
               readData();
             });
           }),

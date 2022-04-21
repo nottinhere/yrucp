@@ -12,10 +12,12 @@ class ComplainAllModel {
   String staff;
   String staff_name;
   String helper;
+  String helper_name;
   String startdate_fix;
   String enddate_fix;
   String note;
   String reply;
+  int rating;
   int id;
 
   ComplainAllModel(
@@ -32,10 +34,12 @@ class ComplainAllModel {
       this.staff,
       this.staff_name,
       this.helper,
+      this.helper_name,
       this.startdate_fix,
       this.enddate_fix,
       this.note,
       this.reply,
+      this.rating,
       this.id});
 
   ComplainAllModel.fromJson(Map<String, dynamic> json) {
@@ -52,10 +56,12 @@ class ComplainAllModel {
     staff = json['staff'];
     staff_name = json['staff_name'];
     helper = json['helper'];
+    helper_name = json['helper_name'];
     startdate_fix = json['startdate_fix'];
     enddate_fix = json['enddate_fix'];
     note = json['note'];
     reply = json['reply'];
+    rating = json['rating'];
     id = json['id'];
   }
 
@@ -74,10 +80,12 @@ class ComplainAllModel {
     data['staff'] = this.staff;
     data['staff_name'] = this.staff_name;
     data['helper'] = this.helper;
+    data['helper_name'] = this.helper_name;
     data['startdate_fix'] = this.startdate_fix;
     data['enddate_fix'] = this.enddate_fix;
     data['note'] = this.note;
     data['reply'] = this.reply;
+    data['rating'] = this.rating;
     data['id'] = this.id;
     return data;
   }

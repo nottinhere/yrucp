@@ -119,12 +119,27 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
     var itemProducts = result['itemsData'];
 
+    // for (var map in itemProducts) {
+    //   ComplainAllModel complainAllModel = ComplainAllModel.fromJson(map);
+    //   setState(() {
+    //     complainAllModels.add(complainAllModel);
+    //     filterComplainAllModels = complainAllModels;
+    //   });
+    // }
+
+    int i = 0;
+    int len = (filterComplainAllModels.length);
+
     for (var map in itemProducts) {
       ComplainAllModel complainAllModel = ComplainAllModel.fromJson(map);
       setState(() {
         complainAllModels.add(complainAllModel);
         filterComplainAllModels = complainAllModels;
       });
+      print(
+          ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
+
+      i = i + 1;
     }
   }
 
@@ -162,7 +177,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget unreadTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -193,7 +208,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget openedTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -224,7 +239,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget inprocessTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -255,7 +270,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget completeTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -286,7 +301,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget incompleteTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -348,7 +363,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget view_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -363,7 +378,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                   color: Colors.white,
                 ),
                 Text(
-                  'รายละเอียด',
+                  ' รายละเอียด',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -397,7 +412,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget delete_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -412,7 +427,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                   color: Colors.white,
                 ),
                 Text(
-                  'ลบข้อมูล',
+                  ' ลบข้อมูล',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -523,50 +538,62 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: [
-            // Icon(Icons.restaurant, color: Colors.green[500]),
-            Text('ผู้แจ้ง'),
-            Text(
-              filterComplainAllModels[index].postby,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.14,
+          child: Column(
+            children: [
+              // Icon(Icons.restaurant, color: Colors.green[500]),
+              Text('ผู้แจ้ง'),
+              Text(
+                filterComplainAllModels[index].postby,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          children: [
-            // Icon(Icons.timer, color: Colors.green[500]),
-            Text('แผนกรับผิดชอบ'),
-            Text(
-              filterComplainAllModels[index].department,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.14,
+          child: Column(
+            children: [
+              // Icon(Icons.timer, color: Colors.green[500]),
+              Text('แผนกรับผิดชอบ'),
+              Text(
+                filterComplainAllModels[index].department,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Column(
-          children: [
-            // Icon(Icons.kitchen, color: Colors.green[500]),
-            Text('ผู้รับผิดชอบ'),
-            Text(
-              filterComplainAllModels[index].staff_name,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 0, 0, 0),
+        Container(
+          width: MediaQuery.of(context).size.width * 0.28,
+          child: Column(
+            children: [
+              // Icon(Icons.kitchen, color: Colors.green[500]),
+              Text('ผู้รับผิดชอบ'),
+              Text(
+                filterComplainAllModels[index].staff_name,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-        Row(
-          children: [view_btn(index), delete_btn(index)],
+        Container(
+          width: MediaQuery.of(context).size.width * 0.2,
+          child: Row(
+            children: [view_btn(index), delete_btn(index)],
+          ),
         )
       ],
     );
@@ -644,13 +671,13 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           return GestureDetector(
             child: Container(
               padding:
-                  EdgeInsets.only(top: 3.0, bottom: 3.0, left: 6.0, right: 6.0),
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
               child: Card(
                 // color: Color.fromRGBO(235, 254, 255, 1.0),
 
                 child: Container(
                   decoration: myBoxDecoration(),
-                  padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+                  padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
                   child: Row(
                     children: <Widget>[
                       showText(index),
@@ -758,7 +785,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
-              // complainAllModels.clear();
+              complainAllModels.clear();
               readData();
             });
           }),

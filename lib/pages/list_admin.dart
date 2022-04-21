@@ -183,7 +183,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget unreadTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -214,7 +214,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget openedTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -245,7 +245,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget inprocessTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -276,7 +276,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget completeTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -307,7 +307,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget incompleteTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -369,7 +369,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget L1_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
@@ -414,7 +414,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget L2_btn(index) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(

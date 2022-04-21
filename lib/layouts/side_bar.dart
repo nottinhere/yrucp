@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-// import 'package:yrusv/models/menu_item.dart';
-// import 'package:yrusv/providers/app_controller.dart';
-// import 'package:yrusv/widgets/side_bar_menu_item.dart';
-// import 'package:yrusv/widgets/workspace_item.dart';
-// import 'package:flutter_icons_null_safety/flutter_icons_null_safety.dart';
-// import 'package:get/get.dart';
-// import '../constants.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:yrusv/widgets/home.dart';
@@ -17,6 +10,7 @@ import 'package:yrusv/pages/list_faq.dart';
 import 'package:yrusv/pages/list_staff.dart';
 import 'package:yrusv/pages/list_department.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:side_navigation/side_navigation.dart';
 
 class SideBar extends StatefulWidget {
   final UserModel userModel;
@@ -43,164 +37,148 @@ class _SideBarState extends State<SideBar> {
     exit(0);
   }
 
+  List<Widget> views = const [
+    Center(
+      child: Text('หน้าหลัก'),
+    ),
+    Center(
+      child: Text('รายการขอใช้บริการ'),
+    ),
+    Center(
+      child: Text('รายการถาม-ตอบ'),
+    ),
+    Center(
+      child: Text('จัดการคำขอบริการ'),
+    ),
+    Center(
+      child: Text('จัดการแผนก'),
+    ),
+    Center(
+      child: Text('จัดการรายชื่อ'),
+    ),
+    Center(
+      child: Text('จัดการข้อมูลถาม-ตอบ'),
+    ),
+    Center(
+      child: Text('ออกจากระบบ'),
+    ),
+  ];
+  int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SideMenu(
-          controller: page,
-          style: SideMenuStyle(
-            displayMode: SideMenuDisplayMode.auto,
-            hoverColor: Colors.blue[100],
-            selectedColor: Colors.lightBlue,
-            selectedTitleTextStyle: TextStyle(color: Colors.white),
-            selectedIconColor: Colors.white,
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.all(Radius.circular(10)),
-            // ),
-            // backgroundColor: Colors.blueGrey[700]
-          ),
-          title: Column(
-            children: [
-              ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 70,
-                  maxWidth: 70,
-                ),
-                child: Image.asset(
-                  'images/logo_master.png',
-                ),
-              ),
-              Text('คุณ : ${myUserModel.personName}'),
-              Text('แผนก : ${myUserModel.department}'),
-              Divider(
-                indent: 8.0,
-                endIndent: 8.0,
-              ),
-            ],
-          ),
-          footer: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'YRU service',
-              style: TextStyle(fontSize: 15),
+        SideNavigationBar(
+          // selectedIndex: selectedIndex,
+          items: const [
+            SideNavigationBarItem(
+              icon: Icons.dashboard,
+              label: 'หน้าหลัก',
             ),
-          ),
-          items: [
-            SideMenuItem(
-              priority: 1,
-              title: 'หน้าหลัก',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return MyService(
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).pushAndRemoveUntil(
-                    materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-                    (Route<dynamic> route) {
-                  return false;
-                });
-              },
-              icon: Icon(Icons.home),
+            SideNavigationBarItem(
+              icon: Icons.checklist,
+              label: 'รายการขอใช้บริการ',
             ),
-            SideMenuItem(
-              priority: 1,
-              title: 'รายการขอใช้บริการ',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListComplain(
-                    index: 0,
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.supervisor_account),
+            SideNavigationBarItem(
+              icon: Icons.question_answer,
+              label: 'รายการถาม-ตอบ',
             ),
-            SideMenuItem(
-              priority: 2,
-              title: 'รายการถาม-ตอบ',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListFaq(
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.file_copy_rounded),
+            SideNavigationBarItem(
+              icon: Icons.check_circle_outline,
+              label: 'จัดการคำขอบริการ',
             ),
-            SideMenuItem(
-              priority: 3,
-              title: 'จัดการคำขอบริการ',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListComplainAdmin(
-                    index: 0,
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.download),
+            SideNavigationBarItem(
+              icon: Icons.group,
+              label: 'จัดการแผนก',
             ),
-            SideMenuItem(
-              priority: 4,
-              title: 'จัดการแผนก',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListDept(
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.settings),
+            SideNavigationBarItem(
+              icon: Icons.person_outline_rounded,
+              label: 'จัดการรายชื่อ',
             ),
-            SideMenuItem(
-              priority: 5,
-              title: 'จัดการรายชื่อ',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListUser(
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.settings),
+            SideNavigationBarItem(
+              icon: Icons.question_answer_outlined,
+              label: 'จัดการข้อมูลถาม-ตอบ',
             ),
-            SideMenuItem(
-              priority: 6,
-              title: 'จัดการข้อมูลถาม-ตอบ',
-              onTap: () {
-                MaterialPageRoute materialPageRoute =
-                    MaterialPageRoute(builder: (BuildContext buildContext) {
-                  return ListFaq(
-                    userModel: myUserModel,
-                  );
-                });
-                Navigator.of(context).push(materialPageRoute);
-              },
-              icon: Icon(Icons.settings),
-            ),
-            SideMenuItem(
-              priority: 7,
-              title: 'ออกจากระบบ',
-              onTap: () async {
-                logOut();
-              },
-              icon: Icon(Icons.exit_to_app),
+            SideNavigationBarItem(
+              icon: Icons.logout,
+              label: 'ออกจากระบบ',
             ),
           ],
+          onTap: (index) {
+            print('index mwnu >> $index');
+            if (index == 0) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return MyService(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).pushAndRemoveUntil(
+                  materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+                  (Route<dynamic> route) {
+                return false;
+              });
+            } else if (index == 1) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListComplain(
+                  index: 0,
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 2) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListFaq(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 3) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListComplainAdmin(
+                  index: 0,
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 4) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListDept(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 5) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListUser(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 6) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListFaq(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 7) {
+              logOut();
+            }
+          },
         ),
+
+        /// Make it take the rest of the available width
+        // Expanded(
+        //   child: views.elementAt(selectedIndex),
+        // ),
       ],
     );
   }
