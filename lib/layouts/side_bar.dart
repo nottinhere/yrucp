@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
+import 'package:yrusv/pages/list_report_support.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/pages/my_service.dart';
 import 'package:yrusv/pages/list_complain.dart';
@@ -9,6 +11,7 @@ import 'package:yrusv/pages/list_complain_admin.dart';
 import 'package:yrusv/pages/list_faq.dart';
 import 'package:yrusv/pages/list_staff.dart';
 import 'package:yrusv/pages/list_department.dart';
+import 'package:yrusv/pages/list_problem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_navigation/side_navigation.dart';
 
@@ -34,7 +37,12 @@ class _SideBarState extends State<SideBar> {
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
-    exit(0);
+    // exit(0);
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyApp();
+    });
+    Navigator.of(context).push(materialPageRoute);
   }
 
   List<Widget> views = const [
@@ -48,19 +56,16 @@ class _SideBarState extends State<SideBar> {
       child: Text('รายการถาม-ตอบ'),
     ),
     Center(
-      child: Text('จัดการคำขอบริการ'),
-    ),
-    Center(
-      child: Text('จัดการแผนก'),
-    ),
-    Center(
-      child: Text('จัดการรายชื่อ'),
-    ),
-    Center(
-      child: Text('จัดการข้อมูลถาม-ตอบ'),
-    ),
-    Center(
       child: Text('ออกจากระบบ'),
+    ),
+    Center(
+      child: Text('------'),
+    ),
+    Center(
+      child: Text('xxx'),
+    ),
+    Center(
+      child: Text('123456'),
     ),
   ];
   int selectedIndex = 0;
@@ -70,6 +75,12 @@ class _SideBarState extends State<SideBar> {
     return Row(
       children: [
         SideNavigationBar(
+          header: SideNavigationBarHeader(
+              image: CircleAvatar(
+                child: Image.asset('images/logo.png'),
+              ),
+              title: Text(myUserModel.personName),
+              subtitle: Text(myUserModel.departmentName)),
           // selectedIndex: selectedIndex,
           items: const [
             SideNavigationBarItem(
@@ -85,12 +96,162 @@ class _SideBarState extends State<SideBar> {
               label: 'รายการถาม-ตอบ',
             ),
             SideNavigationBarItem(
+              icon: Icons.logout,
+              label: 'ออกจากระบบ',
+            ),
+          ],
+          onTap: (index) {
+            print('index mwnu >> $index');
+            if (index == 0) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return MyService(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).pushAndRemoveUntil(
+                  materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+                  (Route<dynamic> route) {
+                return false;
+              });
+            } else if (index == 1) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListComplain(
+                  index: (myUserModel.level == 2) ? 2 : 4,
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 2) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListFaq(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 3) {
+              logOut();
+            }
+          },
+        ),
+
+        /// Make it take the rest of the available width
+        // Expanded(
+        //   child: views.elementAt(selectedIndex),
+        // ),
+      ],
+    );
+  }
+}
+
+/************************************************ */
+
+class AdminSideBar extends StatefulWidget {
+  final UserModel userModel;
+
+  AdminSideBar({Key key, this.userModel}) : super(key: key);
+
+  @override
+  _AdminSideBarState createState() => _AdminSideBarState();
+}
+
+class _AdminSideBarState extends State<AdminSideBar> {
+  UserModel myUserModel;
+  PageController page = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+    myUserModel = widget.userModel;
+  }
+
+  Future<void> logOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    // exit(0);
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyApp();
+    });
+    Navigator.of(context).push(materialPageRoute);
+  }
+
+  List<Widget> views = const [
+    Center(
+      child: Text('หน้าหลัก'),
+    ),
+    Center(
+      child: Text('รายการขอใช้บริการ'),
+    ),
+    Center(
+      child: Text('รายการถาม-ตอบ'),
+    ),
+    Center(
+      child: Text('รายงานสรุป'),
+    ),
+    Center(
+      child: Text('จัดการคำขอบริการ'),
+    ),
+    Center(
+      child: Text('จัดการข้อมูลแผนก'),
+    ),
+    Center(
+      child: Text('จัดการข้อมูลหมวดหมู่'),
+    ),
+    Center(
+      child: Text('จัดการข้อมูลรายชื่อ'),
+    ),
+    Center(
+      child: Text('จัดการข้อมูลถาม-ตอบ'),
+    ),
+    Center(
+      child: Text('ออกจากระบบ'),
+    ),
+  ];
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SideNavigationBar(
+          header: SideNavigationBarHeader(
+              image: CircleAvatar(
+                child: Image.asset('images/logo.png'),
+              ),
+              title: Text(myUserModel.personName),
+              subtitle: Text(myUserModel.departmentName)),
+          // selectedIndex: selectedIndex,
+          items: const [
+            SideNavigationBarItem(
+              icon: Icons.dashboard,
+              label: 'หน้าหลัก',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.checklist,
+              label: 'รายการขอใช้บริการ',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.question_answer,
+              label: 'รายการถาม-ตอบ',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.list_alt_outlined,
+              label: 'รายงานสรุป',
+            ),
+            SideNavigationBarItem(
               icon: Icons.check_circle_outline,
               label: 'จัดการคำขอบริการ',
             ),
             SideNavigationBarItem(
               icon: Icons.group,
               label: 'จัดการแผนก',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.group,
+              label: 'จัดการข้อมูลหมวดหมู่',
             ),
             SideNavigationBarItem(
               icon: Icons.person_outline_rounded,
@@ -139,13 +300,22 @@ class _SideBarState extends State<SideBar> {
             } else if (index == 3) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListComplainAdmin(
+                return ListReportDept(
                   index: 0,
                   userModel: myUserModel,
                 );
               });
               Navigator.of(context).push(materialPageRoute);
             } else if (index == 4) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListComplainAdmin(
+                  index: 0,
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 5) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListDept(
@@ -156,7 +326,7 @@ class _SideBarState extends State<SideBar> {
             } else if (index == 5) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListUser(
+                return ListProblem(
                   userModel: myUserModel,
                 );
               });
@@ -164,20 +334,30 @@ class _SideBarState extends State<SideBar> {
             } else if (index == 6) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListFaq(
+                return ListUser(
                   userModel: myUserModel,
                 );
               });
               Navigator.of(context).push(materialPageRoute);
             } else if (index == 7) {
+              MaterialPageRoute materialPageRoute =
+                  MaterialPageRoute(builder: (BuildContext buildContext) {
+                return ListFaq(
+                  userModel: myUserModel,
+                );
+              });
+              Navigator.of(context).push(materialPageRoute);
+            } else if (index == 8) {
               logOut();
             }
           },
         ),
 
-        /// Make it take the rest of the available width
-        // Expanded(
-        //   child: views.elementAt(selectedIndex),
+        // Make it take the rest of the available width
+        // Center(
+        //   child: Expanded(
+        //     child: views.elementAt(selectedIndex),
+        //   ),
         // ),
       ],
     );

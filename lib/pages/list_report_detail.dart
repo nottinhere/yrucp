@@ -4,28 +4,33 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-// import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/faq_model.dart';
-import 'package:yrusv/pages/faq_add.dart';
-import 'package:yrusv/pages/faq_edit.dart';
+import 'package:yrusv/models/report_dept_detail_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widgets/home.dart';
 
-import 'detail.dart';
+import 'package:uipickers/uipickers.dart';
+
 import 'detail_cart.dart';
-
 import 'package:yrusv/layouts/side_bar.dart';
 
-class ListFaq extends StatefulWidget {
+class ListReportDeptDetail extends StatefulWidget {
   final int index;
   final UserModel userModel;
-
-  ListFaq({Key key, this.index, this.userModel}) : super(key: key);
+  final String dept;
+  final DateTime datestart;
+  final DateTime dateend;
+  ListReportDeptDetail(
+      {Key key,
+      this.index,
+      this.userModel,
+      this.dept,
+      this.datestart,
+      this.dateend})
+      : super(key: key);
 
   @override
-  _ListFaqState createState() => _ListFaqState();
+  _ListReportDeptDetailState createState() => _ListReportDeptDetailState();
 }
 
 //class
@@ -47,17 +52,21 @@ class Debouncer {
   }
 }
 
-class _ListFaqState extends State<ListFaq> {
-  List<UserModel> userModels = List(); // set array
-  List<FaqModel> faqModels = List(); // set array
-  List<FaqModel> filterFaqModels = List();
-  FaqModel selectFaqModel;
+class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
+  List<ReportDeptDetailModel> reportDeptModels = List(); // set array
+  List<ReportDeptDetailModel> filterReportDeptDetailModels = List();
+  ReportDeptDetailModel selectReportDeptModel;
+
   // Explicit
   int myIndex;
 
   int amontCart = 0;
   UserModel myUserModel;
   String searchString = '';
+  String myDept = '';
+
+  DateTime datestart;
+  DateTime dateend;
 
   int amountListView = 6, page = 1;
   String sort = 'asc';
@@ -65,6 +74,11 @@ class _ListFaqState extends State<ListFaq> {
   final Debouncer debouncer =
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
+  int totolpage;
+
+  DateTime selectedStartDate =
+      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+  DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
 
   // Method
   @override
@@ -73,11 +87,13 @@ class _ListFaqState extends State<ListFaq> {
     super.initState();
     myIndex = widget.index;
     myUserModel = widget.userModel;
-
+    myDept = widget.dept;
+    selectedStartDate = widget.datestart;
+    selectedEndDate = widget.dateend;
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readFaq(); // read  ข้อมูลมาแสดง
+      readReport(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -86,56 +102,58 @@ class _ListFaqState extends State<ListFaq> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readFaq();
-
-        // print('in the end');
-
-        // setState(() {
-        //   amountListView = amountListView + 2;
-        //   if (amountListView > filterProductAllModels.length) {
-        //     amountListView = filterProductAllModels.length;
-        //   }
-        // });
+        readReport();
       }
     });
   }
 
-  Future<void> readFaq() async {
+  Future<void> readReport() async {
     String memberId = myUserModel.id.toString();
+    String dept = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_faq.php?memberId=$memberId&searchKey=$searchString&page=$page';
-    print('urlDV >> ${urlDV}');
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_detail.php?memberId=$memberId&dept=$myDept&start=$selectedStartDate&end=$selectedEndDate'; //'';
+    print('urlDV >> $urlDV');
+
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemProducts = result['itemsData'];
+    var item = result['data'];
+    print('item >> $item');
+    int i = 0;
+    int len = (filterReportDeptDetailModels.length);
 
-    for (var map in itemProducts) {
-      FaqModel faqModel = FaqModel.fromJson(map);
+    for (var map in item) {
+      ReportDeptDetailModel reportDeptModel =
+          ReportDeptDetailModel.fromJson(map);
       setState(() {
-        faqModels.add(faqModel);
-        filterFaqModels = faqModels;
+        reportDeptModels.add(reportDeptModel);
+        filterReportDeptDetailModels = reportDeptModels;
       });
+      print(
+          ' >> ${len} =>($i)  ${filterReportDeptDetailModels[(len + i)].dept}  ||  ${filterReportDeptDetailModels[(len + i)].deptName}');
     }
-    print('Count row >> ${filterFaqModels.length}');
+    print('Count row >> ${filterReportDeptDetailModels.length}');
   }
 
-  Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
-    String id = filterFaqModels[index].id.toString();
-    String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?selectId=$id';
+  // Future<void> updateDatalist(index) async {
+  //   print('Here is updateDatalist function');
 
-    http.Response responseSL = await http.get(urlST);
-    var resultSL = json.decode(responseSL.body);
-    var itemSelect = resultSL['data'];
+  //   String memberId = myUserModel.id.toString();
+  //   String selectId = filterReportDeptDetailModels[index].dept;
+  //   String urlST =
+  //       'https://app.oss.yru.ac.th/yrusv/api/json_select_staff.php?memberId=$memberId&selectId=$selectId';
 
-    selectFaqModel = FaqModel.fromJson(itemSelect);
-    setState(() {
-      print('itemSelect = ${selectFaqModel.question}');
-      filterFaqModels[index].question = selectFaqModel.question;
-    });
-  }
+  //   http.Response response = await http.get(urlST);
+  //   var resultSL = json.decode(response.body);
+  //   var itemSelect = resultSL['data'];
+
+  //   selectReportDeptDetailModel = ReportDeptDetailModel.fromJson(itemSelect);
+  //   setState(() {
+  //     filterReportDeptDetailModels[index].deptName = selectReportDeptDetailModel.deptName;
+  //     filterReportDeptDetailModels[index].code = selectReportDeptDetailModel.code;
+  //     filterReportDeptDetailModels[index].countjob = selectReportDeptDetailModel.countjob;
+  //   });
+  // }
 
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -143,68 +161,7 @@ class _ListFaqState extends State<ListFaq> {
     exit(0);
   }
 
-  Widget cancelButton() {
-    return FlatButton(
-      child: Text('Cancel'),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
-  Widget deleteButton(int index) {
-    return IconButton(
-      icon: Icon(Icons.remove_circle_outline),
-      onPressed: () {
-        confirmDelete(index);
-      },
-    );
-  }
-
-  void confirmDelete(int index) {
-    String titleQues = filterFaqModels[index].question;
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleQues'),
-            actions: <Widget>[
-              cancelButton(),
-              comfirmButton(index),
-            ],
-          );
-        });
-  }
-
-  Widget comfirmButton(int index) {
-    return FlatButton(
-      child: Text('Confirm'),
-      onPressed: () {
-        deleteCart(
-          index,
-        );
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
-  Future<void> deleteCart(int index) async {
-    String selectId = filterFaqModels[index].id.toString();
-    String memberID = myUserModel.id.toString();
-
-    String url =
-        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
-
-    print('selectId = $selectId  ,url = $url');
-
-    await http.get(url).then((response) {
-      readFaq();
-    });
-  }
-
-  Widget edit_btn(index) {
+  Widget detail_btn(index) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
@@ -217,11 +174,11 @@ class _ListFaqState extends State<ListFaq> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  Icons.edit,
+                  Icons.speaker_notes_outlined,
                   color: Colors.white,
                 ),
                 Text(
-                  ' แก้ไขข้อมูล',
+                  ' รายละเอียด',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -232,63 +189,15 @@ class _ListFaqState extends State<ListFaq> {
           ),
         ),
         onTap: () {
-          print('Edit BTN');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditFaq(
-              faqAllModel: filterFaqModels[index],
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context)
-              .push(materialPageRoute)
-              .then((value) => setState(() {
-                    // readDept();
-                    updateDatalist(index);
-                    //showTag(index);
-                    // showResponsible(index);
-                  }));
+          print('Detail BTN');
+          // confirmDelete(index);
         },
       ),
     );
   }
 
-  Widget delete_btn(index) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.08,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.blue.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                Text(
-                  ' ลบข้อมูล',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('Delete BTN');
-          confirmDelete(index);
-        },
-      ),
-    );
-  }
-
-  Widget showPercentStock(int index) {
+  Widget showData(int index) {
+    print('index >> $filterReportDeptDetailModels');
     return Row(
       children: <Widget>[
         Container(
@@ -296,16 +205,33 @@ class _ListFaqState extends State<ListFaq> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
-                'Question : ' + filterFaqModels[index].question,
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(0xff, 16, 149, 161),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                child: Text(
+                  filterReportDeptDetailModels[index].staff + '',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 16, 149, 161),
+                  ),
                 ),
               ),
-              Row(
-                children: [edit_btn(index), delete_btn(index)],
+              Container(
+                width: MediaQuery.of(context).size.width * 0.18,
+                child: Text(
+                  'จำนวนงาน : ' + filterReportDeptDetailModels[index].countjob,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    // fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 0, 0, 0),
+                  ),
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.18,
+                child: Row(
+                  children: [detail_btn(index)],
+                ),
               )
             ],
           ),
@@ -315,12 +241,13 @@ class _ListFaqState extends State<ListFaq> {
   }
 
   Widget showName(int index) {
+    print('showName');
     return Row(
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Ques : ' + filterFaqModels[index].question.toString(),
+            'Dept : ' + filterReportDeptDetailModels[index].deptName,
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -336,46 +263,9 @@ class _ListFaqState extends State<ListFaq> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          showPercentStock(index),
-          showName(index),
+          showData(index),
+          // showName(index),
         ],
-      ),
-    );
-  }
-
-  Widget BTNAddFaq() {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddFaq(
-            userModel: myUserModel,
-          );
-        });
-        Navigator.of(context).push(materialPageRoute);
-      },
-      child: Card(
-        color: Colors.blue.shade600,
-        child: Container(
-          height: 50,
-          // padding: EdgeInsets.all(2.0),
-          // alignment: AlignmentDirectional(0.0, 0.0),
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              Text(
-                ' เพิ่มข้อมูล',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -401,7 +291,7 @@ class _ListFaqState extends State<ListFaq> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: filterFaqModels.length,
+        itemCount: reportDeptModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -422,6 +312,16 @@ class _ListFaqState extends State<ListFaq> {
                 ),
               ),
             ),
+            onTap: () {
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Detail(
+              //     productAllModel: filterProductAllModels[index],
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+            },
           );
         },
       ),
@@ -446,22 +346,12 @@ class _ListFaqState extends State<ListFaq> {
   }
   */
 
-  Widget searchForm() {
+  Widget searchFormTXT() {
     return Container(
       decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
       padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
       child: ListTile(
-        // trailing: IconButton(
-        //     icon: Icon(Icons.search),
-        //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
-        //       setState(() {
-        //         page = 1;
-        //         productAllModels.clear();
-        //         readFaq();
-        //       });
-        //     }),
         title: TextField(
           decoration:
               InputDecoration(border: InputBorder.none, hintText: 'Search'),
@@ -472,11 +362,57 @@ class _ListFaqState extends State<ListFaq> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              faqModels.clear();
-              readFaq();
+              reportDeptModels.clear();
+              readReport();
             });
           },
         ),
+      ),
+    );
+  }
+
+  Widget searchForm() {
+    return Container(
+      // decoration: MyStyle().boxLightGray,
+      // color: Colors.grey,
+      padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Text('ตั้งแต่'),
+              SizedBox(
+                  width: 200,
+                  height: 34,
+                  child: AdaptiveDatePicker(
+                    //type: AdaptiveDatePickerType.material,
+                    initialDate: selectedStartDate,
+                    firstDate: DateTime.now().add(Duration(days: -365)),
+                    lastDate: DateTime.now().add(Duration(days: 1460)),
+                    onChanged: (date) {
+                      setState(() => selectedStartDate = date);
+                    },
+                  )),
+            ],
+          ),
+          Column(
+            children: [
+              Text('จนถึง'),
+              SizedBox(
+                  width: 200,
+                  height: 34,
+                  child: AdaptiveDatePicker(
+                    //type: AdaptiveDatePickerType.material,
+                    initialDate: selectedEndDate,
+                    firstDate: DateTime.now().add(Duration(days: -365)),
+                    lastDate: DateTime.now().add(Duration(days: 1460)),
+                    onChanged: (date) {
+                      setState(() => selectedEndDate = date);
+                    },
+                  )),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -493,15 +429,15 @@ class _ListFaqState extends State<ListFaq> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              faqModels.clear();
-              readFaq();
+              reportDeptModels.clear();
+              readReport();
             });
           }),
     );
   }
 
   Widget showContent() {
-    return userModels.length == 0
+    return reportDeptModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
@@ -521,11 +457,15 @@ class _ListFaqState extends State<ListFaq> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('รายการถาม-ตอบ'),
+        title: Text('รายงานสรุปรายบุคคล'),
         actions: <Widget>[
-          BTNAddFaq(),
+          // AddStaff(),
         ],
       ),
+      // body: filterProductAllModels.length == 0
+      //     ? showProgressIndicate()
+      //     : myLayout(),
+
       body: Row(
         children: [
           (myUserModel.level == 1)
@@ -535,7 +475,7 @@ class _ListFaqState extends State<ListFaq> {
             child: Column(
               children: <Widget>[
                 searchForm(),
-                clearButton(),
+                // clearButton(),
                 showContent(),
               ],
             ),

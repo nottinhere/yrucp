@@ -289,6 +289,12 @@ class _ListDeptState extends State<ListDept> {
     );
   }
 
+  Widget showBTN(int index) {
+    return Row(
+      children: [edit_btn(index), delete_btn(index)],
+    );
+  }
+
   Widget showPercentStock(int index) {
     return Row(
       children: <Widget>[
@@ -305,9 +311,16 @@ class _ListDeptState extends State<ListDept> {
                   color: Color.fromARGB(0xff, 16, 149, 161),
                 ),
               ),
-              Row(
-                children: [edit_btn(index), delete_btn(index)],
-              )
+              (filterDeptModels[index].memInDept > 0)
+                  ? showBTN(index)
+                  : Text(
+                      'กรุณาเพิ่มสมาชิกเข้ากลุ่มงาน',
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -483,12 +496,31 @@ class _ListDeptState extends State<ListDept> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              userModels.clear();
-              // readUser();
+              deptModels.clear();
+              readDept();
             });
           },
         ),
       ),
+    );
+  }
+
+  Widget clearButton() {
+    return Container(
+      child: FlatButton.icon(
+          // color: Colors.red,
+          icon: Icon(Icons.search_off_sharp), //`Icon` to display
+          label: Text('ล้างการค้นหา'), //`Text` to display
+          onPressed: () {
+            print('searchString ===>>> $searchString');
+            setState(() {
+              page = 1;
+              // sort = (sort == 'asc') ? 'desc' : 'asc';
+              searchString = '';
+              deptModels.clear();
+              readDept();
+            });
+          }),
     );
   }
 
@@ -520,11 +552,14 @@ class _ListDeptState extends State<ListDept> {
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(
             child: Column(
               children: <Widget>[
                 searchForm(),
+                clearButton(),
                 showContent(),
               ],
             ),

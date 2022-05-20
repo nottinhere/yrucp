@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/popup_model.dart';
 import 'package:yrusv/pages/my_service.dart';
@@ -104,19 +105,25 @@ class _AuthenState extends State<Authen> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     // exit(0);
+    // exit(0);
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyApp();
+    });
+    Navigator.of(context).push(materialPageRoute);
   }
 
   Widget okButtonLogin(BuildContext buildContext) {
     return FlatButton(
       child: Text('OK'),
       onPressed: () {
-        // Navigator.of(buildContext).pop();  // pop คือการทำให้มันหายไป
         logOut();
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return Authen();
-        });
-        Navigator.of(context).push(materialPageRoute);
+        Navigator.of(buildContext).pop(); // pop คือการทำให้มันหายไป
+        // MaterialPageRoute materialPageRoute =
+        //     MaterialPageRoute(builder: (BuildContext buildContext) {
+        //   return Authen();
+        // });
+        // Navigator.of(context).push(materialPageRoute);
       },
     );
   }
@@ -143,26 +150,6 @@ class _AuthenState extends State<Authen> {
       // Have space
       normalDialog(context, 'Have space', 'Please fill all input');
     } else {
-      // String urlPop = 'http://ptnpharma.com/apisupplier/json_popup.php';
-      // http.Response responsePop = await http.get(urlPop);
-      // var resultPop = json.decode(responsePop.body);
-      // var mapItemPopup = resultPop[
-      //     'itemsData']; // dynamic    จะส่ง value อะไรก็ได้ รวมถึง null
-      // for (var map in mapItemPopup) {
-      //   // PromoteModel promoteModel = PromoteModel.fromJson(map);
-      //   PopupModel popupModel = PopupModel.fromJson(map);
-      //   String urlImage = popupModel.photo;
-      //   String subject = popupModel.subject;
-      //   String popstatus = popupModel.popstatus;
-      //   setState(() {
-      //     //promoteModels.add(promoteModel); // push ค่าลง arra
-      //     subjectPopup = subject;
-      //     statusPopup = popstatus;
-      //     imagePopup = urlImage;
-      //   });
-      // }
-
-      // No space
       String url =
           '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';
       print('url = $url');
@@ -277,17 +264,6 @@ class _AuthenState extends State<Authen> {
       return false;
     });
   }
-
-  // void routeToMyService(statusPopup) async {  // with popup
-  //   // print('statusPopup >> $statusPopup');
-  //   if (statusPopup == '1') {
-  //     // when turn on popup alert
-  //     WidgetsBinding.instance
-  //         .addPostFrameCallback((_) => _onBasicAlertPressed(context));
-  //   } else {
-  //     gotoService();
-  //   }
-  // }
 
   Widget userForm() {
     return Container(

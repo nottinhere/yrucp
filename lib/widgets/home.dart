@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/news_model.dart';
 import 'package:yrusv/pages/list_complain.dart';
@@ -9,6 +10,9 @@ import 'package:yrusv/pages/list_complain_admin.dart';
 import 'package:yrusv/pages/list_faq.dart';
 import 'package:yrusv/pages/list_staff.dart';
 import 'package:yrusv/pages/list_department.dart';
+import 'package:yrusv/pages/list_report_support.dart';
+import 'package:yrusv/pages/list_problem.dart';
+
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -104,43 +108,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget productBox() {
-    String login = myUserModel.subject;
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.lightBlue.shade50,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: 45.0,
-                  child: Image.asset('images/icon_drugs.png'),
-                  padding: EdgeInsets.all(8.0),
-                ),
-                Text(
-                  'รายการสินค้า',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click product');
-          routeToListComplain(0);
-        },
-      ),
-    );
-  }
-
   Widget logoutSquareBox() {
     String login = myUserModel.subject;
     return Container(
@@ -218,7 +185,12 @@ class _HomeState extends State<Home> {
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
-    exit(0);
+    // exit(0);
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return MyApp();
+    });
+    Navigator.of(context).push(materialPageRoute);
   }
 
   Widget ViewQA() {
@@ -295,7 +267,55 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           print('You click promotion');
-          routeToListComplain(0);
+          routeToListComplain((myUserModel.level == 1)
+              ? 0
+              : (myUserModel.level == 2)
+                  ? 2
+                  : 4);
+        },
+      ),
+    );
+  }
+
+  Widget ReportComplain() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_report.png'),
+                ),
+                Text(
+                  'รายงาน',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportDept(
+              index: 0,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -345,6 +365,49 @@ class _HomeState extends State<Home> {
     );
   }
 
+  Widget ManageDeptbox() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_department.png'),
+                ),
+                Text(
+                  'แผนก',
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click promotion');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListDept(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget ManageCategorybox() {
     // all product
     return Container(
@@ -364,7 +427,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_category.png'),
                 ),
                 Text(
-                  'แผนก',
+                  'หมวดหมู่',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -378,7 +441,7 @@ class _HomeState extends State<Home> {
           print('You click promotion');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListDept(
+            return ListProblem(
               userModel: myUserModel,
             );
           });
@@ -594,7 +657,9 @@ class _HomeState extends State<Home> {
       // mainAxisSize: MainAxisSize.max,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        ReportComplain(),
         ManageComplain(),
+        ManageDeptbox(),
         ManageCategorybox(),
         ManageUserbox(),
         ManageQA(),
@@ -612,6 +677,7 @@ class _HomeState extends State<Home> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          headTitle('ผู้ดูแลระบบ', Icons.admin_panel_settings),
           row1MenuAdmin(),
           mySizebox(),
           // row2MenuAdmin(),
@@ -626,7 +692,9 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(
             child: Column(
               children: <Widget>[
@@ -634,8 +702,7 @@ class _HomeState extends State<Home> {
                 // profileBox(),
                 headTitle('เมนู', Icons.home),
                 homeMenu(),
-                headTitle('ผู้ดูแลระบบ', Icons.admin_panel_settings),
-                adminMenu(),
+                (myUserModel.level == 1) ? adminMenu() : Container(),
               ],
             ),
           ),

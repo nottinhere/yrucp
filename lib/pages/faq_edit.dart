@@ -289,7 +289,9 @@ class _EditFaqState extends State<EditFaq> {
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(child: showController()),
         ],
       ),

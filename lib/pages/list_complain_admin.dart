@@ -439,17 +439,71 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         ),
         onTap: () {
           print('You are staff');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return DetailStaff(
-              complainAllModel: filterComplainAllModels[index],
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          confirmDelete(index);
         },
       ),
     );
+  }
+
+  Widget cancelButton() {
+    return FlatButton(
+      child: Text('Cancel'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Widget deleteButton(int index) {
+    return IconButton(
+      icon: Icon(Icons.remove_circle_outline),
+      onPressed: () {
+        confirmDelete(index);
+      },
+    );
+  }
+
+  void confirmDelete(int index) {
+    String titleQues = filterComplainAllModels[index].id.toString();
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Confirm delete'),
+            content: Text('Do you want delete : $titleQues'),
+            actions: <Widget>[
+              cancelButton(),
+              comfirmButton(index),
+            ],
+          );
+        });
+  }
+
+  Widget comfirmButton(int index) {
+    return FlatButton(
+      child: Text('Confirm'),
+      onPressed: () {
+        deleteCart(
+          index,
+        );
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  Future<void> deleteCart(int index) async {
+    String selectId = filterComplainAllModels[index].id.toString();
+    String memberID = myUserModel.id.toString();
+
+    String url =
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_deletecomplain.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+
+    print('selectId = $selectId  ,url = $url');
+
+    await http.get(url).then((response) {
+      readData();
+    });
   }
 
   Widget showTag(index) {
@@ -556,7 +610,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.14,
+          width: MediaQuery.of(context).size.width * 0.18,
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
@@ -573,7 +627,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.28,
+          width: MediaQuery.of(context).size.width * 0.24,
           child: Column(
             children: [
               // Icon(Icons.kitchen, color: Colors.green[500]),
@@ -861,7 +915,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           // showCart(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการขอใช้บริการ'),
+        title: Text('จัดการคำขอบริการ'),
       ),
       // body: filterComplainAllModels.length == 0
       //     ? showProgressIndicate()
@@ -869,7 +923,9 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(
             child: Column(
               children: <Widget>[

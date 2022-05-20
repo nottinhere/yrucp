@@ -240,7 +240,7 @@ class _DetailState extends State<Detail> {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
     String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dp=$dp';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dept=$dp';
     print('urlST = $urlST');
 
     print('Here is error');
@@ -530,6 +530,9 @@ class _DetailState extends State<Detail> {
 
   Widget showResponsible_staff() {
     // print('_selectedDBHelper in >> $_selectedDBHelper');
+    if (myUserModel.level == 3) {
+      _mySelection = myUserModel.id.toString();
+    }
 
     return Card(
       child: Column(
@@ -627,9 +630,11 @@ class _DetailState extends State<Detail> {
                       alignment: Alignment.center,
                       underline: Container(color: Colors.transparent),
                       value: _mySelection,
-                      onChanged: (String newVal) {
-                        setState(() => _mySelection = newVal);
-                      },
+                      onChanged: (myUserModel.level == 3)
+                          ? null
+                          : (String newVal) {
+                              setState(() => _mySelection = newVal);
+                            },
                       items: dataST.map((item) {
                         return new DropdownMenuItem(
                           child: new Text(item['person_name']),
@@ -789,6 +794,75 @@ class _DetailState extends State<Detail> {
                           ),
                         ),
                       ],
+                    ),
+                  ],
+                ),
+
+                // Image.network(
+                //   complainAllModel.emotical,
+                //   width: MediaQuery.of(context).size.width * 0.16,
+                // ),
+              ],
+            ),
+            mySizebox(),
+            new Divider(
+              color: Colors.grey.shade400,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'YRU passport',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 16, 149, 161),
+                        // decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: <Widget>[
+                    Text('ชื่อผู้แจ้ง'),
+                    Text(
+                      complainAllModel.ps_fullname,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: <Widget>[
+                    Text('Position'),
+                    Text(
+                      complainAllModel.ps_positionname,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: <Widget>[
+                    Text('Department'),
+                    Text(
+                      complainAllModel.ps_deptname,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
                     ),
                   ],
                 ),
@@ -1222,11 +1296,13 @@ class _DetailState extends State<Detail> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('ขอใช้บริการ :: กำหนดผู้ปฏิบัติงาน'),
+        title: Text('รายการขอใช้บริการ :: กำหนดผู้ปฏิบัติงาน'),
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(child: showDetailList()),
         ],
       ),

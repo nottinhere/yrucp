@@ -101,15 +101,32 @@ class _ListComplainState extends State<ListComplain> {
 
   Future<void> readData() async {
     int memberId = myUserModel.id;
-    String url =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&searchKey=$searchString&page=$page&sort=$sort';
+    int memberLV = myUserModel.level;
+    int memberDP = myUserModel.department;
 
-    if (myIndex != 0) {
-      url = '${MyStyle().readProductWhereMode}$myIndex';
-    }
+    // Admin view all job
+    String url =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort';
+    if (myIndex == 1)
+      // head view all unassign job
+      url =
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort&uas=1';
+    else if (myIndex == 2)
+      // head view all job in dept
+      url =
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort';
+    else if (myIndex == 3)
+      // head view unassign job in dept
+      url =
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort&uas=1';
+    else if (myIndex == 4)
+      // head view  my job only
+      url =
+          'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort';
+
+    print('url >> $url');
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
 
     var itemProducts = result['itemsData'];
@@ -157,6 +174,17 @@ class _ListComplainState extends State<ListComplain> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     exit(0);
+  }
+
+  void routeToListComplain(int index) {
+    MaterialPageRoute materialPageRoute =
+        MaterialPageRoute(builder: (BuildContext buildContext) {
+      return ListComplain(
+        index: index,
+        userModel: myUserModel,
+      );
+    });
+    Navigator.of(context).push(materialPageRoute);
   }
 
   Widget Logout() {
@@ -243,6 +271,196 @@ class _ListComplainState extends State<ListComplain> {
           print('You click update price');
           // routeToListComplain(3);
         },
+      ),
+    );
+  }
+
+  Widget allJob() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 0) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'งานทั้งหมด',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          routeToListComplain(0);
+        },
+      ),
+    );
+  }
+
+  Widget unassignJob() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.13,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' งานที่ยังไม่ระบุผู้รับผิดชอบ',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          routeToListComplain(1);
+        },
+      ),
+    );
+  }
+
+  Widget allMyDeptJob() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' งานในฝ่ายของท่าน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          routeToListComplain(2);
+        },
+      ),
+    );
+  }
+
+  Widget unassignMyDeptJob() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.14,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' งานในฝ่ายยังไม่ระบุผู้รับผิดชอบ',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          routeToListComplain(3);
+        },
+      ),
+    );
+  }
+
+  Widget myJob() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.09,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 4) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' งานของท่าน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget topMenu() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        width: MediaQuery.of(context).size.width * 0.3,
+        child: Row(
+          children: [
+            if (myUserModel.level == 1) allJob(),
+            if (myUserModel.level == 1) unassignJob(),
+            if (myUserModel.level == 2) allMyDeptJob(),
+            if (myUserModel.level == 2) unassignMyDeptJob(),
+            if (myUserModel.level == 3) myJob(),
+            if (myUserModel.level == 3) unassignMyDeptJob(),
+          ],
+        ),
       ),
     );
   }
@@ -455,7 +673,61 @@ class _ListComplainState extends State<ListComplain> {
               userModel: myUserModel,
             );
           });
-          Navigator.of(context).push(materialPageRoute);
+
+          Navigator.of(context)
+              .push(materialPageRoute)
+              .then((value) => setState(() {
+                    // readData();
+                    showTag(index);
+                  }));
+        },
+      ),
+    );
+  }
+
+  Widget L3_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.09,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' ขอทำงานนี้',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You are boss');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return Detail(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context)
+              .push(materialPageRoute)
+              .then((value) => setState(() {
+                    // readData();
+                    updateDatalist(index);
+                  }));
         },
       ),
     );
@@ -573,7 +845,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.14,
+          width: MediaQuery.of(context).size.width * 0.18,
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
@@ -590,7 +862,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.28,
+          width: MediaQuery.of(context).size.width * 0.24,
           child: Column(
             children: [
               // Icon(Icons.kitchen, color: Colors.green[500]),
@@ -609,7 +881,15 @@ class _ListComplainState extends State<ListComplain> {
         Container(
           width: MediaQuery.of(context).size.width * 0.2,
           child: Row(
-            children: [L1_btn(index), L2_btn(index)],
+            children: [
+              (myUserModel.level == 1 || myUserModel.level == 2)
+                  ? L1_btn(index)
+                  : Container(),
+              L2_btn(index),
+              (myUserModel.level == 3 && myIndex == 3)
+                  ? L3_btn(index)
+                  : Container(),
+            ],
           ),
         )
       ],
@@ -791,20 +1071,41 @@ class _ListComplainState extends State<ListComplain> {
   }
 
   Widget refreshButton() {
-    return Container(
-      child: FlatButton.icon(
-          // color: Colors.red,
-          icon: Icon(Icons.refresh), //`Icon` to display
-          label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
-          onPressed: () {
-            print('searchString ===>>> $searchString');
-            setState(() {
-              page = 1;
-              // sort = (sort == 'asc') ? 'desc' : 'asc';
-              complainAllModels.clear();
-              readData();
-            });
-          }),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          child: FlatButton.icon(
+              // color: Colors.red,
+              icon: Icon(Icons.refresh), //`Icon` to display
+              label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
+              onPressed: () {
+                print('searchString ===>>> $searchString');
+                setState(() {
+                  page = 1;
+                  // sort = (sort == 'asc') ? 'desc' : 'asc';
+                  complainAllModels.clear();
+                  readData();
+                });
+              }),
+        ),
+        Container(
+          child: FlatButton.icon(
+              // color: Colors.red,
+              icon: Icon(Icons.search_off_sharp), //`Icon` to display
+              label: Text('ล้างการค้นหา'), //`Text` to display
+              onPressed: () {
+                print('searchString ===>>> $searchString');
+                setState(() {
+                  page = 1;
+                  // sort = (sort == 'asc') ? 'desc' : 'asc';
+                  searchString = '';
+                  complainAllModels.clear();
+                  readData();
+                });
+              }),
+        ),
+      ],
     );
   }
 
@@ -858,14 +1159,17 @@ class _ListComplainState extends State<ListComplain> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColor,
-        title: Text('ขอใช้บริการ'),
+        title: Text('รายการขอใช้บริการ'),
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(
             child: Column(
               children: <Widget>[
+                topMenu(),
                 searchForm(),
                 refreshButton(),
                 showContent(),

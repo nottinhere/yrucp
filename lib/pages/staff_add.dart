@@ -348,11 +348,13 @@ class _AddUserState extends State<AddUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มรายชื่อผู้ปฎิบัติงาน'),
+        title: Text('เพิ่มข้อมูลรายชื่อ'),
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(child: showController()),
         ],
       ),

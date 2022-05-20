@@ -116,6 +116,50 @@ class _EditUserState extends State<EditUser> {
     });
   }
 
+  Future<void> resetPassword() async {
+    int memberId = myUserModel.id;
+    String selectId = selectUserModel.id.toString();
+
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_resetpassword.php?memberId=$memberId&selectId=$selectId';
+    print('url >> $urlST');
+    http.Response response = await http.get(urlST);
+  }
+
+  Widget cancelButton() {
+    return FlatButton(
+      child: Text('Cancel'),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
+  void confirmChange() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Confirm delete'),
+            content: Text('Reset รหัสผ่านเป็น :: yruserviceteam'),
+            actions: <Widget>[
+              cancelButton(),
+              comfirmButton(),
+            ],
+          );
+        });
+  }
+
+  Widget comfirmButton() {
+    return FlatButton(
+      child: Text('Confirm'),
+      onPressed: () {
+        resetPassword();
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
@@ -135,7 +179,7 @@ class _EditUserState extends State<EditUser> {
         // decoration: MyStyle().boxLightGreen,
         // height: 35.0,
 
-        width: MediaQuery.of(context).size.width * 0.63,
+        width: MediaQuery.of(context).size.width * 0.95,
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
@@ -281,6 +325,28 @@ class _EditUserState extends State<EditUser> {
                     ],
                   ),
                 ],
+              ),
+              Column(
+                children: <Widget>[
+                  Text('Reset password :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.orangeAccent // Background color
+                          ),
+                      onPressed: () {
+                        print('Reset password');
+                        confirmChange();
+                      },
+                      child: const Text(
+                        'Reset password',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  mySizebox(),
+                ],
               )
             ],
           ),
@@ -401,11 +467,13 @@ class _EditUserState extends State<EditUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขรายชื่อผู้ปฎิบัติงาน'),
+        title: Text('แก้ไขรข้อมูลรายชื่อ'),
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(child: showController()),
         ],
       ),

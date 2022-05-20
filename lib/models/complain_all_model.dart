@@ -7,12 +7,18 @@ class ComplainAllModel {
   String postdate;
   String postby;
   String status;
+  String problem;
   String textstatus;
   String department;
   String staff;
   String staff_name;
   String helper;
   String helper_name;
+  String ps_fullname;
+  String ps_position;
+  String ps_positionname;
+  String ps_dept;
+  String ps_deptname;
   String startdate_fix;
   String enddate_fix;
   String note;
@@ -29,12 +35,18 @@ class ComplainAllModel {
       this.postdate,
       this.postby,
       this.status,
+      this.problem,
       this.textstatus,
       this.department,
       this.staff,
       this.staff_name,
       this.helper,
       this.helper_name,
+      this.ps_fullname,
+      this.ps_position,
+      this.ps_positionname,
+      this.ps_dept,
+      this.ps_deptname,
       this.startdate_fix,
       this.enddate_fix,
       this.note,
@@ -51,12 +63,18 @@ class ComplainAllModel {
     postdate = json['postdate'];
     postby = json['postby'];
     status = json['status'];
+    problem = json['problem'];
     textstatus = json['textstatus'];
     department = json['department'];
     staff = json['staff'];
     staff_name = json['staff_name'];
     helper = json['helper'];
     helper_name = json['helper_name'];
+    ps_fullname = json['ps_fullname'];
+    ps_position = json['ps_position'];
+    ps_positionname = json['ps_positionname'];
+    ps_dept = json['ps_dept'];
+    ps_deptname = json['ps_deptname'];
     startdate_fix = json['startdate_fix'];
     enddate_fix = json['enddate_fix'];
     note = json['note'];
@@ -75,12 +93,18 @@ class ComplainAllModel {
     data['postdate'] = this.postdate;
     data['postby'] = this.postby;
     data['status'] = this.status;
+    data['problem'] = this.problem;
     data['textstatus'] = this.textstatus;
     data['department'] = this.department;
     data['staff'] = this.staff;
     data['staff_name'] = this.staff_name;
     data['helper'] = this.helper;
     data['helper_name'] = this.helper_name;
+    data['ps_fullname'] = this.ps_fullname;
+    data['ps_position'] = this.ps_position;
+    data['ps_positionname'] = this.ps_positionname;
+    data['ps_dept'] = this.ps_dept;
+    data['ps_deptname'] = this.ps_deptname;
     data['startdate_fix'] = this.startdate_fix;
     data['enddate_fix'] = this.enddate_fix;
     data['note'] = this.note;

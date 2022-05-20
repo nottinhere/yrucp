@@ -6,23 +6,25 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/report_dept_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/widgets/home.dart';
-import 'package:yrusv/pages/staff_add.dart';
-import 'package:yrusv/pages/staff_edit.dart';
+import 'package:yrusv/pages/list_report_request.dart';
+import 'package:yrusv/pages/list_report_detail.dart';
+
+import 'package:uipickers/uipickers.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
-class ListUser extends StatefulWidget {
+class ListReportDept extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListUser({Key key, this.index, this.userModel}) : super(key: key);
+  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListUserState createState() => _ListUserState();
+  _ListReportDeptState createState() => _ListReportDeptState();
 }
 
 //class
@@ -44,10 +46,10 @@ class Debouncer {
   }
 }
 
-class _ListUserState extends State<ListUser> {
-  List<UserModel> userModels = List(); // set array
-  List<UserModel> filterUserModels = List();
-  UserModel selectUserModel;
+class _ListReportDeptState extends State<ListReportDept> {
+  List<ReportDeptModel> reportDeptModels = List(); // set array
+  List<ReportDeptModel> filterReportDeptModels = List();
+  ReportDeptModel selectReportDeptModel;
 
   // Explicit
   int myIndex;
@@ -64,6 +66,10 @@ class _ListUserState extends State<ListUser> {
   bool statusStart = true;
   int totolpage;
 
+  DateTime selectedStartDate =
+      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+  DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
+
   // Method
   @override
   void initState() {
@@ -75,7 +81,7 @@ class _ListUserState extends State<ListUser> {
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readStaff(); // read  ข้อมูลมาแสดง
+      readReport(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -84,58 +90,35 @@ class _ListUserState extends State<ListUser> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readStaff();
-
-        // print('in the end');
-
-        // setState(() {
-        //   amountListView = amountListView + 2;
-        //   if (amountListView > filterProductAllModels.length) {
-        //     amountListView = filterProductAllModels.length;
-        //   }
-        // });
+        readReport();
       }
     });
   }
 
-  Future<void> readStaff() async {
+  Future<void> readReport() async {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemProducts = result['itemsData'];
+    var item = result['data'];
+    print('item >> $item');
+    int i = 0;
+    int len = (filterReportDeptModels.length);
 
-    for (var map in itemProducts) {
-      UserModel userModel = UserModel.fromJson(map);
+    for (var map in item) {
+      ReportDeptModel reportDeptModel = ReportDeptModel.fromJson(map);
       setState(() {
-        userModels.add(userModel);
-        filterUserModels = userModels;
+        reportDeptModels.add(reportDeptModel);
+        filterReportDeptModels = reportDeptModels;
       });
+      print(
+          ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
     }
-    print('Count row >> ${filterUserModels.length}');
-  }
-
-  Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
-
-    String memberId = myUserModel.id.toString();
-    int selectId = filterUserModels[index].id;
-    String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_staff.php?memberId=$memberId&selectId=$selectId';
-
-    http.Response response = await http.get(urlST);
-    var resultSL = json.decode(response.body);
-    var itemSelect = resultSL['data'];
-
-    selectUserModel = UserModel.fromJson(itemSelect);
-    setState(() {
-      filterUserModels[index].personName = selectUserModel.personName;
-      filterUserModels[index].personContact = selectUserModel.personContact;
-    });
+    print('Count row >> ${filterReportDeptModels.length}');
   }
 
   Future<void> logOut() async {
@@ -144,68 +127,7 @@ class _ListUserState extends State<ListUser> {
     exit(0);
   }
 
-  Widget cancelButton() {
-    return FlatButton(
-      child: Text('Cancel'),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
-  Widget deleteButton(int index) {
-    return IconButton(
-      icon: Icon(Icons.remove_circle_outline),
-      onPressed: () {
-        confirmDelete(index);
-      },
-    );
-  }
-
-  void confirmDelete(int index) {
-    String titleName = filterUserModels[index].personName;
-
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
-            actions: <Widget>[
-              cancelButton(),
-              comfirmButton(index),
-            ],
-          );
-        });
-  }
-
-  Widget comfirmButton(int index) {
-    return FlatButton(
-      child: Text('Confirm'),
-      onPressed: () {
-        deleteCart(
-          index,
-        );
-        Navigator.of(context).pop();
-      },
-    );
-  }
-
-  Future<void> deleteCart(int index) async {
-    String selectId = filterUserModels[index].id.toString();
-    String memberID = myUserModel.id.toString();
-
-    String url =
-        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
-
-    print('selectId = $selectId  ,url = $url');
-
-    await http.get(url).then((response) {
-      readStaff();
-    });
-  }
-
-  Widget edit_btn(index) {
+  Widget detail_btn(index) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
@@ -218,11 +140,11 @@ class _ListUserState extends State<ListUser> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  Icons.edit,
+                  Icons.speaker_notes_outlined,
                   color: Colors.white,
                 ),
                 Text(
-                  ' แก้ไขข้อมูล',
+                  ' รายละเอียด',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -233,63 +155,25 @@ class _ListUserState extends State<ListUser> {
           ),
         ),
         onTap: () {
-          print('Edit BTN');
+          print('Detail BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditUser(
-              userAllModel: filterUserModels[index],
+            return ListReportDeptDetail(
+              index: 0,
               userModel: myUserModel,
+              dept: filterReportDeptModels[index].dept,
+              datestart: selectedStartDate,
+              dateend: selectedEndDate,
             );
           });
-          Navigator.of(context)
-              .push(materialPageRoute)
-              .then((value) => setState(() {
-                    // readDept();
-                    updateDatalist(index);
-                    //showTag(index);
-                    // showResponsible(index);
-                  }));
-        },
-      ),
-    );
-  }
-
-  Widget delete_btn(index) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.08,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.blue.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                Text(
-                  ' ลบข้อมูล',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('Delete BTN');
-          confirmDelete(index);
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
   }
 
   Widget showData(int index) {
+    print('index >> $filterReportDeptModels');
     return Row(
       children: <Widget>[
         Container(
@@ -300,7 +184,9 @@ class _ListUserState extends State<ListUser> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: Text(
-                  'Name : ' + filterUserModels[index].personName,
+                  '[${filterReportDeptModels[index].code}] ' +
+                      filterReportDeptModels[index].deptName +
+                      '',
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
@@ -311,7 +197,7 @@ class _ListUserState extends State<ListUser> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.18,
                 child: Text(
-                  'Contact : ' + filterUserModels[index].personContact,
+                  'จำนวนงาน : ' + filterReportDeptModels[index].countjob,
                   style: TextStyle(
                     fontSize: 16.0,
                     // fontWeight: FontWeight.bold,
@@ -320,9 +206,9 @@ class _ListUserState extends State<ListUser> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.17,
+                width: MediaQuery.of(context).size.width * 0.18,
                 child: Row(
-                  children: [edit_btn(index), delete_btn(index)],
+                  children: [detail_btn(index)],
                 ),
               )
             ],
@@ -333,12 +219,13 @@ class _ListUserState extends State<ListUser> {
   }
 
   Widget showName(int index) {
+    print('showName');
     return Row(
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterUserModels[index].department.toString(),
+            'Dept : ' + filterReportDeptModels[index].code,
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -361,41 +248,46 @@ class _ListUserState extends State<ListUser> {
     );
   }
 
-  Widget AddStaff() {
-    return GestureDetector(
-      onTap: () {
-        MaterialPageRoute materialPageRoute =
-            MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddUser(
-            userModel: myUserModel,
-          );
-        });
-        Navigator.of(context).push(materialPageRoute);
-      },
-      child: Card(
-        color: Colors.blue.shade600,
-        child: Container(
-          height: 50,
-          // padding: EdgeInsets.all(2.0),
-          // alignment: AlignmentDirectional(0.0, 0.0),
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              Text(
-                ' เพิ่มข้อมูล',
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-            ],
+  Widget submitButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 30.0),
+          child: RaisedButton(
+            color: Color.fromARGB(0xff, 13, 163, 93),
+            onPressed: () {
+              String memberId = myUserModel.id.toString();
+
+              // print(
+              //     'memberId=$memberID&start=$cpID&end=$_mySelection&note=$txtnote');
+
+              submitThread();
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
-      ),
+      ],
     );
+  }
+
+  Future<void> submitThread() async {
+    try {
+      String memberId = myUserModel.id.toString();
+      String url =
+          'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
+      print('submitURL >> $url');
+      await http.get(url).then((value) {
+        setState(() {
+          page = 1;
+          reportDeptModels.clear();
+          readReport();
+        });
+      });
+    } catch (e) {}
   }
 
   BoxDecoration myBoxDecoration() {
@@ -419,7 +311,7 @@ class _ListUserState extends State<ListUser> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: userModels.length,
+        itemCount: reportDeptModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -474,22 +366,12 @@ class _ListUserState extends State<ListUser> {
   }
   */
 
-  Widget searchForm() {
+  Widget searchFormTXT() {
     return Container(
       decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
       padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
       child: ListTile(
-        // trailing: IconButton(
-        //     icon: Icon(Icons.search),
-        //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
-        //       setState(() {
-        //         page = 1;
-        //         productAllModels.clear();
-        //         readStaff();
-        //       });
-        //     }),
         title: TextField(
           decoration:
               InputDecoration(border: InputBorder.none, hintText: 'Search'),
@@ -500,11 +382,152 @@ class _ListUserState extends State<ListUser> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              userModels.clear();
-              readStaff();
+              reportDeptModels.clear();
+              readReport();
             });
           },
         ),
+      ),
+    );
+  }
+
+  Widget reportViewbyRequest() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 0) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'สรุปการปฎิบัติงาน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // routeToListComplain(0);
+        },
+      ),
+    );
+  }
+
+  Widget reportViewbySupport() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' สรุปการขอใช้บริการ',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // routeToListComplain(1);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportReqDept(
+              index: 1,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget topMenu() {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        width: MediaQuery.of(context).size.width * 0.3,
+        child: Row(
+          children: [
+            reportViewbyRequest(),
+            reportViewbySupport(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget searchForm() {
+    return Container(
+      // decoration: MyStyle().boxLightGray,
+      // color: Colors.grey,
+      padding: EdgeInsets.only(left: 5.0, right: 5.0, top: 1.0, bottom: 1.0),
+      child: Row(
+        children: [
+          Column(
+            children: [
+              Text('ตั้งแต่'),
+              SizedBox(
+                  width: 200,
+                  height: 34,
+                  child: AdaptiveDatePicker(
+                    //type: AdaptiveDatePickerType.material,
+                    initialDate: selectedStartDate,
+                    firstDate: DateTime.now().add(Duration(days: -365)),
+                    lastDate: DateTime.now().add(Duration(days: 1460)),
+                    onChanged: (date) {
+                      setState(() => selectedStartDate = date);
+                    },
+                  )),
+            ],
+          ),
+          Column(
+            children: [
+              Text('จนถึง'),
+              SizedBox(
+                  width: 200,
+                  height: 34,
+                  child: AdaptiveDatePicker(
+                    //type: AdaptiveDatePickerType.material,
+                    initialDate: selectedEndDate,
+                    firstDate: DateTime.now().add(Duration(days: -365)),
+                    lastDate: DateTime.now().add(Duration(days: 1460)),
+                    onChanged: (date) {
+                      setState(() => selectedEndDate = date);
+                    },
+                  )),
+            ],
+          ),
+          Column(
+            children: [Text(''), submitButton()],
+          ),
+        ],
       ),
     );
   }
@@ -521,15 +544,15 @@ class _ListUserState extends State<ListUser> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              userModels.clear();
-              readStaff();
+              reportDeptModels.clear();
+              readReport();
             });
           }),
     );
   }
 
   Widget showContent() {
-    return userModels.length == 0
+    return reportDeptModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
@@ -549,9 +572,9 @@ class _ListUserState extends State<ListUser> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลรายชื่อ'),
+        title: Text('สรุปการปฎิบัติงาน'),
         actions: <Widget>[
-          AddStaff(),
+          // AddStaff(),
         ],
       ),
       // body: filterProductAllModels.length == 0
@@ -566,8 +589,9 @@ class _ListUserState extends State<ListUser> {
           Expanded(
             child: Column(
               children: <Widget>[
+                topMenu(),
                 searchForm(),
-                clearButton(),
+                // clearButton(),
                 showContent(),
               ],
             ),

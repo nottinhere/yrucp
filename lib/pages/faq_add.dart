@@ -272,7 +272,9 @@ class _AddFaqState extends State<AddFaq> {
       ),
       body: Row(
         children: [
-          SideBar(userModel: myUserModel),
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
           Expanded(child: showController()),
         ],
       ),
