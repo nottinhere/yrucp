@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/department_model.dart';
+import 'package:yrusv/models/problem_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,18 +15,18 @@ import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 import 'package:yrusv/models/user_model.dart';
 
-class EditDept extends StatefulWidget {
-  final DepartmentModel deptAllModel;
+class EditProb extends StatefulWidget {
+  final ProblemModel probAllModel;
 
   UserModel userModel;
 
-  EditDept({Key key, this.deptAllModel, this.userModel}) : super(key: key);
+  EditProb({Key key, this.probAllModel, this.userModel}) : super(key: key);
 
   @override
-  _EditDeptState createState() => _EditDeptState();
+  _EditProbState createState() => _EditProbState();
 }
 
-class _EditDeptState extends State<EditDept> {
+class _EditProbState extends State<EditProb> {
   // Explicit
 
   StaffModel staffAllModel;
@@ -34,11 +34,11 @@ class _EditDeptState extends State<EditDept> {
 
   int amontCart = 0;
   UserModel myUserModel;
-  DepartmentModel selectDeptModel;
+  ProblemModel selectProbModel;
 
   String id; // productID
 
-  String txtname = '';
+  String txtsubject = '';
   String txtcode = '';
   String txttoken = '';
   String memberID;
@@ -53,41 +53,40 @@ class _EditDeptState extends State<EditDept> {
   @override
   void initState() {
     super.initState();
-    selectDeptModel = widget.deptAllModel;
+    selectProbModel = widget.probAllModel;
     myUserModel = widget.userModel;
     // _selectedHelper = _helpers;
     setState(() {
-      readDepartment();
+      readProblem();
       readStaff();
       readStaffHead();
     });
   }
 
   List dataDV;
-  Future<void> readDepartment() async {
+  Future<void> readProblem() async {
     int memberId = myUserModel.id;
-    String selectId = selectDeptModel.dpId.toString();
+    String selectId = selectProbModel.dpId.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_department.php?selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     setState(() {
       Map<String, dynamic> map = result['data'];
-      DepartmentModel selectDeptModel = DepartmentModel.fromJson(map);
-      txtname = selectDeptModel.dpName;
-      txtcode = selectDeptModel.code;
-      txttoken = selectDeptModel.accessToken;
+      ProblemModel selectProbModel = ProblemModel.fromJson(map);
+      txtsubject = selectProbModel.subject;
+      txtcode = selectProbModel.subject;
     });
   }
 
   List dataST;
   Future<void> readStaff() async {
-    String selectId = selectDeptModel.dpId.toString();
+    String selectId = selectProbModel.dpId.toString();
     String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?dept=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?prob=$selectId';
 
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
@@ -98,7 +97,7 @@ class _EditDeptState extends State<EditDept> {
         String personID = map['id'].toString();
         String personName = map['person_name'];
         String level = map['level'].toString();
-        String department = map['department'].toString();
+        String problem = map['problem'].toString();
       }
     });
 
@@ -108,9 +107,9 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Future<void> readStaffHead() async {
-    String selectId = selectDeptModel.dpId.toString();
+    String selectId = selectProbModel.dpId.toString();
     String urlSTH =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?dept=$selectId&level=2';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?prob=$selectId&level=2';
     // print('urlSTH >> $urlSTH');
 
     http.Response response = await http.get(urlSTH);
@@ -199,7 +198,7 @@ class _EditDeptState extends State<EditDept> {
                       mySizebox(),
                       Column(
                         children: [
-                          Text('หัวหน้าแผนก :'),
+                          Text('หัวหน้าหมวดหมู่ :'),
                           Container(
                             width: 400,
                             height: 47,
@@ -235,14 +234,14 @@ class _EditDeptState extends State<EditDept> {
                     children: [
                       Column(
                         children: [
-                          Text('แผนก :'),
+                          Text('หมวดหมู่ :'),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.3,
                             child: TextFormField(
                               style: TextStyle(color: Colors.black),
-                              initialValue: txtname, // set default value
+                              initialValue: txtsubject, // set default value
                               onChanged: (string) {
-                                txtname = string.trim();
+                                txtsubject = string.trim();
                               },
                               decoration: InputDecoration(
                                 fillColor: Colors.grey.shade200,
@@ -266,7 +265,7 @@ class _EditDeptState extends State<EditDept> {
                                 prefixIcon:
                                     Icon(Icons.mode_edit, color: Colors.grey),
                                 // border: InputBorder.none,
-                                hintText: 'แผนก',
+                                hintText: 'หมวดหมู่',
                                 hintStyle: TextStyle(color: Colors.grey),
                               ),
                             ),
@@ -326,11 +325,11 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectDeptModel.dpId.toString();
+    String selectId = selectProbModel.dpId.toString();
 
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtsubject&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -362,7 +361,7 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Widget submitButton() {
-    String selectId = selectDeptModel.dpId.toString();
+    String selectId = selectProbModel.dpId.toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -375,12 +374,12 @@ class _EditDeptState extends State<EditDept> {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
               print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&staff=$_mySelection');
+                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtsubject&staff=$_mySelection');
 
               submitThread();
             },
             child: Text(
-              'แก้ไขชื่อแผนก',
+              'แก้ไขชื่อหมวดหมู่',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -419,7 +418,7 @@ class _EditDeptState extends State<EditDept> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขข้อมูลแผนก'),
+        title: Text('แก้ไขข้อมูลหมวดหมู่'),
       ),
       body: Row(
         children: [

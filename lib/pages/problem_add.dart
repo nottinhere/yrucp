@@ -14,16 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
-class AddDept extends StatefulWidget {
+class AddProb extends StatefulWidget {
   final UserModel userModel;
 
-  AddDept({Key key, this.userModel}) : super(key: key);
+  AddProb({Key key, this.userModel}) : super(key: key);
 
   @override
-  _AddDeptState createState() => _AddDeptState();
+  _AddProbState createState() => _AddProbState();
 }
 
-class _AddDeptState extends State<AddDept> {
+class _AddProbState extends State<AddProb> {
   // Explicit
 
   DepartmentModel departmentAllModel;
@@ -145,7 +145,7 @@ class _AddDeptState extends State<AddDept> {
               mySizebox(),
               Column(
                 children: <Widget>[
-                  Text('แผนก :'),
+                  Text('หมวดหมู่ :'),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
@@ -173,7 +173,7 @@ class _AddDeptState extends State<AddDept> {
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'แผนก',
+                        hintText: 'หมวดหมู่',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -276,7 +276,7 @@ class _AddDeptState extends State<AddDept> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('เพิ่มข้อมูลแผนก'),
+        title: Text('เพิ่มข้อมูลหมวดหมู่'),
       ),
       body: Row(
         children: [

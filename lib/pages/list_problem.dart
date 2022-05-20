@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/department_model.dart';
-import 'package:yrusv/pages/department_add.dart';
-import 'package:yrusv/pages/department_edit.dart';
+import 'package:yrusv/models/problem_model.dart';
+import 'package:yrusv/pages/problem_add.dart';
+import 'package:yrusv/pages/problem_edit.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
@@ -48,9 +48,9 @@ class Debouncer {
 
 class _ListProblemState extends State<ListProblem> {
   List<UserModel> userModels = List(); // set array
-  List<DepartmentModel> deptModels = List(); // set array
-  List<DepartmentModel> filterDeptModels = List();
-  DepartmentModel selectDeptModel;
+  List<ProblemModel> probModels = List(); // set array
+  List<ProblemModel> filterProbModels = List();
+  ProblemModel selectProbModel;
 
   // Explicit
   int myIndex;
@@ -77,7 +77,7 @@ class _ListProblemState extends State<ListProblem> {
     createController(); // เมื่อ scroll to bottom
 
     setState(() {
-      readDept(); // read  ข้อมูลมาแสดง
+      readProb(); // read  ข้อมูลมาแสดง
     });
   }
 
@@ -86,7 +86,7 @@ class _ListProblemState extends State<ListProblem> {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         page++;
-        readDept();
+        readProb();
 
         // print('in the end');
 
@@ -100,7 +100,7 @@ class _ListProblemState extends State<ListProblem> {
     });
   }
 
-  Future<void> readDept() async {
+  Future<void> readProb() async {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
@@ -111,29 +111,29 @@ class _ListProblemState extends State<ListProblem> {
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
-      DepartmentModel deptModel = DepartmentModel.fromJson(map);
+      ProblemModel probModel = ProblemModel.fromJson(map);
       setState(() {
-        deptModels.add(deptModel);
-        filterDeptModels = deptModels;
+        probModels.add(probModel);
+        filterProbModels = probModels;
       });
     }
-    print('Count row >> ${filterDeptModels.length}');
+    print('Count row >> ${filterProbModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
-    String selectId = filterDeptModels[index].dpId;
+    String selectId = filterProbModels[index].dpId;
 
     String urlSL =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_department.php?selectId=$selectId';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
 
     http.Response responseSL = await http.get(urlSL);
     var resultSL = json.decode(responseSL.body);
     var itemSelect = resultSL['data'];
 
-    selectDeptModel = DepartmentModel.fromJson(itemSelect);
+    selectProbModel = ProblemModel.fromJson(itemSelect);
     setState(() {
-      print('itemSelect = ${selectDeptModel.dpName}');
-      filterDeptModels[index].dpName = selectDeptModel.dpName;
+      print('itemSelect = ${selectProbModel.subject}');
+      filterProbModels[index].subject = selectProbModel.subject;
     });
   }
 
@@ -162,7 +162,7 @@ class _ListProblemState extends State<ListProblem> {
   }
 
   void confirmDelete(int index) {
-    String titleName = filterDeptModels[index].dpName;
+    String titleName = filterProbModels[index].subject;
 
     showDialog(
         context: context,
@@ -191,16 +191,16 @@ class _ListProblemState extends State<ListProblem> {
   }
 
   Future<void> deleteCart(int index) async {
-    String selectId = filterDeptModels[index].dpId.toString();
+    String selectId = filterProbModels[index].dpId.toString();
     String memberID = myUserModel.id.toString();
 
     String url =
-        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readDept();
+      readProb();
     });
   }
 
@@ -235,8 +235,8 @@ class _ListProblemState extends State<ListProblem> {
           print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return EditDept(
-              deptAllModel: filterDeptModels[index],
+            return EditProb(
+              probAllModel: filterProbModels[index],
               userModel: myUserModel,
             );
           });
@@ -244,7 +244,7 @@ class _ListProblemState extends State<ListProblem> {
           Navigator.of(context)
               .push(materialPageRoute)
               .then((value) => setState(() {
-                    // readDept();
+                    // readProb();
                     updateDatalist(index);
                     //showTag(index);
                     // showResponsible(index);
@@ -304,23 +304,14 @@ class _ListProblemState extends State<ListProblem> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'ชื่อแผนก : ' + filterDeptModels[index].dpName,
+                'ชื่อหมวดหมู่ : ' + filterProbModels[index].subject,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 16, 149, 161),
                 ),
               ),
-              (filterDeptModels[index].memInDept > 0)
-                  ? showBTN(index)
-                  : Text(
-                      'กรุณาเพิ่มสมาชิกเข้ากลุ่มงาน',
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
+              showBTN(index)
             ],
           ),
         ),
@@ -334,7 +325,7 @@ class _ListProblemState extends State<ListProblem> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterDeptModels[index].dpName.toString(),
+            'Prob : ' + filterProbModels[index].subject.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -357,12 +348,12 @@ class _ListProblemState extends State<ListProblem> {
     );
   }
 
-  Widget AddDepartment() {
+  Widget AddProblem() {
     return GestureDetector(
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
-          return AddDept(
+          return AddProb(
             userModel: myUserModel,
           );
         });
@@ -415,7 +406,7 @@ class _ListProblemState extends State<ListProblem> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: filterDeptModels.length,
+        itemCount: filterProbModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return GestureDetector(
             child: Container(
@@ -483,7 +474,7 @@ class _ListProblemState extends State<ListProblem> {
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
-        //         readDept();
+        //         readProb();
         //       });
         //     }),
         title: TextField(
@@ -496,8 +487,8 @@ class _ListProblemState extends State<ListProblem> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              deptModels.clear();
-              readDept();
+              probModels.clear();
+              readProb();
             });
           },
         ),
@@ -517,8 +508,8 @@ class _ListProblemState extends State<ListProblem> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              deptModels.clear();
-              readDept();
+              probModels.clear();
+              readProb();
             });
           }),
     );
@@ -545,9 +536,9 @@ class _ListProblemState extends State<ListProblem> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลแผนก'),
+        title: Text('จัดการข้อมูลหมวดหมู่'),
         actions: <Widget>[
-          AddDepartment(),
+          AddProblem(),
         ],
       ),
       body: Row(
