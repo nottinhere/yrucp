@@ -12,6 +12,7 @@ import 'package:yrusv/pages/detail_staff.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
+import 'package:intl/intl.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
@@ -51,6 +52,9 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
   int myIndex;
   List<ComplainAllModel> complainAllModels = List(); // set array
   List<ComplainAllModel> filterComplainAllModels = List();
+  ComplainAllModel currentComplainAllModel;
+  ComplainAllModel complainAllModel;
+
   int amontCart = 0;
   UserModel myUserModel;
   String searchString = '';
@@ -141,6 +145,29 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
       i = i + 1;
     }
+  }
+
+  Future<void> updateDatalist(index) async {
+    print('Here is updateDatalist function');
+
+    String id = filterComplainAllModels[index].id.toString();
+    String url =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
+    // print('url = $url');
+    http.Response response = await http.get(url);
+    var result = json.decode(response.body);
+
+    var itemProducts = result['itemsData'];
+    for (var map in itemProducts) {
+      setState(() {
+        complainAllModel = ComplainAllModel.fromJson(map);
+        filterComplainAllModels[index].staff_name = complainAllModel.staff_name;
+        filterComplainAllModels[index].appointdate =
+            complainAllModel.appointdate;
+        filterComplainAllModels[index].appointtime =
+            complainAllModel.appointtime;
+      });
+    } // for
   }
 
   Future<void> logOut() async {
@@ -401,9 +428,10 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           Navigator.of(context)
               .push(materialPageRoute)
               .then((value) => setState(() {
-                    readData();
-                    //showTag(index);
-                    showResponsible(index);
+                    // readData();
+                    // //showTag(index);
+                    // showResponsible(index);
+                    updateDatalist(index);
                   }));
         },
       ),
@@ -544,6 +572,17 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
   }
 
   Widget showNumber(int index) {
+    String selectedDate;
+
+    if (filterComplainAllModels[index].appointdate == '-') {
+      selectedDate = '-';
+    } else {
+      DateTime dateApt = DateTime.parse(
+          (filterComplainAllModels[index].appointdate).toString());
+      selectedDate = DateFormat('dd/MM/yyyy').format(dateApt);
+      ;
+    }
+
     return Row(
       children: <Widget>[
         Container(
@@ -560,7 +599,23 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                 ),
               ),
               Text(
+                'ผู้แจ้ง :   ${filterComplainAllModels[index].postby}',
+                style: TextStyle(
+                  fontSize: 13.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+              Text(
                 'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
+                style: TextStyle(
+                  fontSize: 13.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+              Text(
+                'วันที่นัดหมาย :   ${selectedDate}   ${filterComplainAllModels[index].appointtime} ',
                 style: TextStyle(
                   fontSize: 16.0,
                   // fontWeight: FontWeight.bold,
@@ -593,13 +648,13 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.14,
+          width: MediaQuery.of(context).size.width * 0.19,
           child: Column(
             children: [
               // Icon(Icons.restaurant, color: Colors.green[500]),
-              Text('ผู้แจ้ง'),
+              Text('หมวดหมู่'),
               Text(
-                filterComplainAllModels[index].postby,
+                filterComplainAllModels[index].problem,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -610,7 +665,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.18,
+          width: MediaQuery.of(context).size.width * 0.22,
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
@@ -627,7 +682,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.24,
+          width: MediaQuery.of(context).size.width * 0.15,
           child: Column(
             children: [
               // Icon(Icons.kitchen, color: Colors.green[500]),

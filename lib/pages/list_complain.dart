@@ -787,9 +787,17 @@ class _ListComplainState extends State<ListComplain> {
                 ),
               ),
               Text(
+                'ผู้แจ้ง :   ${filterComplainAllModels[index].postby}',
+                style: TextStyle(
+                  fontSize: 13.0,
+                  // fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 0, 0, 0),
+                ),
+              ),
+              Text(
                 'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
                 style: TextStyle(
-                  fontSize: 11.0,
+                  fontSize: 13.0,
                   // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
@@ -828,13 +836,13 @@ class _ListComplainState extends State<ListComplain> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.14,
+          width: MediaQuery.of(context).size.width * 0.19,
           child: Column(
             children: [
               // Icon(Icons.restaurant, color: Colors.green[500]),
-              Text('ผู้แจ้ง'),
+              Text('หมวดหมู่'),
               Text(
-                filterComplainAllModels[index].postby,
+                filterComplainAllModels[index].problem,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -845,7 +853,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.18,
+          width: MediaQuery.of(context).size.width * 0.22,
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
@@ -862,7 +870,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         Container(
-          width: MediaQuery.of(context).size.width * 0.24,
+          width: MediaQuery.of(context).size.width * 0.15,
           child: Column(
             children: [
               // Icon(Icons.kitchen, color: Colors.green[500]),

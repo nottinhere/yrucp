@@ -323,7 +323,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 5) {
+            } else if (index == 6) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListProblem(
@@ -331,7 +331,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 6) {
+            } else if (index == 7) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListUser(
@@ -339,7 +339,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 7) {
+            } else if (index == 8) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListFaq(
@@ -347,7 +347,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 8) {
+            } else if (index == 9) {
               logOut();
             }
           },

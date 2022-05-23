@@ -34,13 +34,13 @@ class _AddProbState extends State<AddProb> {
   DepartmentModel myDeptModel;
   String id; // productID
 
-  String txtname = '';
-  String txtcode = '';
+  String txtsubject = '';
   String memberID;
   String strhelperID;
 
   int page = 1, dp = 1;
   String searchString = '';
+  String _mySelection;
 
   // Method
   @override
@@ -54,22 +54,23 @@ class _AddProbState extends State<AddProb> {
 
   List dataDV;
   Future<void> readDepartment() async {
-    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
     print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemDivisions = result['itemsData'];
+    var itemDepartments = result['itemsData'];
 
     setState(() {
-      for (var map in itemDivisions) {
-        String dvID = map['dv_id'];
-        String dvName = map['dv_name'];
+      for (var map in itemDepartments) {
+        String dpID = map['dp_id'];
+        String dpName = map['dp_name'];
       } // for
     });
 
     setState(() {
-      dataDV = itemDivisions;
+      dataDV = itemDepartments;
     });
     print('dataDV >> $dataDV');
   }
@@ -107,14 +108,14 @@ class _AddProbState extends State<AddProb> {
             children: [
               Column(
                 children: <Widget>[
-                  Text('Code :'),
+                  Text('หมวดหมู่ปัญหา :'),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
                       // initialValue: complainAllModel.postby, // set default value
                       onChanged: (string) {
-                        txtcode = string.trim();
+                        txtsubject = string.trim();
                       },
                       decoration: InputDecoration(
                         fillColor: Colors.grey.shade200,
@@ -144,37 +145,29 @@ class _AddProbState extends State<AddProb> {
               ),
               mySizebox(),
               Column(
-                children: <Widget>[
-                  Text('หมวดหมู่ :'),
+                children: [
+                  Text('แผนกรับผิดชอบ :'),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      onChanged: (string) {
-                        txtname = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
-
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'หมวดหมู่',
-                        hintStyle: TextStyle(color: Colors.grey),
+                    width: 400,
+                    height: 47,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Center(
+                      child: DropdownButton(
+                        alignment: Alignment.center,
+                        underline: Container(color: Colors.transparent),
+                        value: _mySelection,
+                        onChanged: (String newVal) {
+                          setState(() => _mySelection = newVal);
+                        },
+                        items: dataDV.map((item) {
+                          return new DropdownMenuItem(
+                            child: new Text(item['dp_name']),
+                            value: item['dp_id'].toString(),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ),
@@ -190,7 +183,7 @@ class _AddProbState extends State<AddProb> {
   Future<void> submitThread() async {
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname&code=$txtcode'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -232,7 +225,7 @@ class _AddProbState extends State<AddProb> {
             onPressed: () {
               // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('deptId=$deptID&action=add&name=$txtname');
+              // print('deptId=$deptID&action=add&name=$txtsubject');
 
               submitThread();
             },

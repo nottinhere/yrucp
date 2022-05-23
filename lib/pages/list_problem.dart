@@ -121,10 +121,11 @@ class _ListProblemState extends State<ListProblem> {
   }
 
   Future<void> updateDatalist(index) async {
-    String selectId = filterProbModels[index].dpId;
+    String selectId = filterProbModels[index].pId;
 
     String urlSL =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
+    print('urlSL >> $urlSL');
 
     http.Response responseSL = await http.get(urlSL);
     var resultSL = json.decode(responseSL.body);
@@ -133,7 +134,10 @@ class _ListProblemState extends State<ListProblem> {
     selectProbModel = ProblemModel.fromJson(itemSelect);
     setState(() {
       print('itemSelect = ${selectProbModel.subject}');
+      print('itemSelect = ${selectProbModel.dpName}');
+
       filterProbModels[index].subject = selectProbModel.subject;
+      filterProbModels[index].dpName = selectProbModel.dpName;
     });
   }
 
@@ -325,7 +329,7 @@ class _ListProblemState extends State<ListProblem> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Prob : ' + filterProbModels[index].subject.toString(),
+            'กลุ่มงาน : ' + filterProbModels[index].dpName.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),

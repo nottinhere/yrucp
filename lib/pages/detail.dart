@@ -754,6 +754,20 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
+                    Text('หมวดหมู่'),
+                    Text(
+                      complainAllModel.problem,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ],
+                ),
+
+                Column(
+                  children: <Widget>[
                     Text('แผนกรับผิดชอบ'),
                     Text(
                       complainAllModel.department,

@@ -39,8 +39,7 @@ class _EditProbState extends State<EditProb> {
   String id; // productID
 
   String txtsubject = '';
-  String txtcode = '';
-  String txttoken = '';
+  String txtdpid = '';
   String memberID;
   String strhelperID;
   String staffHeader;
@@ -58,15 +57,14 @@ class _EditProbState extends State<EditProb> {
     // _selectedHelper = _helpers;
     setState(() {
       readProblem();
-      readStaff();
-      readStaffHead();
+      readDepartment();
     });
   }
 
-  List dataDV;
+  List dataPB;
   Future<void> readProblem() async {
     int memberId = myUserModel.id;
-    String selectId = selectProbModel.dpId.toString();
+    String selectId = selectProbModel.pId.toString();
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
@@ -78,53 +76,34 @@ class _EditProbState extends State<EditProb> {
       Map<String, dynamic> map = result['data'];
       ProblemModel selectProbModel = ProblemModel.fromJson(map);
       txtsubject = selectProbModel.subject;
-      txtcode = selectProbModel.subject;
+      txtdpid = selectProbModel.dpId;
+      _mySelection = (selectProbModel.dpId == '-')
+          ? null
+          : selectProbModel.dpId.toString();
     });
   }
 
-  List dataST;
-  Future<void> readStaff() async {
-    String selectId = selectProbModel.dpId.toString();
-    String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?prob=$selectId';
+  List dataDV;
+  Future<void> readDepartment() async {
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
+    print('urlDV >> $urlDV');
 
-    http.Response response = await http.get(urlST);
+    http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var itemStaff = result['itemsData'];
+    var itemDepartments = result['itemsData'];
 
     setState(() {
-      for (var map in itemStaff) {
-        String personID = map['id'].toString();
-        String personName = map['person_name'];
-        String level = map['level'].toString();
-        String problem = map['problem'].toString();
-      }
+      for (var map in itemDepartments) {
+        String dpID = map['dp_id'];
+        String dpName = map['dp_name'];
+      } // for
     });
 
     setState(() {
-      dataST = itemStaff;
+      dataDV = itemDepartments;
     });
-  }
-
-  Future<void> readStaffHead() async {
-    String selectId = selectProbModel.dpId.toString();
-    String urlSTH =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?prob=$selectId&level=2';
-    // print('urlSTH >> $urlSTH');
-
-    http.Response response = await http.get(urlSTH);
-    var result = json.decode(response.body);
-    var itemStaff = result['itemsData'];
-
-    setState(() {
-      for (var map in itemStaff) {
-        String personID = map['id'].toString();
-        String level = map['level'].toString();
-        currentHeader = personID;
-        _mySelection = personID;
-      }
-    });
-    print('_mySelection >> $_mySelection');
+    // print('dataDV >> $dataDV');
   }
 
   Future<void> logOut() async {
@@ -149,174 +128,76 @@ class _EditProbState extends State<EditProb> {
         padding: EdgeInsets.all(20),
         child: Align(
           alignment: Alignment.topLeft,
-          child: Column(
+          child: Row(
             children: [
-              Row(
+              Column(
                 children: <Widget>[
-                  Column(
-                    children: [
-                      Column(
-                        children: <Widget>[
-                          Text('Code :'),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.black),
-                              initialValue: txtcode, // set default value
-                              onChanged: (string) {
-                                txtcode = string.trim();
-                              },
-                              decoration: InputDecoration(
-                                fillColor: Colors.grey.shade200,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
+                  Text('หมวดหมู่ปัญหา :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue: txtsubject, // set default value
+                      onChanged: (string) {
+                        txtsubject = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
 
-                                contentPadding: EdgeInsets.only(
-                                  top: 6.0,
-                                ),
-                                prefixIcon:
-                                    Icon(Icons.mode_edit, color: Colors.grey),
-                                // border: InputBorder.none,
-                                hintText: 'Code',
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'Code',
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
-                      mySizebox(),
-                      Column(
-                        children: [
-                          Text('หัวหน้าหมวดหมู่ :'),
-                          Container(
-                            width: 400,
-                            height: 47,
-                            decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
-                              color: Colors.grey.shade200,
-                            ),
-                            child: Center(
-                              child: DropdownButton(
-                                alignment: Alignment.center,
-                                underline: Container(color: Colors.transparent),
-                                value: _mySelection,
-                                onChanged: (String newVal) {
-                                  setState(() => _mySelection = newVal);
-                                },
-                                items: dataST.map((item) {
-                                  return new DropdownMenuItem(
-                                    child: new Text(item['person_name']),
-                                    value: item['id'].toString(),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      /*   */
-                    ],
-                  ),
-                  mySizebox(),
-                  Column(
-                    children: [
-                      Column(
-                        children: [
-                          Text('หมวดหมู่ :'),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.black),
-                              initialValue: txtsubject, // set default value
-                              onChanged: (string) {
-                                txtsubject = string.trim();
-                              },
-                              decoration: InputDecoration(
-                                fillColor: Colors.grey.shade200,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
-
-                                contentPadding: EdgeInsets.only(
-                                  top: 6.0,
-                                ),
-                                prefixIcon:
-                                    Icon(Icons.mode_edit, color: Colors.grey),
-                                // border: InputBorder.none,
-                                hintText: 'หมวดหมู่',
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      mySizebox(),
-                      Column(
-                        children: [
-                          Text('Access Token :'),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.3,
-                            child: TextFormField(
-                              style: TextStyle(color: Colors.black),
-                              initialValue: txttoken, // set default value
-                              onChanged: (string) {
-                                txttoken = string.trim();
-                              },
-                              decoration: InputDecoration(
-                                fillColor: Colors.grey.shade200,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                  borderSide: const BorderSide(
-                                      color: Colors.white, width: 0.0),
-                                ),
-
-                                contentPadding: EdgeInsets.only(
-                                  top: 6.0,
-                                ),
-                                prefixIcon:
-                                    Icon(Icons.mode_edit, color: Colors.grey),
-                                // border: InputBorder.none,
-                                hintText: 'Access Token',
-                                hintStyle: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
+              mySizebox(),
+              Column(
+                children: [
+                  Text('แผนกรับผิดชอบ :'),
+                  Container(
+                    width: 400,
+                    height: 47,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: Colors.grey.shade200,
+                    ),
+                    child: Center(
+                      child: DropdownButton(
+                        alignment: Alignment.center,
+                        underline: Container(color: Colors.transparent),
+                        value: _mySelection,
+                        onChanged: (String newVal) {
+                          setState(() => _mySelection = newVal);
+                        },
+                        items: dataDV.map((item) {
+                          return new DropdownMenuItem(
+                            child: new Text(item['dp_name']),
+                            value: item['dp_id'].toString(),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              mySizebox(),
             ],
           ),
         ),
@@ -325,11 +206,11 @@ class _EditProbState extends State<EditProb> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectProbModel.dpId.toString();
+    String selectId = selectProbModel.pId.toString();
 
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtsubject&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&subject=$txtsubject&dp_id=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();
@@ -361,7 +242,7 @@ class _EditProbState extends State<EditProb> {
   }
 
   Widget submitButton() {
-    String selectId = selectProbModel.dpId.toString();
+    String selectId = selectProbModel.pId.toString();
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
