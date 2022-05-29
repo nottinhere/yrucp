@@ -530,7 +530,12 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readData();
+      setState(() {
+        page = 1;
+        complainAllModels.clear();
+        readData();
+      });
+      // readData();
     });
   }
 

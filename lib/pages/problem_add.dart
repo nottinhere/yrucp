@@ -183,7 +183,7 @@ class _AddProbState extends State<AddProb> {
   Future<void> submitThread() async {
     try {
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
       print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmSubmit();

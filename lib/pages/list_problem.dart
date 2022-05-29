@@ -204,7 +204,12 @@ class _ListProblemState extends State<ListProblem> {
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readProb();
+      setState(() {
+        page = 1;
+        probModels.clear();
+        readProb();
+      });
+      // readProb();
     });
   }
 
@@ -361,7 +366,14 @@ class _ListProblemState extends State<ListProblem> {
             userModel: myUserModel,
           );
         });
-        Navigator.of(context).push(materialPageRoute);
+        // Navigator.of(context).push(materialPageRoute);
+        Navigator.of(context)
+            .push(materialPageRoute)
+            .then((value) => setState(() {
+                  page = 1;
+                  probModels.clear();
+                  readProb();
+                }));
       },
       child: Card(
         color: Colors.blue.shade600,

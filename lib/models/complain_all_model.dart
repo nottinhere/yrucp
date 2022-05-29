@@ -14,6 +14,8 @@ class ComplainAllModel {
   String staff_name;
   String helper;
   String helper_name;
+  String attachIcon;
+  String attachTarget;
   String ps_fullname;
   String ps_position;
   String ps_positionname;
@@ -42,6 +44,8 @@ class ComplainAllModel {
       this.staff_name,
       this.helper,
       this.helper_name,
+      this.attachIcon,
+      this.attachTarget,
       this.ps_fullname,
       this.ps_position,
       this.ps_positionname,
@@ -70,6 +74,8 @@ class ComplainAllModel {
     staff_name = json['staff_name'];
     helper = json['helper'];
     helper_name = json['helper_name'];
+    attachIcon = json['attach_icon'];
+    attachTarget = json['attach_target'];
     ps_fullname = json['ps_fullname'];
     ps_position = json['ps_position'];
     ps_positionname = json['ps_positionname'];
@@ -100,6 +106,8 @@ class ComplainAllModel {
     data['staff_name'] = this.staff_name;
     data['helper'] = this.helper;
     data['helper_name'] = this.helper_name;
+    data['attach_icon'] = this.attachIcon;
+    data['attach_target'] = this.attachTarget;
     data['ps_fullname'] = this.ps_fullname;
     data['ps_position'] = this.ps_position;
     data['ps_positionname'] = this.ps_positionname;

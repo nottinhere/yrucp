@@ -201,7 +201,12 @@ class _ListUserState extends State<ListUser> {
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readStaff();
+      setState(() {
+        page = 1;
+        filterUserModels.clear();
+        readStaff();
+      });
+      // readStaff();
     });
   }
 
@@ -370,7 +375,14 @@ class _ListUserState extends State<ListUser> {
             userModel: myUserModel,
           );
         });
-        Navigator.of(context).push(materialPageRoute);
+        // Navigator.of(context).push(materialPageRoute);
+        Navigator.of(context)
+            .push(materialPageRoute)
+            .then((value) => setState(() {
+                  page = 1;
+                  filterUserModels.clear();
+                  readStaff();
+                }));
       },
       child: Card(
         color: Colors.blue.shade600,

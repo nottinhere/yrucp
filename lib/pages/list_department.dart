@@ -200,7 +200,12 @@ class _ListDeptState extends State<ListDept> {
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readDept();
+      setState(() {
+        page = 1;
+        deptModels.clear();
+        readDept();
+      });
+      // readDept();
     });
   }
 
@@ -366,7 +371,14 @@ class _ListDeptState extends State<ListDept> {
             userModel: myUserModel,
           );
         });
-        Navigator.of(context).push(materialPageRoute);
+        // Navigator.of(context).push(materialPageRoute);
+        Navigator.of(context)
+            .push(materialPageRoute)
+            .then((value) => setState(() {
+                  page = 1;
+                  deptModels.clear();
+                  readDept();
+                }));
       },
       child: Card(
         color: Colors.blue.shade600,

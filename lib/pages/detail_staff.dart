@@ -15,6 +15,7 @@ import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailStaff extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -109,6 +110,15 @@ class _DetailStaffState extends State<DetailStaff> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     exit(0);
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
   }
 
   Widget Home() {
@@ -325,6 +335,31 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
+  Widget showAttachfile() {
+    final uri = Uri.parse(complainAllModel.attachTarget);
+    print('uri >> $uri');
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08, //0.7 - 50,
+      height: 100,
+      child: GestureDetector(
+        onTap: () => _launchInBrowser(uri),
+        child: Card(
+          color: Colors.blueGrey.shade50,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 65.0,
+                child: Image.asset(complainAllModel.attachIcon),
+              ),
+              Text('เปิดไฟล์แนบ'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget showResponsible() {
     // print('_selectedDBHelper in >> $_selectedDBHelper');
 
@@ -406,6 +441,9 @@ class _DetailStaffState extends State<DetailStaff> {
                   ),
                 ),
               ),
+              // (complainAllModel.attachIcon == '-')
+              //     ? Container()
+              //     : showAttachfile(),
             ],
           ),
           Container(
@@ -613,45 +651,61 @@ class _DetailStaffState extends State<DetailStaff> {
             new Divider(
               color: Colors.pink,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-              child: Text(
-                'เรื่อง : ' + complainAllModel.subject,
-                style: MyStyle().h3bStyle,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-              child: Text(
-                'สถานที่ : ' + complainAllModel.location,
-                style: MyStyle().h3bStyle,
-              ),
-            ),
-            SizedBox(height: 20),
-            Column(
+            Row(
               children: [
-                // Icon(Icons.timer, color: Colors.green[500]),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'รายละเอียด',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      decoration: TextDecoration.underline,
-                    ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.60,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.90, //0.7 - 50,
+                        child: Text(
+                          'เรื่อง : ' + complainAllModel.subject,
+                          style: MyStyle().h3bStyle,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.90, //0.7 - 50,
+                        child: Text(
+                          'สถานที่ : ' + complainAllModel.location,
+                          style: MyStyle().h3bStyle,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
+                          // Icon(Icons.timer, color: Colors.green[500]),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'รายละเอียด',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              complainAllModel.detail,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                // fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(0xff, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    complainAllModel.detail,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      // fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(0xff, 0, 0, 0),
-                    ),
-                  ),
-                ),
+                (complainAllModel.attachIcon == '-')
+                    ? Container()
+                    : showAttachfile(),
               ],
             ),
           ],

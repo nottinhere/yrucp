@@ -45,7 +45,7 @@ dependencies:
   flutter_icons_null_safety: ^1.1.0
   easy_sidemenu: ^0.2.1
   side_navigation: ^1.0.2
-
+  url_launcher: ^6.1.2
 
   google_fonts:
 

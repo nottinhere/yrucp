@@ -200,7 +200,11 @@ class _ListFaqState extends State<ListFaq> {
     print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
-      readFaq();
+      setState(() {
+        page = 1;
+        faqModels.clear();
+        readFaq();
+      });
     });
   }
 
@@ -352,7 +356,14 @@ class _ListFaqState extends State<ListFaq> {
             userModel: myUserModel,
           );
         });
-        Navigator.of(context).push(materialPageRoute);
+        // Navigator.of(context).push(materialPageRoute);
+        Navigator.of(context)
+            .push(materialPageRoute)
+            .then((value) => setState(() {
+                  page = 1;
+                  faqModels.clear();
+                  readFaq();
+                }));
       },
       child: Card(
         color: Colors.blue.shade600,
