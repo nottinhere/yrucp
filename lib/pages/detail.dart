@@ -1243,7 +1243,7 @@ class _DetailState extends State<Detail> {
               submitThread();
             },
             child: Text(
-              'Update',
+              'แก้ไขข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),

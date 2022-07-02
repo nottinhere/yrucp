@@ -595,7 +595,9 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade600,
+          color: (filterComplainAllModels[index].status == '4')
+              ? Colors.blue.shade200
+              : Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -618,20 +620,24 @@ class _ListComplainState extends State<ListComplain> {
         ),
         onTap: () {
           print('You are boss');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return Detail(
-              complainAllModel: filterComplainAllModels[index],
-              userModel: myUserModel,
-            );
-          });
-          // Navigator.of(context).push(materialPageRoute);
-          Navigator.of(context)
-              .push(materialPageRoute)
-              .then((value) => setState(() {
-                    // readData();
-                    updateDatalist(index);
-                  }));
+          if (filterComplainAllModels[index].status == '4') {
+            null;
+          } else {
+            MaterialPageRoute materialPageRoute =
+                MaterialPageRoute(builder: (BuildContext buildContext) {
+              return Detail(
+                complainAllModel: filterComplainAllModels[index],
+                userModel: myUserModel,
+              );
+            });
+            // Navigator.of(context).push(materialPageRoute);
+            Navigator.of(context)
+                .push(materialPageRoute)
+                .then((value) => setState(() {
+                      // readData();
+                      updateDatalist(index);
+                    }));
+          }
         },
       ),
     );

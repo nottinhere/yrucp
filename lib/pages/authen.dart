@@ -148,7 +148,7 @@ class _AuthenState extends State<Authen> {
   Future<void> checkAuthen() async {
     if (user.isEmpty || password.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'Please fill all input');
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String url =
           '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';

@@ -1100,7 +1100,7 @@ class _DetailStaffState extends State<DetailStaff> {
               submitThread();
             },
             child: Text(
-              'Update',
+              'แก้ไขข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),

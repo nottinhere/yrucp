@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/news_model.dart';
+import 'package:yrusv/pages/changepassword.dart';
 import 'package:yrusv/pages/list_complain.dart';
 import 'package:yrusv/pages/list_complain_admin.dart';
 import 'package:yrusv/pages/list_faq.dart';
@@ -227,6 +228,49 @@ class _HomeState extends State<Home> {
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListFaq(
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget ChangePasswordbox() {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 150.0,
+      child: GestureDetector(
+        child: Card(
+          // color: Colors.green.shade100,
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 70.0,
+                  child: Image.asset('images/icon_reset_password.png'),
+                ),
+                Text(
+                  'เปลี่ยนรหัสผ่าน',
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          print('You click Changepassword');
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ChangePassword(
               userModel: myUserModel,
             );
           });
@@ -623,6 +667,7 @@ class _HomeState extends State<Home> {
       children: <Widget>[
         Complainbox(),
         ViewQA(),
+        ChangePasswordbox(),
         LogoutBox(),
       ],
     );
