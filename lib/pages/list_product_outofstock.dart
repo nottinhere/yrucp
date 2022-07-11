@@ -469,9 +469,9 @@ class _ListProductState extends State<ListProductOutofstock> {
             minWidth: 80.0,
             cornerRadius: 20,
             activeBgColor: Colors.lightBlue.shade400,
-            activeTextColor: Colors.white,
+            // activeTextColor: Colors.white,
             inactiveBgColor: Colors.grey.shade500,
-            inactiveTextColor: Colors.white,
+            // inactiveTextColor: Colors.white,
             labels: ['รอ', 'สั่งแล้ว'],
             // icons: [FontAwesomeIcons.check, FontAwesomeIcons.times],
             onToggle: (index) async {
@@ -494,9 +494,9 @@ class _ListProductState extends State<ListProductOutofstock> {
             cornerRadius: 20,
             initialLabelIndex: 1,
             activeBgColor: Colors.red.shade400,
-            activeTextColor: Colors.white,
+            // activeTextColor: Colors.white,
             inactiveBgColor: Colors.blueGrey.shade500,
-            inactiveTextColor: Colors.white,
+            // inactiveTextColor: Colors.white,
             labels: ['ยกเลิก', 'สั่งแล้ว'],
             // icons: [FontAwesomeIcons.check, FontAwesomeIcons.times],
             onToggle: (index) async {

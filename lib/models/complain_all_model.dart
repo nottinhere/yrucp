@@ -10,6 +10,7 @@ class ComplainAllModel {
   String problem;
   String textstatus;
   String department;
+  String department_id;
   String staff;
   String staff_name;
   String helper;
@@ -40,6 +41,7 @@ class ComplainAllModel {
       this.problem,
       this.textstatus,
       this.department,
+      this.department_id,
       this.staff,
       this.staff_name,
       this.helper,
@@ -70,6 +72,7 @@ class ComplainAllModel {
     problem = json['problem'];
     textstatus = json['textstatus'];
     department = json['department'];
+    department_id = json['department_id'];
     staff = json['staff'];
     staff_name = json['staff_name'];
     helper = json['helper'];
@@ -102,6 +105,7 @@ class ComplainAllModel {
     data['problem'] = this.problem;
     data['textstatus'] = this.textstatus;
     data['department'] = this.department;
+    data['department_id'] = this.department_id;
     data['staff'] = this.staff;
     data['staff_name'] = this.staff_name;
     data['helper'] = this.helper;

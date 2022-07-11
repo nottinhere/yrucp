@@ -620,24 +620,24 @@ class _ListComplainState extends State<ListComplain> {
         ),
         onTap: () {
           print('You are boss');
-          if (filterComplainAllModels[index].status == '4') {
-            null;
-          } else {
-            MaterialPageRoute materialPageRoute =
-                MaterialPageRoute(builder: (BuildContext buildContext) {
-              return Detail(
-                complainAllModel: filterComplainAllModels[index],
-                userModel: myUserModel,
-              );
-            });
-            // Navigator.of(context).push(materialPageRoute);
-            Navigator.of(context)
-                .push(materialPageRoute)
-                .then((value) => setState(() {
-                      // readData();
-                      updateDatalist(index);
-                    }));
-          }
+          // if (filterComplainAllModels[index].status == '4') {
+          //   null;
+          // } else {
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return Detail(
+              complainAllModel: filterComplainAllModels[index],
+              userModel: myUserModel,
+            );
+          });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context)
+              .push(materialPageRoute)
+              .then((value) => setState(() {
+                    // readData();
+                    updateDatalist(index);
+                  }));
+          // }
         },
       ),
     );

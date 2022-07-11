@@ -51,7 +51,8 @@ class _DetailState extends State<Detail> {
   String memberID;
   String strhelperID;
 
-  int page = 1, dp = 1;
+  int page = 1;
+  String dp = '1';
   String searchString = '';
 
   List<StaffModel> staffModels = List(); // set array
@@ -235,12 +236,17 @@ class _DetailState extends State<Detail> {
 
   List dataST;
   String myDBhelper;
+  String dept;
+
   List<String> listHelperDB = [];
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
     String myDBhelper = currentComplainAllModel.helper;
+    dept = currentComplainAllModel.department_id;
+    print('dept -> $dept');
+
     String urlST =
-        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dept=$dp';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page&dept=$dept';
     print('urlST = $urlST');
 
     print('Here is error');
