@@ -169,8 +169,8 @@ class _ListUserState extends State<ListUser> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleName'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -305,7 +305,7 @@ class _ListUserState extends State<ListUser> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.35,
                 child: Text(
-                  'Name : ' + filterUserModels[index].personName,
+                  'ชื่อ : ' + filterUserModels[index].personName,
                   style: TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
@@ -343,7 +343,7 @@ class _ListUserState extends State<ListUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterUserModels[index].department.toString(),
+            'งาน : ' + filterUserModels[index].departmentName.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -360,7 +360,7 @@ class _ListUserState extends State<ListUser> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showData(index),
-          // showName(index),
+          showName(index),
         ],
       ),
     );

@@ -206,7 +206,7 @@ class _AddUserState extends State<AddUser> {
                     ),
                   ),
                   mySizebox(),
-                  Text('แผนก :'),
+                  Text('งาน :'),
                   Container(
                     width: 400,
                     height: 47,
@@ -241,14 +241,22 @@ class _AddUserState extends State<AddUser> {
   }
 
   Future<void> submitThread() async {
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+    if (txtuser.isEmpty ||
+        txtname.isEmpty ||
+        txtcontact.isEmpty ||
+        _mySelection == null) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&action=add&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+        print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {

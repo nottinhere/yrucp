@@ -27,6 +27,7 @@ class ComplainAllModel {
   String note;
   String reply;
   int rating;
+  String usermsg;
   int id;
 
   ComplainAllModel(
@@ -58,6 +59,7 @@ class ComplainAllModel {
       this.note,
       this.reply,
       this.rating,
+      this.usermsg,
       this.id});
 
   ComplainAllModel.fromJson(Map<String, dynamic> json) {
@@ -89,6 +91,7 @@ class ComplainAllModel {
     note = json['note'];
     reply = json['reply'];
     rating = json['rating'];
+    usermsg = json['usermsg'];
     id = json['id'];
   }
 
@@ -122,6 +125,7 @@ class ComplainAllModel {
     data['note'] = this.note;
     data['reply'] = this.reply;
     data['rating'] = this.rating;
+    data['usermsg'] = this.usermsg;
     data['id'] = this.id;
     return data;
   }

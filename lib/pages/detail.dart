@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/staff_all_model.dart';
@@ -16,6 +17,7 @@ import 'package:uipickers/uipickers.dart';
 import 'package:time_picker_widget/time_picker_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:yrusv/layouts/side_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Detail extends StatefulWidget {
   final ComplainAllModel complainAllModel;
@@ -292,6 +294,22 @@ class _DetailState extends State<Detail> {
     });
   }
 
+  Future<void> launchLink(String url, {bool isNewTab = true}) async {
+    await launchUrl(
+      Uri.parse(url),
+      webOnlyWindowName: isNewTab ? '_blank' : '_self',
+    );
+  }
+
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
+
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
@@ -476,6 +494,31 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  Widget showAttachfile() {
+    final uri = Uri.parse(complainAllModel.attachTarget);
+    print('uri >> $uri');
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08, //0.7 - 50,
+      height: 100,
+      child: GestureDetector(
+        onTap: () => _launchInBrowser(uri),
+        child: Card(
+          color: Colors.blueGrey.shade50,
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(5.0),
+                width: 65.0,
+                child: Image.asset(complainAllModel.attachIcon),
+              ),
+              Text('เปิดไฟล์แนบ'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget showSubject() {
     return Row(
       children: <Widget>[
@@ -606,6 +649,13 @@ class _DetailState extends State<Detail> {
                           // DEMO --------------
                           showCustomTimePicker(
                               context: context,
+                              builder: (BuildContext context, Widget child) {
+                                return MediaQuery(
+                                  data: MediaQuery.of(context)
+                                      .copyWith(alwaysUse24HourFormat: true),
+                                  child: child,
+                                );
+                              },
                               onFailValidation: (context) => showMessage(
                                   context, 'Unavailable selection.'),
                               initialTime: TimeOfDay(
@@ -716,7 +766,6 @@ class _DetailState extends State<Detail> {
               Column(
                 children: [
                   noteBox(),
-                  replyBox(),
                 ],
               ),
             ],
@@ -774,7 +823,7 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('แผนกรับผิดชอบ'),
+                    Text('งานที่รับผิดชอบ'),
                     Text(
                       complainAllModel.department,
                       style: TextStyle(
@@ -897,45 +946,98 @@ class _DetailState extends State<Detail> {
             new Divider(
               color: Colors.pink,
             ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-              child: Text(
-                'เรื่อง : ' + complainAllModel.subject,
-                style: MyStyle().h3bStyle,
-              ),
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-              child: Text(
-                'สถานที่ : ' + complainAllModel.location,
-                style: MyStyle().h3bStyle,
-              ),
-            ),
-            SizedBox(height: 20),
-            Column(
+            Row(
               children: [
-                // Icon(Icons.timer, color: Colors.green[500]),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'รายละเอียด',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      decoration: TextDecoration.underline,
-                    ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.60,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.90, //0.7 - 50,
+                        child: Text(
+                          'เรื่อง : ' + complainAllModel.subject,
+                          style: MyStyle().h3bStyle,
+                        ),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width *
+                            0.90, //0.7 - 50,
+                        child: Text(
+                          'สถานที่ : ' + complainAllModel.location,
+                          style: MyStyle().h3bStyle,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Column(
+                        children: [
+                          // Icon(Icons.timer, color: Colors.green[500]),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'รายละเอียด',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              complainAllModel.detail,
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                // fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(0xff, 0, 0, 0),
+                              ),
+                            ),
+                          ),
+                          // SizedBox(height: 20),
+                          // Column(
+                          //   children: [
+                          //     // Icon(Icons.timer, color: Colors.green[500]),
+                          //     Align(
+                          //       alignment: Alignment.centerLeft,
+                          //       child: Text(
+                          //         'เอกสารเพิ่มเติม',
+                          //         style: TextStyle(
+                          //           fontSize: 18.0,
+                          //           decoration: TextDecoration.underline,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     (complainAllModel.attachIcon == '-')
+                          //         ? ListTile(
+                          //             title: Text('ไม่มีเอกสารแนบ'),
+                          //             onTap: () {
+                          //               null;
+                          //             })
+                          //         : ListTile(
+                          //             title: Text(
+                          //               'กดดูเอกสารแนบ',
+                          //               style: TextStyle(
+                          //                 fontSize: 18.0,
+                          //                 color:
+                          //                     Color.fromARGB(255, 8, 33, 173),
+                          //                 decoration: TextDecoration.underline,
+                          //               ),
+                          //             ),
+                          //             onTap: () {
+                          //               launchLink(
+                          //                   complainAllModel.attachTarget,
+                          //                   isNewTab: true);
+                          //             }),
+                          //   ],
+                          // ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    complainAllModel.detail,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      // fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(0xff, 0, 0, 0),
-                    ),
-                  ),
-                ),
+                (complainAllModel.attachIcon == '-')
+                    ? Container()
+                    : showAttachfile(),
               ],
             ),
           ],
@@ -1083,6 +1185,7 @@ class _DetailState extends State<Detail> {
   }
 
   Widget noteBox() {
+    txtnote = complainAllModel.note;
     return Container(
       width: MediaQuery.of(context).size.width * 0.33,
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -1094,7 +1197,8 @@ class _DetailState extends State<Detail> {
                 // decoration: TextDecoration.underline,
                 ),
           ),
-          TextField(
+          TextFormField(
+            initialValue: txtnote,
             onChanged: (value) {
               txtnote = value.trim();
             },
@@ -1121,7 +1225,7 @@ class _DetailState extends State<Detail> {
 
   Widget replyBox() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.33,
+      width: MediaQuery.of(context).size.width * 0.66,
       margin: EdgeInsets.only(left: 10.0, right: 10.0),
       child: Column(
         children: [
@@ -1138,10 +1242,47 @@ class _DetailState extends State<Detail> {
             // margin: EdgeInsets.only(left: 10.0, right: 10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.grey.shade100,
+              border: Border.all(color: Colors.black45),
+              color: Colors.white,
             ),
             child: Text(
               complainAllModel.reply,
+              style: TextStyle(
+                fontSize: 16.0,
+                // fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget usermsgBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.50,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความจากผู้แจ้ง',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.50,
+            height: 40,
+            // margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.black45),
+              color: Colors.white,
+            ),
+            child: Text(
+              complainAllModel.usermsg,
               style: TextStyle(
                 fontSize: 16.0,
                 // fontWeight: FontWeight.bold,
@@ -1179,14 +1320,44 @@ class _DetailState extends State<Detail> {
               showAppoint(),
               showFixStartdate(),
               showFixEnddate(),
-              showEvaluation(),
+              // showEvaluation(),
             ],
           ),
           // noteBox(),
-          // replyBox(),
-
+          replyBox(),
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
+        ],
+      ),
+    );
+  }
+
+  Widget feedbackBox() {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 10),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+            child: Text(
+              'ข้อแนะนำจากผู้แจ้ง',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 16, 149, 161),
+                // decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+          new Divider(
+            color: Colors.green.shade300,
+          ),
+          Row(
+            children: <Widget>[
+              showEvaluation(),
+              usermsgBox(),
+            ],
+          ),
         ],
       ),
     );
@@ -1356,6 +1527,7 @@ class _DetailState extends State<Detail> {
         showResponsible_staff(),
         showFormDeal(),
         submitButton(),
+        feedbackBox(),
         // showPhoto(),
       ],
     );

@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:url_encoder/url_encoder.dart';
 
 class EditDept extends StatefulWidget {
   final DepartmentModel deptAllModel;
@@ -199,7 +200,7 @@ class _EditDeptState extends State<EditDept> {
                       mySizebox(),
                       Column(
                         children: [
-                          Text('หัวหน้าแผนก :'),
+                          Text('หัวหน้างาน :'),
                           Container(
                             width: 400,
                             height: 47,
@@ -235,7 +236,7 @@ class _EditDeptState extends State<EditDept> {
                     children: [
                       Column(
                         children: [
-                          Text('แผนก :'),
+                          Text('งาน :'),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.3,
                             child: TextFormField(
@@ -266,7 +267,7 @@ class _EditDeptState extends State<EditDept> {
                                 prefixIcon:
                                     Icon(Icons.mode_edit, color: Colors.grey),
                                 // border: InputBorder.none,
-                                hintText: 'แผนก',
+                                hintText: 'งาน',
                                 hintStyle: TextStyle(color: Colors.grey),
                               ),
                             ),
@@ -326,16 +327,21 @@ class _EditDeptState extends State<EditDept> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectDeptModel.dpId.toString();
-
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+    if (txtcode.isEmpty || txtname.isEmpty) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      String selectId = selectDeptModel.dpId.toString();
+      txttoken = txttoken.replaceAll('+', '%2B'); //   (text: txttoken);
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
+        print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {
@@ -380,7 +386,7 @@ class _EditDeptState extends State<EditDept> {
               submitThread();
             },
             child: Text(
-              'แก้ไขชื่อแผนก',
+              'แก้ไขข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -419,7 +425,7 @@ class _EditDeptState extends State<EditDept> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขข้อมูลแผนก'),
+        title: Text('แก้ไขข้อมูลงาน'),
       ),
       body: Row(
         children: [

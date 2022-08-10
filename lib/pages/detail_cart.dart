@@ -253,8 +253,8 @@ class _DetailCartState extends State<DetailCart> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleProduct'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleProduct'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index, size),

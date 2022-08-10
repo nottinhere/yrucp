@@ -428,7 +428,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_department.png'),
                 ),
                 Text(
-                  'แผนก',
+                  'งาน',
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

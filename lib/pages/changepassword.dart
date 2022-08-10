@@ -175,7 +175,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'แผนก',
+                        hintText: 'งาน',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -190,6 +190,8 @@ class _ChangePasswordState extends State<ChangePassword> {
   }
 
   Future<void> submitThread() async {
+    String memberID = myUserModel.id.toString();
+
     if (txtnewpass.isEmpty || txtrenewpass.isEmpty) {
       // Have space
       normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
@@ -199,7 +201,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       } else {
         try {
           String url =
-              'https://app.oss.yru.ac.th/yrusv/api/json_submit_changepassword.php?memberId=$memberID&action=add&name=$txtnewpass'; //'';
+              'https://app.oss.yru.ac.th/yrusv/api/json_submit_changepassword.php?memberId=$memberID&action=edit&data=$txtnewpass'; //'';
           print('submitURL >> $url');
           await http.get(url).then((value) {
             confirmSubmit();
@@ -215,7 +217,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            content: Text('แก้ไขรหัสผ่านเรียบร้อย'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {

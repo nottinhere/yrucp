@@ -192,16 +192,21 @@ class _EditFaqState extends State<EditFaq> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectFaqModel.id.toString();
+    if (txtquestion.isEmpty || txtanswer.isEmpty) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      String selectId = selectFaqModel.id.toString();
 
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
+        print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {

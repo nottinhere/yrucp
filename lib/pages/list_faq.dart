@@ -168,8 +168,8 @@ class _ListFaqState extends State<ListFaq> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleQues'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleQues'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),

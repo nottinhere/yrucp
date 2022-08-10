@@ -83,10 +83,14 @@ class _DetailStaffState extends State<DetailStaff> {
           Map<String, dynamic> priceListMap = map['price_list'];
           _mySelection =
               (complainAllModel.staff == '-') ? null : complainAllModel.staff;
-          isButtonCheckinActive =
-              (complainAllModel.startdate_fix == '-') ? true : false;
-          isButtonCheckoutActive =
-              (complainAllModel.enddate_fix == '-') ? true : false;
+          isButtonCheckinActive = (complainAllModel.startdate_fix == '-' &&
+                  complainAllModel.staff != '-')
+              ? true
+              : false;
+          isButtonCheckoutActive = (complainAllModel.enddate_fix == '-') &&
+                  complainAllModel.staff != '-'
+              ? true
+              : false;
         });
       } // for
 
@@ -104,6 +108,13 @@ class _DetailStaffState extends State<DetailStaff> {
     setState(() {
       dataST = itemDivisions;
     });
+  }
+
+  Future<void> launchLink(String url, {bool isNewTab = true}) async {
+    await launchUrl(
+      Uri.parse(url),
+      webOnlyWindowName: isNewTab ? '_blank' : '_self',
+    );
   }
 
   Future<void> logOut() async {
@@ -528,7 +539,7 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('แผนกรับผิดชอบ'),
+                    Text('งานที่รับผิดชอบ'),
                     Text(
                       complainAllModel.department,
                       style: TextStyle(
@@ -698,6 +709,43 @@ class _DetailStaffState extends State<DetailStaff> {
                               ),
                             ),
                           ),
+                          // SizedBox(height: 20),
+                          // Column(
+                          //   children: [
+                          //     // Icon(Icons.timer, color: Colors.green[500]),
+                          //     Align(
+                          //       alignment: Alignment.centerLeft,
+                          //       child: Text(
+                          //         'เอกสารเพิ่มเติม',
+                          //         style: TextStyle(
+                          //           fontSize: 18.0,
+                          //           decoration: TextDecoration.underline,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //     (complainAllModel.attachIcon == '-')
+                          //         ? ListTile(
+                          //             title: Text('ไม่มีเอกสารแนบ'),
+                          //             onTap: () {
+                          //               null;
+                          //             })
+                          //         : ListTile(
+                          //             title: Text(
+                          //               'กดดูเอกสารแนบ',
+                          //               style: TextStyle(
+                          //                 fontSize: 18.0,
+                          //                 color:
+                          //                     Color.fromARGB(255, 8, 33, 173),
+                          //                 decoration: TextDecoration.underline,
+                          //               ),
+                          //             ),
+                          //             onTap: () {
+                          //               launchLink(
+                          //                   complainAllModel.attachTarget,
+                          //                   isNewTab: true);
+                          //             }),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ],
@@ -839,10 +887,11 @@ class _DetailStaffState extends State<DetailStaff> {
               decoration: TextDecoration.underline,
             ),
           ),
-          TextField(
+          TextFormField(
             onChanged: (value) {
               txtreply = value.trim();
             },
+            initialValue: complainAllModel.reply,
             keyboardType: TextInputType.multiline,
             maxLines: 1,
             decoration: InputDecoration(
@@ -1109,6 +1158,101 @@ class _DetailStaffState extends State<DetailStaff> {
     );
   }
 
+  Widget usermsgBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.50,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความจากผู้แจ้ง',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.50,
+            height: 40,
+            // margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.black45),
+              color: Colors.white,
+            ),
+            child: Text(
+              complainAllModel.usermsg,
+              style: TextStyle(
+                fontSize: 16.0,
+                // fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget showEvaluation() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.20,
+      child: Column(
+        children: <Widget>[
+          Text(
+            'ผลประเมิน',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 80),
+            child: Row(
+              children: <Widget>[
+                for (var i = 0; i < complainAllModel.rating; i++)
+                  Image.asset(
+                    'images/star.png',
+                    width: MediaQuery.of(context).size.width * 0.02,
+                  ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget feedbackBox() {
+    return Card(
+      child: Column(
+        children: <Widget>[
+          SizedBox(height: 10),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+            child: Text(
+              'ข้อแนะนำจากผู้แจ้ง',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 16, 149, 161),
+                // decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+          new Divider(
+            color: Colors.green.shade300,
+          ),
+          Row(
+            children: <Widget>[
+              showEvaluation(),
+              usermsgBox(),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget showPhoto() {
     return Container(
       height: MediaQuery.of(context).size.height * 0.5 - 50,
@@ -1240,6 +1384,8 @@ class _DetailStaffState extends State<DetailStaff> {
         showResponsible(),
         showFormDeal(),
         submitButton(),
+        feedbackBox(),
+
         // showPhoto(),
       ],
     );

@@ -206,16 +206,20 @@ class _EditProbState extends State<EditProb> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectProbModel.pId.toString();
-
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&subject=$txtsubject&dp_id=$_mySelection'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+    if (txtsubject.isEmpty || _mySelection == null) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      String selectId = selectProbModel.pId.toString();
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&subject=$txtsubject&dp_id=$_mySelection'; //'';
+        print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {
@@ -260,7 +264,7 @@ class _EditProbState extends State<EditProb> {
               submitThread();
             },
             child: Text(
-              'แก้ไขชื่อหมวดหมู่',
+              'แก้ไขข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),

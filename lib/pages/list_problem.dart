@@ -172,8 +172,8 @@ class _ListProblemState extends State<ListProblem> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleName'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -334,7 +334,7 @@ class _ListProblemState extends State<ListProblem> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'กลุ่มงาน : ' + filterProbModels[index].dpName.toString(),
+            'งาน : ' + filterProbModels[index].dpName.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),

@@ -419,7 +419,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           print('You are boss');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return Detail(
+            return DetailStaff(
               complainAllModel: filterComplainAllModels[index],
               userModel: myUserModel,
             );
@@ -498,8 +498,8 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleQues'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleQues'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -674,7 +674,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
-              Text('แผนกรับผิดชอบ'),
+              Text('งานที่รับผิดชอบ'),
               Text(
                 filterComplainAllModels[index].department,
                 style: TextStyle(

@@ -140,8 +140,8 @@ class _EditUserState extends State<EditUser> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Reset รหัสผ่านเป็น :: yruserviceteam'),
+            title: Text('ยืนยันการรีเซ็ตรหัสผ่าน'),
+            content: Text('รีเซ็ตรหัสผ่านเป็น :: yruserviceteam'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(),
@@ -297,7 +297,7 @@ class _EditUserState extends State<EditUser> {
                   mySizebox(),
                   Column(
                     children: [
-                      Text('แผนก :'),
+                      Text('งาน :'),
                       Container(
                         width: 400,
                         height: 47,
@@ -356,16 +356,24 @@ class _EditUserState extends State<EditUser> {
   }
 
   Future<void> submitThread() async {
-    String selectId = selectUserModel.id.toString();
+    if (txtuser.isEmpty ||
+        txtname.isEmpty ||
+        txtcontact.isEmpty ||
+        _mySelection == null) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      String selectId = selectUserModel.id.toString();
 
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+        print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {

@@ -195,7 +195,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
       child: Text('จัดการคำขอบริการ'),
     ),
     Center(
-      child: Text('จัดการข้อมูลแผนก'),
+      child: Text('จัดการข้อมูลงาน'),
     ),
     Center(
       child: Text('จัดการข้อมูลหมวดหมู่'),
@@ -247,7 +247,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
             ),
             SideNavigationBarItem(
               icon: Icons.group,
-              label: 'จัดการแผนก',
+              label: 'จัดการข้อมูลงาน',
             ),
             SideNavigationBarItem(
               icon: Icons.group,

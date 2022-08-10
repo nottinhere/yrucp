@@ -488,13 +488,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.8"
+  url_encoder:
+    dependency: "direct main"
+    description:
+      name: url_encoder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   url_launcher:
     dependency: "direct main"
     description:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.4"
+    version: "6.1.5"
   url_launcher_android:
     dependency: transitive
     description:

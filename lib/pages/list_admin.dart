@@ -553,7 +553,7 @@ class _ListComplainState extends State<ListComplain> {
         Column(
           children: [
             // Icon(Icons.timer, color: Colors.green[500]),
-            Text('แผนกรับผิดชอบ'),
+            Text('งานที่รับผิดชอบ'),
             Text(
               filterComplainAllModels[index].department,
               style: TextStyle(

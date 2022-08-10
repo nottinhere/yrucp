@@ -181,14 +181,19 @@ class _AddProbState extends State<AddProb> {
   }
 
   Future<void> submitThread() async {
-    try {
-      String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
-      print('submitURL >> $url');
-      await http.get(url).then((value) {
-        confirmSubmit();
-      });
-    } catch (e) {}
+    if (txtsubject.isEmpty || _mySelection == null) {
+      // Have space
+      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+    } else {
+      try {
+        String url =
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
+        print('submitURL >> $url');
+        // await http.get(url).then((value) {
+        //   confirmSubmit();
+        // });
+      } catch (e) {}
+    }
   }
 
   Future<void> confirmSubmit() async {
@@ -230,7 +235,7 @@ class _AddProbState extends State<AddProb> {
               submitThread();
             },
             child: Text(
-              'เพิ่มรายชื่อ',
+              'เพิ่มข้อมูล',
               style: TextStyle(color: Colors.white),
             ),
           ),

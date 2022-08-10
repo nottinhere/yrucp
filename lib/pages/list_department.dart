@@ -168,8 +168,8 @@ class _ListDeptState extends State<ListDept> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Confirm delete'),
-            content: Text('Do you want delete : $titleName'),
+            title: Text('ยืนยันการลบข้อมูล'),
+            content: Text('คุณต้องการลบข้อมูล : $titleName'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -309,7 +309,7 @@ class _ListDeptState extends State<ListDept> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'ชื่อแผนก : ' + filterDeptModels[index].dpName,
+                'ชื่องาน : ' + filterDeptModels[index].dpName,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -356,7 +356,7 @@ class _ListDeptState extends State<ListDept> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showPercentStock(index),
-          showName(index),
+          // showName(index),
         ],
       ),
     );
@@ -557,7 +557,7 @@ class _ListDeptState extends State<ListDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลแผนก'),
+        title: Text('จัดการข้อมูลงาน'),
         actions: <Widget>[
           AddDepartment(),
         ],
