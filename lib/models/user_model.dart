@@ -11,6 +11,7 @@ class UserModel {
   int department;
   String departmentName;
   int level;
+  String levelName;
   int status;
 
   UserModel(
@@ -26,6 +27,7 @@ class UserModel {
       this.department,
       this.departmentName,
       this.level,
+      this.levelName,
       this.status});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class UserModel {
     department = json['department'];
     departmentName = json['departmentName'];
     level = json['level'];
+    levelName = json['levelName'];
     status = json['status'];
   }
 
@@ -58,6 +61,7 @@ class UserModel {
     data['department'] = this.department;
     data['departmentName'] = this.departmentName;
     data['level'] = this.level;
+    data['levelName'] = this.levelName;
     data['status'] = this.status;
     return data;
   }

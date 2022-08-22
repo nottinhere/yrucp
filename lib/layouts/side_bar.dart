@@ -80,7 +80,8 @@ class _SideBarState extends State<SideBar> {
                 child: Image.asset('images/logo.png'),
               ),
               title: Text(myUserModel.personName),
-              subtitle: Text(myUserModel.departmentName)),
+              subtitle: Text('(${myUserModel.levelName}) ' +
+                  ' ${myUserModel.departmentName} ')),
           // selectedIndex: selectedIndex,
           items: const [
             SideNavigationBarItem(
@@ -222,7 +223,8 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 child: Image.asset('images/logo.png'),
               ),
               title: Text(myUserModel.personName),
-              subtitle: Text(myUserModel.departmentName)),
+              subtitle: Text('(${myUserModel.levelName}) ' +
+                  ' ${myUserModel.departmentName} ')),
           // selectedIndex: selectedIndex,
           items: const [
             SideNavigationBarItem(

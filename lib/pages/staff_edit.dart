@@ -7,12 +7,15 @@ import 'package:http/http.dart' as http;
 
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
+import 'package:yrusv/models/userlevel_model.dart';
+
 import 'package:yrusv/models/department_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 
 class EditUser extends StatefulWidget {
   final UserModel userAllModel;
@@ -46,7 +49,7 @@ class _EditUserState extends State<EditUser> {
   UserModel selectUserModel;
 
   String id; // productID
-
+  bool isToggledLevel;
   String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
   String memberID;
   String strhelperID;
@@ -68,6 +71,7 @@ class _EditUserState extends State<EditUser> {
     // _selectedHelper = _helpers;
     setState(() {
       readDepartment();
+      readUserlevel();
       readStaff();
     });
   }
@@ -95,6 +99,29 @@ class _EditUserState extends State<EditUser> {
     // print('dataDV >> $dataDV');
   }
 
+  List dataLV;
+  Future<void> readUserlevel() async {
+    String urlLV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_userlevel.php';
+    print('urlLV >> $urlLV');
+
+    http.Response response = await http.get(urlLV);
+    var result = json.decode(response.body);
+    var itemUserlevel = result['itemsData'];
+
+    setState(() {
+      for (var map in itemUserlevel) {
+        String lvID = map['lv_id'];
+        String lvName = map['lv_name'];
+      } // for
+    });
+
+    setState(() {
+      dataLV = itemUserlevel;
+    });
+    print('dataLV >> $dataLV');
+  }
+
   List dataST;
   Future<void> readStaff() async {
     int memberId = myUserModel.id;
@@ -109,6 +136,8 @@ class _EditUserState extends State<EditUser> {
       txtuser = selectUserModel.user;
       txtname = selectUserModel.personName;
       txtcontact = selectUserModel.personContact;
+      isToggledLevel = (selectUserModel.level == 1) ? true : false;
+
       print('selectUserModel >> $selectUserModel');
       _mySelection = (selectUserModel.department == '-')
           ? null
@@ -346,6 +375,35 @@ class _EditUserState extends State<EditUser> {
                     ),
                   ),
                   mySizebox(),
+                  Column(
+                    children: [
+                      Text('ผู้ดูแลระบบ :'),
+                      Container(
+                        width: 200,
+                        height: 47,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.grey.shade200,
+                        ),
+                        child: Center(
+                          child: FlutterSwitch(
+                            height: 20.0,
+                            width: 40.0,
+                            padding: 4.0,
+                            toggleSize: 15.0,
+                            borderRadius: 10.0,
+                            activeColor: Colors.green,
+                            value: isToggledLevel,
+                            onToggle: (value) {
+                              setState(() {
+                                isToggledLevel = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               )
             ],
@@ -367,7 +425,7 @@ class _EditUserState extends State<EditUser> {
 
       try {
         String url =
-            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection'; //'';
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection&isToggledLevel=$isToggledLevel'; //'';
         print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
@@ -475,7 +533,7 @@ class _EditUserState extends State<EditUser> {
           // Home(),
         ],
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('แก้ไขรข้อมูลรายชื่อ'),
+        title: Text('แก้ไขข้อมูลรายชื่อ'),
       ),
       body: Row(
         children: [

@@ -13,6 +13,7 @@ import 'package:uipickers/uipickers.dart';
 
 import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
+import 'package:yrusv/pages/list_report_user_detail.dart';
 
 class ListReportDeptDetail extends StatefulWidget {
   final int index;
@@ -190,7 +191,17 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
         ),
         onTap: () {
           print('Detail BTN');
-          // confirmDelete(index);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListComplainByUser(
+              index: 0,
+              userModel: myUserModel,
+              staffID: filterReportDeptDetailModels[index].staffID,
+              datestart: selectedStartDate,
+              dateend: selectedEndDate,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );

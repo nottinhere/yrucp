@@ -135,6 +135,8 @@ class _ListUserState extends State<ListUser> {
     setState(() {
       filterUserModels[index].personName = selectUserModel.personName;
       filterUserModels[index].personContact = selectUserModel.personContact;
+      filterUserModels[index].departmentName = selectUserModel.departmentName;
+      filterUserModels[index].levelName = selectUserModel.levelName;
     });
   }
 
@@ -343,7 +345,10 @@ class _ListUserState extends State<ListUser> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'งาน : ' + filterUserModels[index].departmentName.toString(),
+            '( สถานะ : ' +
+                filterUserModels[index].levelName.toString() +
+                ' ) งาน : ' +
+                filterUserModels[index].departmentName.toString(),
             style: MyStyle().h3bStyle,
           ),
         ),
