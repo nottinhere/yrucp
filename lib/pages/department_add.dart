@@ -193,12 +193,14 @@ class _AddDeptState extends State<AddDept> {
       normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       try {
+        memberID = myUserModel.id.toString();
+
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname&code=$txtcode'; //'';
         print('submitURL >> $url');
-        await http.get(url).then((value) {
-          confirmSubmit();
-        });
+        // await http.get(url).then((value) {
+        //   confirmSubmit();
+        // });
       } catch (e) {}
     }
   }

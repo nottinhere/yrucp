@@ -186,12 +186,13 @@ class _AddProbState extends State<AddProb> {
       normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       try {
+        memberID = myUserModel.id.toString();
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
         print('submitURL >> $url');
-        // await http.get(url).then((value) {
-        //   confirmSubmit();
-        // });
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
       } catch (e) {}
     }
   }

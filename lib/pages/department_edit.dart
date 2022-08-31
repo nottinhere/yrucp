@@ -334,6 +334,7 @@ class _EditDeptState extends State<EditDept> {
       String selectId = selectDeptModel.dpId.toString();
       txttoken = txttoken.replaceAll('+', '%2B'); //   (text: txttoken);
       try {
+        memberID = myUserModel.id.toString();
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
         print('submitURL >> $url');
