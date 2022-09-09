@@ -219,7 +219,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             title: Text('Complete'),
             content: Text('แก้ไขรหัสผ่านเรียบร้อย'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     backProcess();
@@ -240,8 +240,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 30.0),
-          child: RaisedButton(
-            color: Color.fromARGB(0xff, 13, 163, 93),
+          child: ElevatedButton(
+            // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;

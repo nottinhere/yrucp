@@ -1068,7 +1068,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Widget sortButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
@@ -1089,7 +1089,7 @@ class _ListComplainState extends State<ListComplain> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          child: FlatButton.icon(
+          child: TextButton.icon(
               // color: Colors.red,
               icon: Icon(Icons.refresh), //`Icon` to display
               label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
@@ -1104,7 +1104,7 @@ class _ListComplainState extends State<ListComplain> {
               }),
         ),
         Container(
-          child: FlatButton.icon(
+          child: TextButton.icon(
               // color: Colors.red,
               icon: Icon(Icons.search_off_sharp), //`Icon` to display
               label: Text('ล้างการค้นหา'), //`Text` to display

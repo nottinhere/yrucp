@@ -144,7 +144,7 @@ class _ListFaqState extends State<ListFaq> {
   }
 
   Widget cancelButton() {
-    return FlatButton(
+    return TextButton(
       child: Text('Cancel'),
       onPressed: () {
         Navigator.of(context).pop();
@@ -179,7 +179,7 @@ class _ListFaqState extends State<ListFaq> {
   }
 
   Widget comfirmButton(int index) {
-    return FlatButton(
+    return TextButton(
       child: Text('Confirm'),
       onPressed: () {
         deleteCart(
@@ -494,7 +494,7 @@ class _ListFaqState extends State<ListFaq> {
 
   Widget clearButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display

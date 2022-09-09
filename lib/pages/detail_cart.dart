@@ -206,7 +206,7 @@ class _DetailCartState extends State<DetailCart> {
     String unitSize = size;
     String memberID = myUserModel.id.toString();
 
-    return FlatButton(
+    return TextButton(
       child: Text('OK'),
       onPressed: () {
         print(
@@ -229,7 +229,7 @@ class _DetailCartState extends State<DetailCart> {
   }
 
   Widget cancelButton() {
-    return FlatButton(
+    return TextButton(
       child: Text('Cancel'),
       onPressed: () {
         Navigator.of(context).pop();
@@ -264,7 +264,7 @@ class _DetailCartState extends State<DetailCart> {
   }
 
   Widget comfirmButton(int index, String size) {
-    return FlatButton(
+    return TextButton(
       child: Text('Confirm'),
       onPressed: () {
         deleteCart(index, size);

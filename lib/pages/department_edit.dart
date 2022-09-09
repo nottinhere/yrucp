@@ -353,7 +353,7 @@ class _EditDeptState extends State<EditDept> {
             title: Text('Complete'),
             content: Text('แก้ไขรายชื่อเรียบร้อย'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     backProcess();
@@ -376,8 +376,8 @@ class _EditDeptState extends State<EditDept> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 30.0),
-          child: RaisedButton(
-            color: Color.fromARGB(0xff, 13, 163, 93),
+          child: ElevatedButton(
+            // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;

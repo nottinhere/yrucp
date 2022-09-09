@@ -367,7 +367,7 @@ class _ListProductAlertState extends State<ListProductAlert> {
 
   Widget sortButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display

@@ -6,6 +6,7 @@ class ComplainAllModel {
   String appointtime;
   String postdate;
   String postby;
+  String contactnumber;
   String status;
   String problem;
   String textstatus;
@@ -28,6 +29,7 @@ class ComplainAllModel {
   String reply;
   int rating;
   String usermsg;
+  String tousermsg;
   int id;
 
   ComplainAllModel(
@@ -38,6 +40,7 @@ class ComplainAllModel {
       this.appointtime,
       this.postdate,
       this.postby,
+      this.contactnumber,
       this.status,
       this.problem,
       this.textstatus,
@@ -60,6 +63,7 @@ class ComplainAllModel {
       this.reply,
       this.rating,
       this.usermsg,
+      this.tousermsg,
       this.id});
 
   ComplainAllModel.fromJson(Map<String, dynamic> json) {
@@ -70,6 +74,7 @@ class ComplainAllModel {
     appointtime = json['appointtime'];
     postdate = json['postdate'];
     postby = json['postby'];
+    contactnumber = json['contactnumber'];
     status = json['status'];
     problem = json['problem'];
     textstatus = json['textstatus'];
@@ -92,6 +97,7 @@ class ComplainAllModel {
     reply = json['reply'];
     rating = json['rating'];
     usermsg = json['usermsg'];
+    tousermsg = json['tousermsg'];
     id = json['id'];
   }
 
@@ -104,6 +110,7 @@ class ComplainAllModel {
     data['appointtime'] = this.appointtime;
     data['postdate'] = this.postdate;
     data['postby'] = this.postby;
+    data['contactnumber'] = this.contactnumber;
     data['status'] = this.status;
     data['problem'] = this.problem;
     data['textstatus'] = this.textstatus;
@@ -126,6 +133,7 @@ class ComplainAllModel {
     data['reply'] = this.reply;
     data['rating'] = this.rating;
     data['usermsg'] = this.usermsg;
+    data['tousermsg'] = this.tousermsg;
     data['id'] = this.id;
     return data;
   }

@@ -356,7 +356,7 @@ class _ListProductState extends State<ListProductReport> {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               setState(() {
                 String strDt = "$year-$month-15";
@@ -387,7 +387,7 @@ class _ListProductState extends State<ListProductReport> {
               ),
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
             onPressed: () {
               setState(() {
                 String strDt = "$year-$month-15";

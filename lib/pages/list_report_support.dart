@@ -254,8 +254,8 @@ class _ListReportDeptState extends State<ListReportDept> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 30.0),
-          child: RaisedButton(
-            color: Color.fromARGB(0xff, 13, 163, 93),
+          child: ElevatedButton(
+            // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               String memberId = myUserModel.id.toString();
 
@@ -534,7 +534,7 @@ class _ListReportDeptState extends State<ListReportDept> {
 
   Widget clearButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display

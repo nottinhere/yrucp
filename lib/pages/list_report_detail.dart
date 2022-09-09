@@ -430,7 +430,7 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
 
   Widget clearButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display

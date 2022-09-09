@@ -474,7 +474,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
   }
 
   Widget cancelButton() {
-    return FlatButton(
+    return TextButton(
       child: Text('Cancel'),
       onPressed: () {
         Navigator.of(context).pop();
@@ -509,7 +509,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
   }
 
   Widget comfirmButton(int index) {
-    return FlatButton(
+    return TextButton(
       child: Text('Confirm'),
       onPressed: () {
         deleteCart(
@@ -872,7 +872,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget sortButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
@@ -890,7 +890,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget refreshButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.refresh), //`Icon` to display
           label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display

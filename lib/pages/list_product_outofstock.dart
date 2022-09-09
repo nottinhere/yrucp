@@ -543,7 +543,7 @@ class _ListProductState extends State<ListProductOutofstock> {
         Padding(
           padding: EdgeInsets.only(left: 10.00, right: 10.00),
         ),
-        FlatButton(
+        TextButton(
           color: Colors.red,
           textColor: Colors.white,
           disabledColor: Colors.grey,
@@ -824,7 +824,7 @@ class _ListProductState extends State<ListProductOutofstock> {
 
   Widget sortButton() {
     return Container(
-      child: FlatButton.icon(
+      child: TextButton.icon(
           // color: Colors.red,
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display

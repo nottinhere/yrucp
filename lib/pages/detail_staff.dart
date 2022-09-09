@@ -38,7 +38,11 @@ class _DetailStaffState extends State<DetailStaff> {
   UserModel myUserModel;
   String id; // productID
 
-  String txtdeal = '', txtfree = '', txtprice = '', txtreply = '';
+  String txtdeal = '',
+      txtfree = '',
+      txtprice = '',
+      txtreply = '',
+      txttousermsg = '';
   String memberID;
 
   int page = 1, dp = 1;
@@ -580,6 +584,19 @@ class _DetailStaffState extends State<DetailStaff> {
                         ),
                       ],
                     ),
+                    Column(
+                      children: [
+                        // Icon(Icons.restaurant, color: Colors.green[500]),
+                        Text(
+                          'เบอร์ติดต่อ : ' + complainAllModel.contactnumber,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(0xff, 0, 0, 0),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
 
@@ -882,7 +899,7 @@ class _DetailStaffState extends State<DetailStaff> {
 
           // Icon(Icons.kitchen, color: Colors.green[500]),
           Text(
-            'ข้อความตอบกลับ',
+            'ข้อความตอบกลับหัวหน้างาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
@@ -892,6 +909,47 @@ class _DetailStaffState extends State<DetailStaff> {
               txtreply = value.trim();
             },
             initialValue: complainAllModel.reply,
+            keyboardType: TextInputType.multiline,
+            maxLines: 1,
+            decoration: InputDecoration(
+              // suffixIcon: Icon(Icons.mode_edit, color: Colors.blue),
+              fillColor: Colors.grey.shade100,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: const BorderSide(color: Colors.white, width: 0.0),
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                borderSide: const BorderSide(color: Colors.white, width: 0.0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget touserBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.70,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          SizedBox(height: 20),
+
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความตอบกลับผู้แจ้งเรื่อง',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          TextFormField(
+            onChanged: (value) {
+              txttousermsg = value.trim();
+            },
+            initialValue: complainAllModel.tousermsg,
             keyboardType: TextInputType.multiline,
             maxLines: 1,
             decoration: InputDecoration(
@@ -942,6 +1000,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
           // noteBox(),
           replyBox(),
+          touserBox(),
 
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
@@ -1104,7 +1163,7 @@ class _DetailStaffState extends State<DetailStaff> {
       var cpID = currentComplainAllModel.id;
 
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_submit_reply.php?memberId=$memberID&cpID=$cpID&reply=$txtreply'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_submit_reply.php?memberId=$memberID&cpID=$cpID&reply=$txtreply&tousermsg=$txttousermsg'; //'';
       await http.get(url).then((value) {
         confirmSubmit();
       });
@@ -1119,7 +1178,7 @@ class _DetailStaffState extends State<DetailStaff> {
             title: Text('Complete'),
             content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     backProcess();
@@ -1140,8 +1199,8 @@ class _DetailStaffState extends State<DetailStaff> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 30.0),
-          child: RaisedButton(
-            color: Color.fromARGB(0xff, 13, 163, 93),
+          child: ElevatedButton(
+            // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
               var cpID = currentComplainAllModel.id;
@@ -1149,7 +1208,7 @@ class _DetailStaffState extends State<DetailStaff> {
               submitThread();
             },
             child: Text(
-              'แก้ไขข้อมูล',
+              'Submit',
               style: TextStyle(color: Colors.white),
             ),
           ),

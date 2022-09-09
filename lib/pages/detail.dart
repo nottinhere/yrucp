@@ -49,7 +49,12 @@ class _DetailState extends State<Detail> {
   UserModel myUserModel;
   String id; // productID
 
-  String txtdeal = '', txtfree = '', txtprice = '', txtnote = '';
+  String txtdeal = '',
+      txtfree = '',
+      txtprice = '',
+      txtnote = '',
+      txttousermsg = '';
+
   String memberID;
   String strhelperID;
 
@@ -864,6 +869,19 @@ class _DetailState extends State<Detail> {
                         ),
                       ],
                     ),
+                    Column(
+                      children: [
+                        // Icon(Icons.restaurant, color: Colors.green[500]),
+                        Text(
+                          'เบอร์ติดต่อ : ' + complainAllModel.contactnumber,
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(0xff, 0, 0, 0),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
 
@@ -1259,6 +1277,42 @@ class _DetailState extends State<Detail> {
     );
   }
 
+  Widget touserBox() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.66,
+      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+      child: Column(
+        children: [
+          // Icon(Icons.kitchen, color: Colors.green[500]),
+          Text(
+            'ข้อความตอบกลับผู้แจ้งเรื่อง',
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.60,
+            height: 40,
+            // margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              border: Border.all(color: Colors.black45),
+              color: Colors.white,
+            ),
+            child: Text(
+              complainAllModel.tousermsg,
+              style: TextStyle(
+                fontSize: 16.0,
+                // fontWeight: FontWeight.bold,
+                color: Color.fromARGB(0xff, 0, 0, 0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget usermsgBox() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.50,
@@ -1325,6 +1379,7 @@ class _DetailState extends State<Detail> {
           ),
           // noteBox(),
           replyBox(),
+          touserBox(),
           //  Row(children: <Widget>[priceBox(),priceBox(),],),
           //  Row(children: <Widget>[noteBox()],),
         ],
@@ -1387,7 +1442,7 @@ class _DetailState extends State<Detail> {
             title: Text('Complete'),
             content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                     // Navigator.pop(context, true);
@@ -1409,8 +1464,8 @@ class _DetailState extends State<Detail> {
       children: <Widget>[
         Container(
           margin: EdgeInsets.only(right: 30.0),
-          child: RaisedButton(
-            color: Color.fromARGB(0xff, 13, 163, 93),
+          child: ElevatedButton(
+            // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
               var cpID = currentComplainAllModel.id;
@@ -1420,7 +1475,7 @@ class _DetailState extends State<Detail> {
               submitThread();
             },
             child: Text(
-              'แก้ไขข้อมูล',
+              'Submit',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -1525,8 +1580,8 @@ class _DetailState extends State<Detail> {
         // showSubject(),
         // showResponsible(),
         showResponsible_staff(),
-        showFormDeal(),
         submitButton(),
+        showFormDeal(),
         feedbackBox(),
         // showPhoto(),
       ],

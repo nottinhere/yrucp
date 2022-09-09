@@ -15,10 +15,10 @@ Widget showTitle(String title) {
 }
 
 Widget okButton(BuildContext buildContext) {
-  return FlatButton(
+  return TextButton(
     child: Text('OK'),
     onPressed: () {
-      Navigator.of(buildContext).pop();  // pop คือการทำให้มันหายไป 
+      Navigator.of(buildContext).pop(); // pop คือการทำให้มันหายไป
     },
   );
 }
