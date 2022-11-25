@@ -44,14 +44,14 @@ class _DetailState extends State<DetailView> {
     if (currentProductAllModel != null) {
       id = currentProductAllModel.id.toString();
       String url = '${MyStyle().getProductWhereId}$id';
-      print('url = $url');
+      // print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
-      print('result = $result');
+      // print('result = $result');
 
       var itemProducts = result['itemsData'];
       for (var map in itemProducts) {
-        print('map = $map');
+        // print('map = $map');
 
         setState(() {
           productAllModel = ProductAllModel.fromJson(map);
@@ -86,7 +86,7 @@ class _DetailState extends State<DetailView> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListProduct(2);
         },
       ),
@@ -117,7 +117,7 @@ class _DetailState extends State<DetailView> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListProduct(3);
         },
       ),
@@ -148,7 +148,7 @@ class _DetailState extends State<DetailView> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListProduct(1);
         },
       ),
@@ -179,7 +179,7 @@ class _DetailState extends State<DetailView> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),
@@ -210,7 +210,7 @@ class _DetailState extends State<DetailView> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),

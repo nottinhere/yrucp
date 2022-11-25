@@ -88,7 +88,7 @@ class _ListDeptState extends State<ListDept> {
         page++;
         readDept();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -105,7 +105,7 @@ class _ListDeptState extends State<ListDept> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php?memberId=$memberId&searchKey=$searchString&page=$page';
-    print('urlDV >> ${urlDV}');
+    // print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemProducts = result['itemsData'];
@@ -117,7 +117,7 @@ class _ListDeptState extends State<ListDept> {
         filterDeptModels = deptModels;
       });
     }
-    print('Count row >> ${filterDeptModels.length}');
+    // print('Count row >> ${filterDeptModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
@@ -132,8 +132,9 @@ class _ListDeptState extends State<ListDept> {
 
     selectDeptModel = DepartmentModel.fromJson(itemSelect);
     setState(() {
-      print('itemSelect = ${selectDeptModel.dpName}');
+      // print('itemSelect = ${selectDeptModel.dpName}');
       filterDeptModels[index].dpName = selectDeptModel.dpName;
+      filterDeptModels[index].code = selectDeptModel.code;
     });
   }
 
@@ -197,7 +198,7 @@ class _ListDeptState extends State<ListDept> {
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
-    print('selectId = $selectId  ,url = $url');
+    // print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
       setState(() {
@@ -213,7 +214,8 @@ class _ListDeptState extends State<ListDept> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -237,7 +239,7 @@ class _ListDeptState extends State<ListDept> {
           ),
         ),
         onTap: () {
-          print('Edit BTN');
+          // print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return EditDept(
@@ -263,7 +265,8 @@ class _ListDeptState extends State<ListDept> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -287,7 +290,7 @@ class _ListDeptState extends State<ListDept> {
           ),
         ),
         onTap: () {
-          print('Delete BTN');
+          // print('Delete BTN');
           confirmDelete(index);
         },
       ),
@@ -309,7 +312,10 @@ class _ListDeptState extends State<ListDept> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'ชื่องาน : ' + filterDeptModels[index].dpName,
+                ' [ ' +
+                    filterDeptModels[index].code +
+                    ' ]  ชื่องาน : ' +
+                    filterDeptModels[index].dpName,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -491,7 +497,7 @@ class _ListDeptState extends State<ListDept> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -524,7 +530,7 @@ class _ListDeptState extends State<ListDept> {
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -557,7 +563,7 @@ class _ListDeptState extends State<ListDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลงาน'),
+        title: Text('จัดการผู้รับผิดชอบ'),
         actions: <Widget>[
           AddDepartment(),
         ],

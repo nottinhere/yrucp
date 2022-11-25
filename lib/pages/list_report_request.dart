@@ -10,8 +10,11 @@ import 'package:yrusv/models/report_dept_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/pages/list_report_support.dart';
-
+import 'package:yrusv/pages/list_report_problem.dart';
+import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
+import 'package:yrusv/pages/list_report_rating.dart';
+import 'package:yrusv/pages/list_comment.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -68,7 +71,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
   int totolpage;
 
   DateTime selectedStartDate =
-      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+      DateTime.now().add(Duration(days: -60)); //  = DateTime.now()
   DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
 
   // Method
@@ -100,13 +103,13 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_request.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
-    print('urlDV >> $urlDV');
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_request.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var item = result['data'];
-    print('item >> $item');
+    // print('item >> $item');
     int i = 0;
     int len = (filterReportDeptModels.length);
 
@@ -116,10 +119,10 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
         reportDeptModels.add(reportDeptModel);
         filterReportDeptModels = reportDeptModels;
       });
-      print(
-          ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
+      // print(
+      //     ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
     }
-    print('Count row >> ${filterReportDeptModels.length}');
+    // print('Count row >> ${filterReportDeptModels.length}');
   }
 
   Future<void> logOut() async {
@@ -156,7 +159,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
           ),
         ),
         onTap: () {
-          print('Detail BTN');
+          // print('Detail BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListReportDeptDetail(
@@ -174,7 +177,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
   }
 
   Widget showData(int index) {
-    print('index >> $filterReportDeptModels');
+    // print('index >> $filterReportDeptModels');
     return Row(
       children: <Widget>[
         Container(
@@ -220,7 +223,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
   }
 
   Widget showName(int index) {
-    print('showName');
+    // print('showName');
     return Row(
       children: <Widget>[
         Container(
@@ -266,7 +269,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
               submitThread();
             },
             child: Text(
-              'Submit',
+              'ค้นหา',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -280,7 +283,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
       String memberId = myUserModel.id.toString();
       String url =
           'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
-      print('submitURL >> $url');
+      // print('submitURL >> $url');
       await http.get(url).then((value) {
         setState(() {
           page = 1;
@@ -392,11 +395,12 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
     );
   }
 
-  Widget reportViewbyRequest() {
+  Widget reportViewbySupport() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 0) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -409,7 +413,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
                   color: Colors.white,
                 ),
                 Text(
-                  'สรุปการปฎิบัติงาน',
+                  'สรุปจากผู้รับผิดชอบ',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -433,13 +437,97 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
     );
   }
 
-  Widget reportViewbySupport() {
+  Widget reportViewbyProblem() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.10,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'สรุปจากประเภทงาน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportProblemDept(
+              index: 1,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget reportViewbyStaff() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'สรุปรายบุคคล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportStaff(
+              index: 2,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget reportViewbyRequest() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -467,16 +555,105 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
     );
   }
 
+  Widget reportViewbyRating() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 4) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' สรุปการประเมิน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // routeToListComplain(1);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportRatingDept(
+              index: 4,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
+  Widget viewListcomment() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.10,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 5) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'ดูข้อแนะนำเพิ่มเติม',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListComment(
+              index: 5,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
+        },
+      ),
+    );
+  }
+
   Widget topMenu() {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.3,
+        width: MediaQuery.of(context).size.width * 0.65,
         child: Row(
           children: [
-            reportViewbyRequest(),
             reportViewbySupport(),
+            reportViewbyProblem(),
+            reportViewbyStaff(),
+            reportViewbyRequest(),
+            reportViewbyRating(),
+            viewListcomment(),
           ],
         ),
       ),
@@ -539,7 +716,7 @@ class _ListReportReqDeptState extends State<ListReportReqDept> {
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';

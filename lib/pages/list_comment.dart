@@ -5,31 +5,31 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
+import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/report_dept_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/pages/list_report_request.dart';
+import 'package:yrusv/pages/list_report_support.dart';
 import 'package:yrusv/pages/list_report_problem.dart';
 import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
+import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
-import 'package:yrusv/pages/list_comment.dart';
 
 import 'package:uipickers/uipickers.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class ListReportDept extends StatefulWidget {
+class ListComment extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListComment({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListReportDeptState createState() => _ListReportDeptState();
+  _ListCommentState createState() => _ListCommentState();
 }
 
 //class
@@ -51,10 +51,10 @@ class Debouncer {
   }
 }
 
-class _ListReportDeptState extends State<ListReportDept> {
-  List<ReportDeptModel> reportDeptModels = List(); // set array
-  List<ReportDeptModel> filterReportDeptModels = List();
-  ReportDeptModel selectReportDeptModel;
+class _ListCommentState extends State<ListComment> {
+  List<ComplainAllModel> complainAllModels = List(); // set array
+  List<ComplainAllModel> filterComplainAllModels = List();
+  ComplainAllModel selectComplainAllModel;
 
   // Explicit
   int myIndex;
@@ -104,35 +104,26 @@ class _ListReportDeptState extends State<ListReportDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_comment.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
     // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
-    var item = result['data'];
+    var item = result['itemsData'];
     // print('item >> $item');
     int i = 0;
-    int len = (filterReportDeptModels.length);
+    int len = (filterComplainAllModels.length);
 
     for (var map in item) {
-      ReportDeptModel reportDeptModel = ReportDeptModel.fromJson(map);
+      ComplainAllModel complainAllModel = ComplainAllModel.fromJson(map);
       setState(() {
-        reportDeptModels.add(reportDeptModel);
-        filterReportDeptModels = reportDeptModels;
+        complainAllModels.add(complainAllModel);
+        filterComplainAllModels = complainAllModels;
       });
       // print(
-      //     ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
+      //     ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].rating}  ||  ${filterComplainAllModels[(len + i)].usermsg}');
     }
-    // print('Count row >> ${filterReportDeptModels.length}');
-  }
-
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw 'Could not launch $url';
-    }
+    // print('Count row >> ${filterComplainAllModels.length}');
   }
 
   Future<void> logOut() async {
@@ -175,7 +166,7 @@ class _ListReportDeptState extends State<ListReportDept> {
             return ListReportDeptDetail(
               index: 0,
               userModel: myUserModel,
-              dept: filterReportDeptModels[index].dept,
+              dept: filterComplainAllModels[index].subject,
               datestart: selectedStartDate,
               dateend: selectedEndDate,
             );
@@ -187,75 +178,39 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showData(int index) {
-    // print('index >> $filterReportDeptModels');
+    // print('index >> $filterComplainAllModels');
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.97,
+          width: MediaQuery.of(context).size.width * 0.85,
           child: Row(
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Card(
-                child: Container(
-                  height: 100.0,
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: Column(
-                    children: [
-                      Text(
-                        '[${filterReportDeptModels[index].code}] ',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(0xff, 16, 149, 161),
-                        ),
-                      ),
-                      Container(
-                        height: 15.0,
-                      ),
-                      Text(
-                        filterReportDeptModels[index].deptName,
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(0xff, 16, 149, 161),
-                        ),
-                      ),
-                    ],
+              Container(
+                width: MediaQuery.of(context).size.width * 0.30,
+                child: Text(
+                  filterComplainAllModels[index].department.toString() +
+                      ' : ' +
+                      filterComplainAllModels[index].problem.toString(),
+                  style: TextStyle(
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 16, 149, 161),
                   ),
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  child: Row(
-                    children: [
-                      AllJobbox(index),
-                      UnreadJobbox(index),
-                      InProcessJobbox(index),
-                      CompleteJobbox(index),
-                    ],
-                  )),
-              // Container(
-              //   width: MediaQuery.of(context).size.width * 0.18,
-              //   child: Row(
-              //     children: [detail_btn(index)],
-              //   ),
-              // )
+                width: MediaQuery.of(context).size.width * 0.65,
+                child: Text(
+                  filterComplainAllModels[index].usermsg,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    // fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(0xff, 0, 0, 0),
+                  ),
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget showName(int index) {
-    // print('showName');
-    return Row(
-      children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-          child: Text(
-            'Dept : ' + filterReportDeptModels[index].code,
-            style: MyStyle().h3bStyle,
           ),
         ),
       ],
@@ -271,7 +226,6 @@ class _ListReportDeptState extends State<ListReportDept> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           showData(index),
-          // showName(index),
         ],
       ),
     );
@@ -312,7 +266,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       await http.get(url).then((value) {
         setState(() {
           page = 1;
-          reportDeptModels.clear();
+          complainAllModels.clear();
           readReport();
         });
       });
@@ -340,10 +294,9 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: reportDeptModels.length,
+        itemCount: complainAllModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
-          return InkWell(
-            mouseCursor: MaterialStateMouseCursor.clickable,
+          return GestureDetector(
             child: Container(
               padding:
                   EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
@@ -385,6 +338,17 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
+  /*
+  Widget myLayout() {
+    return Column(
+      children: <Widget>[
+        searchForm(),
+        showProductItem(),
+      ],
+    );
+  }
+  */
+
   Widget searchFormTXT() {
     return Container(
       decoration: MyStyle().boxLightGray,
@@ -401,7 +365,7 @@ class _ListReportDeptState extends State<ListReportDept> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              reportDeptModels.clear();
+              complainAllModels.clear();
               readReport();
             });
           },
@@ -439,7 +403,14 @@ class _ListReportDeptState extends State<ListReportDept> {
           ),
         ),
         onTap: () {
-          // routeToListComplain(0);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportDept(
+              index: 0,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -657,188 +628,6 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
-  Widget AllJobbox(int index) {
-    // all product
-    return Container(
-      // width: MediaQuery.of(context).size.width * 0.45,
-      width: 190.0,
-      height: 110.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        hoverColor: Colors.blue.shade100,
-        child: Card(
-          color: Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      'เรื่องทั้งหมด',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      height: 15.0,
-                    ),
-                    Text(
-                      filterReportDeptModels[index].alljob + ' งาน',
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget UnreadJobbox(int index) {
-    // all product
-    return Container(
-      // width: MediaQuery.of(context).size.width * 0.45,
-      width: 190.0,
-      height: 110.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        hoverColor: Colors.blue.shade100,
-        child: Card(
-          color: Colors.red.shade500,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      'ยังไม่ตรวจสอบ',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      height: 15.0,
-                    ),
-                    Text(
-                      filterReportDeptModels[index].unread + ' งาน',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget InProcessJobbox(int index) {
-    // all product
-    return Container(
-      // width: MediaQuery.of(context).size.width * 0.45,
-      width: 190.0,
-      height: 110.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        hoverColor: Colors.blue.shade100,
-        child: Card(
-          color: Colors.orange.shade600,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      'ระหว่างดำเนินการ',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      height: 15.0,
-                    ),
-                    Text(
-                      filterReportDeptModels[index].inprocess + ' งาน',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget CompleteJobbox(int index) {
-    // all product
-    return Container(
-      // width: MediaQuery.of(context).size.width * 0.45,
-      width: 190.0,
-      height: 110.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        hoverColor: Colors.blue.shade100,
-        child: Card(
-          color: Colors.green.shade500,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: [
-                    Text(
-                      'ดำเนินการเสร็จสิ้น',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                    Container(
-                      height: 15.0,
-                    ),
-                    Text(
-                      filterReportDeptModels[index].complete + ' งาน',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget topMenu() {
     return Align(
       alignment: Alignment.centerLeft,
@@ -860,12 +649,6 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget searchForm() {
-    String memberId = myUserModel.id.toString();
-    String dept = myUserModel.department.toString();
-    String urlDL =
-        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
-    final uri = Uri.parse(urlDL);
-
     return Container(
       // decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
@@ -909,43 +692,6 @@ class _ListReportDeptState extends State<ListReportDept> {
           Column(
             children: [Text(''), submitButton()],
           ),
-          Column(
-            children: [
-              Text(''),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12,
-                // height: 80.0,
-                child: InkWell(
-                  mouseCursor: MaterialStateMouseCursor.clickable,
-                  child: Card(
-                    color: Colors.green.shade700,
-                    child: Container(
-                      padding: EdgeInsets.all(4.0),
-                      alignment: AlignmentDirectional(0.0, 0.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.download,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            ' รายงานสรุปผู้รับผิดชอบ',
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    _launchInBrowser(uri);
-                  },
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );
@@ -963,7 +709,7 @@ class _ListReportDeptState extends State<ListReportDept> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              reportDeptModels.clear();
+              complainAllModels.clear();
               readReport();
             });
           }),
@@ -971,7 +717,7 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showContent() {
-    return reportDeptModels.length == 0
+    return complainAllModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
@@ -991,7 +737,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปจากผู้รับผิดชอบ'),
+        title: Text('ข้อแนะนำเพิ่มเติม'),
         actions: <Widget>[
           // AddStaff(),
         ],

@@ -149,7 +149,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click profile');
+          // print('You click profile');
           // routeToListComplain(0);
         },
       ),
@@ -186,7 +186,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click product');
+          // print('You click product');
           routeToListComplain(0);
         },
       ),
@@ -223,7 +223,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click square logout');
+          // print('You click square logout');
           logOut();
         },
       ),
@@ -260,7 +260,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click logout');
+          // print('You click logout');
           logOut();
         },
       ),
@@ -306,7 +306,7 @@ class _HomeState extends State<Home> {
   //         ),
   //       ),
   //       onTap: () {
-  //         print('This is News');
+  //         // print('This is News');
   //         // int index;
   //         MaterialPageRoute materialPageRoute =
   //             MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -351,7 +351,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click listUser');
+          // print('You click listUser');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListFaq(
@@ -394,7 +394,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           routeToListComplain(0);
         },
       ),
@@ -431,7 +431,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListComplainAdmin(
@@ -475,7 +475,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListDept(
@@ -518,7 +518,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click listUser');
+          // print('You click listUser');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListUser(
@@ -561,7 +561,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click listUser');
+          // print('You click listUser');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListFaq(
@@ -606,7 +606,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click square logout');
+          // print('You click square logout');
           logOut();
         },
       ),
@@ -645,7 +645,7 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          print('You click square logout');
+          // print('You click square logout');
           logOut();
         },
       ),

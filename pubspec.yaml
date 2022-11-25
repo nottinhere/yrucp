@@ -49,6 +49,11 @@ dependencies:
   url_encoder: ^0.0.3
   flutter_switch: ^0.0.2
 
+  url_navigator: ^0.2.6
+  encrypt: ^5.0.1
+
+
+
   google_fonts:
 
 

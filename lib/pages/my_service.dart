@@ -94,7 +94,7 @@ class _MyServiceState extends State<MyService> {
   Future<void> readQRcode() async {
     try {
       qrString = await BarcodeScanner.scan();
-      print('QR code = $qrString');
+      // print('QR code = $qrString');
       if (qrString != null) {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -105,7 +105,7 @@ class _MyServiceState extends State<MyService> {
         Navigator.of(context).push(materialPageRoute);
       }
     } catch (e) {
-      print('e = $e');
+      // print('e = $e');
     }
   }
 

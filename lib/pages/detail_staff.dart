@@ -75,10 +75,10 @@ class _DetailStaffState extends State<DetailStaff> {
       // String url = '${MyStyle().getProductWhereId}$id';
       String url =
           'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
-      print('url = $url');
+      // print('url = $url');
       http.Response response = await http.get(url);
       var result = json.decode(response.body);
-      print('result = $result');
+      // print('result = $result');
 
       var itemProducts = result['itemsData'];
       for (var map in itemProducts) {
@@ -182,7 +182,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListComplain(2);
         },
       ),
@@ -195,7 +195,7 @@ class _DetailStaffState extends State<DetailStaff> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade600,
+          color: Color.fromARGB(255, 84, 122, 153),
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -213,7 +213,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListComplain(3);
         },
       ),
@@ -244,7 +244,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListComplain(1);
         },
       ),
@@ -264,7 +264,7 @@ class _DetailStaffState extends State<DetailStaff> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'ดำเนินการเรียบร้อบ',
+                  'ดำเนินการเสร็จสิ้น',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -275,7 +275,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -306,7 +306,38 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget cancelTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.yellow.shade900,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -328,6 +359,7 @@ class _DetailStaffState extends State<DetailStaff> {
         (complainAllModel.status == '3') ? inprocessTag() : Container(),
         (complainAllModel.status == '4') ? completeTag() : Container(),
         (complainAllModel.status == '5') ? incompleteTag() : Container(),
+        (complainAllModel.status == '6') ? cancelTag() : Container(),
         SizedBox(
           width: 5.0,
           height: 8.0,
@@ -352,23 +384,26 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget showAttachfile() {
     final uri = Uri.parse(complainAllModel.attachTarget);
-    print('uri >> $uri');
+    // print('uri >> $uri');
     return Container(
       width: MediaQuery.of(context).size.width * 0.08, //0.7 - 50,
       height: 100,
       child: GestureDetector(
         onTap: () => _launchInBrowser(uri),
-        child: Card(
-          color: Colors.blueGrey.shade50,
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                width: 65.0,
-                child: Image.asset(complainAllModel.attachIcon),
-              ),
-              Text('เปิดไฟล์แนบ'),
-            ],
+        child: InkWell(
+          mouseCursor: MaterialStateMouseCursor.clickable,
+          child: Card(
+            color: Colors.blueGrey.shade50,
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5.0),
+                  width: 65.0,
+                  child: Image.asset(complainAllModel.attachIcon),
+                ),
+                Text('เปิดไฟล์แนบ'),
+              ],
+            ),
           ),
         ),
       ),
@@ -376,121 +411,128 @@ class _DetailStaffState extends State<DetailStaff> {
   }
 
   Widget showResponsible() {
-    // print('_selectedDBHelper in >> $_selectedDBHelper');
+    // // print('_selectedDBHelper in >> $_selectedDBHelper');
 
     return Card(
-      child: Column(
-        children: [
-          SizedBox(height: 10),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-            child: Text(
-              'การนัดหมาย',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 16, 149, 161),
-                // decoration: TextDecoration.underline,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Color.fromARGB(235, 211, 211, 211), width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+              child: Text(
+                'การนัดหมาย',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 16, 149, 161),
+                  // decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-          new Divider(
-            color: Colors.green.shade300,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
-                height: 170,
-                child: Card(
-                  color: Colors.blueGrey.shade50,
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: 100.0,
-                        child: Image.asset('images/icon_clock.png'),
-                      ),
-                      Text('วันนัดหมาย'),
-                      Text(complainAllModel.appointdate +
-                          '  ' +
-                          complainAllModel.appointtime),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
-                height: 170,
-                child: Card(
-                  color: Colors.blueGrey.shade50,
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: 100.0,
-                        child: Image.asset('images/icon_location.png'),
-                      ),
-                      Text('สถานที่นัดหมาย'),
-                      Text(complainAllModel.location),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
-                height: 170,
-                child: Card(
-                  color: Colors.blueGrey.shade50,
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(8.0),
-                        width: 100.0,
-                        child: Image.asset('images/icon_staff.png'),
-                      ),
-                      Text('ผู้รับผิดชอบ'),
-                      Text(complainAllModel.staff_name),
-                    ],
-                  ),
-                ),
-              ),
-              // (complainAllModel.attachIcon == '-')
-              //     ? Container()
-              //     : showAttachfile(),
-            ],
-          ),
-          Container(
-            padding: new EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+            new Divider(
+              color: Colors.green.shade300,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  child: Text(
-                    'ผู้ช่วย :: ' + complainAllModel.helper_name,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      // fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(0xff, 0, 0, 0),
+                  width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                  height: 170,
+                  child: Card(
+                    color: Colors.blueGrey.shade50,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          width: 100.0,
+                          child: Image.asset('images/icon_clock.png'),
+                        ),
+                        Text('วันนัดหมาย'),
+                        Text(complainAllModel.appointdate +
+                            '  ' +
+                            complainAllModel.appointtime),
+                      ],
                     ),
                   ),
                 ),
                 Container(
-                  child: Text(
-                    'ข้อมูลเพิ่มเติม :: ' + complainAllModel.note,
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      // fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(0xff, 0, 0, 0),
+                  width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                  height: 170,
+                  child: Card(
+                    color: Colors.blueGrey.shade50,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          width: 100.0,
+                          child: Image.asset('images/icon_location.png'),
+                        ),
+                        Text('สถานที่นัดหมาย'),
+                        Text(complainAllModel.location),
+                      ],
                     ),
                   ),
                 ),
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.12, //0.7 - 50,
+                  height: 170,
+                  child: Card(
+                    color: Colors.blueGrey.shade50,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          width: 100.0,
+                          child: Image.asset('images/icon_staff.png'),
+                        ),
+                        Text('ผู้รับผิดชอบ'),
+                        Text(complainAllModel.staff_name),
+                      ],
+                    ),
+                  ),
+                ),
+                // (complainAllModel.attachIcon == '-')
+                //     ? Container()
+                //     : showAttachfile(),
               ],
             ),
-          ),
-        ],
+            Container(
+              padding: new EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Text(
+                      'ผู้ช่วย :: ' + complainAllModel.helper_name,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        // fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Text(
+                      'ข้อมูลเพิ่มเติม :: ' + complainAllModel.note,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        // fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(0xff, 0, 0, 0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
     // return Text('na');
@@ -505,6 +547,10 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget showHeader() {
     return Card(
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Color.fromARGB(235, 211, 211, 211), width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Container(
         // width: MediaQuery.of(context).size.width * 1.00,
         padding: new EdgeInsets.all(10.0),
@@ -905,6 +951,7 @@ class _DetailStaffState extends State<DetailStaff> {
             ),
           ),
           TextFormField(
+            readOnly: (complainAllModel.status == '4') ? true : false,
             onChanged: (value) {
               txtreply = value.trim();
             },
@@ -946,6 +993,7 @@ class _DetailStaffState extends State<DetailStaff> {
             ),
           ),
           TextFormField(
+            readOnly: (complainAllModel.status == '4') ? true : false,
             onChanged: (value) {
               txttousermsg = value.trim();
             },
@@ -973,38 +1021,46 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget showFormDeal() {
     return Card(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 10),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-            child: Text(
-              'ข้อมูลการเข้าปฎิบัติงาน',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 16, 149, 161),
-                // decoration: TextDecoration.underline,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Color.fromARGB(179, 22, 141, 11), width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 10),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+              child: Text(
+                'ข้อมูลการเข้าปฎิบัติงาน',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 16, 149, 161),
+                  // decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-          new Divider(
-            color: Colors.green.shade300,
-          ),
-          Row(
-            children: <Widget>[
-              showAppoint(),
-              showAppointStartdate(),
-              showAppointEnddate(),
-            ],
-          ),
-          // noteBox(),
-          replyBox(),
-          touserBox(),
+            new Divider(
+              color: Colors.green.shade300,
+            ),
+            Row(
+              children: <Widget>[
+                showAppoint(),
+                showAppointStartdate(),
+                showAppointEnddate(),
+              ],
+            ),
+            // noteBox(),
+            replyBox(),
+            touserBox(),
+            (complainAllModel.status == '4') ? Container() : submitButton(),
 
-          //  Row(children: <Widget>[priceBox(),priceBox(),],),
-          //  Row(children: <Widget>[noteBox()],),
-        ],
+            //  Row(children: <Widget>[priceBox(),priceBox(),],),
+            //  Row(children: <Widget>[noteBox()],),
+          ],
+        ),
       ),
     );
   }
@@ -1022,7 +1078,7 @@ class _DetailStaffState extends State<DetailStaff> {
           child: const Text('ลงเวลาเข้า'),
           onPressed: isButtonCheckinActive
               ? () {
-                  print('You click checkin');
+                  // print('You click checkin');
                   checkIn();
                   setState(() {
                     isButtonCheckinActive = false;
@@ -1096,7 +1152,7 @@ class _DetailStaffState extends State<DetailStaff> {
           child: const Text('ลงเวลาออก'),
           onPressed: (isButtonCheckoutActive && isButtonCheckinActive == false)
               ? () {
-                  print('You click checkout');
+                  // print('You click checkout');
                   checkOut();
                   setState(() {
                     isButtonCheckoutActive = false;
@@ -1175,7 +1231,7 @@ class _DetailStaffState extends State<DetailStaff> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
+            title: Text('ดำเนินการเรียบร้อย'),
             content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
@@ -1200,15 +1256,24 @@ class _DetailStaffState extends State<DetailStaff> {
         Container(
           margin: EdgeInsets.only(right: 30.0),
           child: ElevatedButton(
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.resolveWith<Color>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered))
+                    return Colors.blue.shade700; //<-- SEE HERE
+                  return null; // Defer to the widget's default.
+                },
+              ),
+            ),
             // color: Color.fromARGB(0xff, 13, 163, 93),
             onPressed: () {
               memberID = myUserModel.id.toString();
               var cpID = currentComplainAllModel.id;
-              print('memberId=$memberID&cpID=$cpID&reply=$txtreply');
+              // print('memberId=$memberID&cpID=$cpID&reply=$txtreply');
               submitThread();
             },
             child: Text(
-              'Submit',
+              'บันทึก',
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -1283,31 +1348,38 @@ class _DetailStaffState extends State<DetailStaff> {
 
   Widget feedbackBox() {
     return Card(
-      child: Column(
-        children: <Widget>[
-          SizedBox(height: 10),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-            child: Text(
-              'ข้อแนะนำจากผู้แจ้ง',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(0xff, 16, 149, 161),
-                // decoration: TextDecoration.underline,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Color.fromARGB(235, 211, 211, 211), width: 2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 10),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
+              child: Text(
+                'ข้อแนะนำจากผู้แจ้ง',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(0xff, 16, 149, 161),
+                  // decoration: TextDecoration.underline,
+                ),
               ),
             ),
-          ),
-          new Divider(
-            color: Colors.green.shade300,
-          ),
-          Row(
-            children: <Widget>[
-              showEvaluation(),
-              usermsgBox(),
-            ],
-          ),
-        ],
+            new Divider(
+              color: Colors.green.shade300,
+            ),
+            Row(
+              children: <Widget>[
+                showEvaluation(),
+                usermsgBox(),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1442,8 +1514,7 @@ class _DetailStaffState extends State<DetailStaff> {
         // showSubject(),
         showResponsible(),
         showFormDeal(),
-        submitButton(),
-        feedbackBox(),
+        // feedbackBox(),
 
         // showPhoto(),
       ],

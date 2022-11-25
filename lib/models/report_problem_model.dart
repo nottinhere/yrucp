@@ -1,7 +1,8 @@
-class ReportDeptModel {
+class ReportProblemModel {
+  String pId;
+  String problemName;
   String dept;
   String deptName;
-  String code;
   String countjob;
   String alljob;
   String unread;
@@ -12,10 +13,11 @@ class ReportDeptModel {
   String incomplete;
   String cancel;
 
-  ReportDeptModel(
-      {this.dept,
+  ReportProblemModel(
+      {this.pId,
+      this.problemName,
+      this.dept,
       this.deptName,
-      this.code,
       this.countjob,
       this.alljob,
       this.unread,
@@ -26,10 +28,11 @@ class ReportDeptModel {
       this.incomplete,
       this.cancel});
 
-  ReportDeptModel.fromJson(Map<String, dynamic> json) {
+  ReportProblemModel.fromJson(Map<String, dynamic> json) {
+    pId = json['p_id'];
+    problemName = json['ProblemName'];
     dept = json['dept'];
     deptName = json['deptName'];
-    code = json['code'];
     countjob = json['countjob'];
     alljob = json['alljob'];
     unread = json['unread'];
@@ -43,9 +46,10 @@ class ReportDeptModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['p_id'] = this.pId;
+    data['ProblemName'] = this.problemName;
     data['dept'] = this.dept;
     data['deptName'] = this.deptName;
-    data['code'] = this.code;
     data['countjob'] = this.countjob;
     data['alljob'] = this.alljob;
     data['unread'] = this.unread;

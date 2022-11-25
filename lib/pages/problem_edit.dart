@@ -68,7 +68,7 @@ class _EditProbState extends State<EditProb> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -87,7 +87,7 @@ class _EditProbState extends State<EditProb> {
   Future<void> readDepartment() async {
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -103,7 +103,7 @@ class _EditProbState extends State<EditProb> {
     setState(() {
       dataDV = itemDepartments;
     });
-    // print('dataDV >> $dataDV');
+    // // print('dataDV >> $dataDV');
   }
 
   Future<void> logOut() async {
@@ -208,13 +208,13 @@ class _EditProbState extends State<EditProb> {
   Future<void> submitThread() async {
     if (txtsubject.isEmpty || _mySelection == null) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String selectId = selectProbModel.pId.toString();
       try {
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=edit&subject=$txtsubject&dp_id=$_mySelection'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -227,8 +227,8 @@ class _EditProbState extends State<EditProb> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            title: Text('ดำเนินการเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -258,8 +258,8 @@ class _EditProbState extends State<EditProb> {
             onPressed: () {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtsubject&staff=$_mySelection');
+              // print(
+              //     'memberId=$memberID&selectId=$selectId&action=edit&name=$txtsubject&staff=$_mySelection');
 
               submitThread();
             },

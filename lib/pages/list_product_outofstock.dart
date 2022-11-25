@@ -82,7 +82,7 @@ class _ListProductState extends State<ListProductOutofstock> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -106,11 +106,11 @@ class _ListProductState extends State<ListProductOutofstock> {
     // }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    // print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListProduct ====>>>> $url');
-    // print('result ListProduct ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListProduct ====>>>> $url');
+    // // print('result ListProduct ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -151,7 +151,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListProduct(2);
         },
       ),
@@ -182,7 +182,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListProduct(3);
         },
       ),
@@ -213,7 +213,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListProduct(1);
         },
       ),
@@ -244,7 +244,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),
@@ -275,7 +275,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),
@@ -478,7 +478,7 @@ class _ListProductState extends State<ListProductOutofstock> {
               String url =
                   'http://ptnpharma.com/apisupplier/json_orderitem.php?memberId=$memberId&med_id=$med_id&status=$index';
               http.Response response = await http.get(url);
-              print('url OrderItem >>> $url');
+              // print('url OrderItem >>> $url');
             }),
       ],
     );
@@ -503,7 +503,7 @@ class _ListProductState extends State<ListProductOutofstock> {
               String url =
                   'http://ptnpharma.com/apisupplier/json_removeitem.php?memberId=$memberId&med_id=$med_id&status=$index';
               http.Response response = await http.get(url);
-              print('url RemoveItem >>> $url');
+              // print('url RemoveItem >>> $url');
             }),
       ],
     );
@@ -526,7 +526,7 @@ class _ListProductState extends State<ListProductOutofstock> {
         textStatus[index] = '';
         textButton[index] = 'ยกเลิกแล้ว';
         textTest  = 'ใช้ได้';
-        print('url value >>> $index >> ' + textStatus[index] + " >> " +textButton[index]);
+        // print('url value >>> $index >> ' + textStatus[index] + " >> " +textButton[index]);
       });
     }
 
@@ -554,14 +554,14 @@ class _ListProductState extends State<ListProductOutofstock> {
             String url =
                 'http://ptnpharma.com/apisupplier/json_removeitem.php?memberId=$memberId&med_id=$med_id';
             // http.Response response = await http.get(url);
-            print('url RemoveItem >>> $url');
+            // print('url RemoveItem >>> $url');
 
             // setState(() {
             // var textStatus = {index: ''};
             // var textButton = {index: 'ยกเลิกแล้ว'};
             // // textStatus[index] = '';
             // // textButton[index] = 'ยกเลิกแล้ว';
-            // print('url value >>> $index >> ' +
+            // // print('url value >>> $index >> ' +
             //     textStatus[index] +
             //     " >> " +
             //     textButton[index]);
@@ -796,7 +796,7 @@ class _ListProductState extends State<ListProductOutofstock> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -829,7 +829,7 @@ class _ListProductState extends State<ListProductOutofstock> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';

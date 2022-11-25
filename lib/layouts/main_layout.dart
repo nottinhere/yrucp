@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
-import 'side_bar.dart';
+import 'package:yrusv/layouts/side_bar.dart';
 import 'top_bar.dart';
 
 class MainLayout extends StatefulWidget {

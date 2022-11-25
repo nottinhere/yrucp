@@ -56,7 +56,7 @@ class _AddProbState extends State<AddProb> {
   Future<void> readDepartment() async {
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -72,7 +72,7 @@ class _AddProbState extends State<AddProb> {
     setState(() {
       dataDV = itemDepartments;
     });
-    print('dataDV >> $dataDV');
+    // print('dataDV >> $dataDV');
   }
 
   Widget showSubject() {
@@ -183,13 +183,13 @@ class _AddProbState extends State<AddProb> {
   Future<void> submitThread() async {
     if (txtsubject.isEmpty || _mySelection == null) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       try {
         memberID = myUserModel.id.toString();
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&action=add&subject=$txtsubject&dp_id=$_mySelection'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -203,7 +203,7 @@ class _AddProbState extends State<AddProb> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            content: Text('เพิ่มข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -231,7 +231,7 @@ class _AddProbState extends State<AddProb> {
             onPressed: () {
               // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('deptId=$deptID&action=add&name=$txtsubject');
+              // // print('deptId=$deptID&action=add&name=$txtsubject');
 
               submitThread();
             },

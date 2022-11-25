@@ -47,31 +47,7 @@ class _AddDeptState extends State<AddDept> {
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
-    setState(() {
-      readDepartment();
-    });
-  }
-
-  List dataDV;
-  Future<void> readDepartment() async {
-    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
-    print('urlDV >> $urlDV');
-
-    http.Response response = await http.get(urlDV);
-    var result = json.decode(response.body);
-    var itemDivisions = result['itemsData'];
-
-    setState(() {
-      for (var map in itemDivisions) {
-        String dvID = map['dv_id'];
-        String dvName = map['dv_name'];
-      } // for
-    });
-
-    setState(() {
-      dataDV = itemDivisions;
-    });
-    print('dataDV >> $dataDV');
+    setState(() {});
   }
 
   Widget showSubject() {
@@ -197,10 +173,10 @@ class _AddDeptState extends State<AddDept> {
 
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&action=add&name=$txtname&code=$txtcode'; //'';
-        print('submitURL >> $url');
-        // await http.get(url).then((value) {
-        //   confirmSubmit();
-        // });
+        // print('submitURL >> $url');
+        await http.get(url).then((value) {
+          confirmSubmit();
+        });
       } catch (e) {}
     }
   }
@@ -210,8 +186,8 @@ class _AddDeptState extends State<AddDept> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            title: Text('ดำเนินการเรียบร้อย'),
+            content: Text('เพิ่มข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -239,7 +215,7 @@ class _AddDeptState extends State<AddDept> {
             onPressed: () {
               // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('deptId=$deptID&action=add&name=$txtname');
+              // // print('deptId=$deptID&action=add&name=$txtname');
 
               submitThread();
             },

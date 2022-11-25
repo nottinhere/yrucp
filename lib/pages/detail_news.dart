@@ -40,7 +40,7 @@ class _DetailState extends State<DetailNews> {
 
   Future<void> getNewsWhereID() async {
     String url = 'http://ptnpharma.com/apisupplier/json_supnewsdetail.php';
-    print('urlNews >> $url');
+    // print('urlNews >> $url');
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -54,7 +54,7 @@ class _DetailState extends State<DetailNews> {
       String subject = newsModel.subject;
       String postdate = newsModel.postdate;
       String detail = newsModel.detail;
-      print('subjectNews >> $subject');
+      // print('subjectNews >> $subject');
       setState(() {
         //promoteModels.add(promoteModel); // push ค่าลง arra
         subjectNews = subject;

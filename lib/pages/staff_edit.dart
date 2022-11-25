@@ -80,7 +80,7 @@ class _EditUserState extends State<EditUser> {
   Future<void> readDepartment() async {
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_department.php';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -96,14 +96,14 @@ class _EditUserState extends State<EditUser> {
     setState(() {
       dataDV = itemDepartments;
     });
-    // print('dataDV >> $dataDV');
+    // // print('dataDV >> $dataDV');
   }
 
   List dataLV;
   Future<void> readUserlevel() async {
     String urlLV =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_userlevel.php';
-    print('urlLV >> $urlLV');
+    // print('urlLV >> $urlLV');
 
     http.Response response = await http.get(urlLV);
     var result = json.decode(response.body);
@@ -119,7 +119,7 @@ class _EditUserState extends State<EditUser> {
     setState(() {
       dataLV = itemUserlevel;
     });
-    print('dataLV >> $dataLV');
+    // print('dataLV >> $dataLV');
   }
 
   List dataST;
@@ -138,7 +138,7 @@ class _EditUserState extends State<EditUser> {
       txtcontact = selectUserModel.personContact;
       isToggledLevel = (selectUserModel.level == 1) ? true : false;
 
-      print('selectUserModel >> $selectUserModel');
+      // print('selectUserModel >> $selectUserModel');
       _mySelection = (selectUserModel.department == '-')
           ? null
           : selectUserModel.department.toString();
@@ -151,15 +151,16 @@ class _EditUserState extends State<EditUser> {
 
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_resetpassword.php?memberId=$memberId&selectId=$selectId';
-    print('url >> $urlST');
+    // print('url >> $urlST');
     http.Response response = await http.get(urlST);
+    Navigator.of(context, rootNavigator: true).pop();
   }
 
   Widget cancelButton() {
     return TextButton(
       child: Text('Cancel'),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -365,7 +366,7 @@ class _EditUserState extends State<EditUser> {
                           primary: Colors.orangeAccent // Background color
                           ),
                       onPressed: () {
-                        print('Reset password');
+                        // print('Reset password');
                         confirmChange();
                       },
                       child: const Text(
@@ -419,14 +420,14 @@ class _EditUserState extends State<EditUser> {
         txtcontact.isEmpty ||
         _mySelection == null) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String selectId = selectUserModel.id.toString();
 
       try {
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection&isToggledLevel=$isToggledLevel'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -440,7 +441,7 @@ class _EditUserState extends State<EditUser> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -470,8 +471,8 @@ class _EditUserState extends State<EditUser> {
             onPressed: () {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
+              // print(
+              //     'memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection');
 
               submitThread();
             },

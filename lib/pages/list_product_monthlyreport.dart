@@ -80,7 +80,7 @@ class _ListProductState extends State<ListProductReport> {
           scrollController.position.maxScrollExtent) {
         page++;
         readData();
-        //  print('in the end');
+        //  // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -104,11 +104,11 @@ class _ListProductState extends State<ListProductReport> {
     // }
 
     http.Response response = await http.get(url);
-    print('url readData ++++>>> $url');
+    // print('url readData ++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListProduct ====>>>> $url');
-    print('result ListProduct ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListProduct ====>>>> $url');
+    // print('result ListProduct ========>>>>> $result');
     var itemProducts = result['itemsData'];
 
     for (var map in itemProducts) {
@@ -325,7 +325,7 @@ class _ListProductState extends State<ListProductReport> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productReportModel.clear();

@@ -47,30 +47,8 @@ class _AddFaqState extends State<AddFaq> {
     super.initState();
     myUserModel = widget.userModel;
     setState(() {
-      readFaq();
+      // readFaq();
     });
-  }
-
-  List dataDV;
-  Future<void> readFaq() async {
-    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
-    print('urlDV >> $urlDV');
-
-    http.Response response = await http.get(urlDV);
-    var result = json.decode(response.body);
-    var itemDivisions = result['itemsData'];
-
-    setState(() {
-      for (var map in itemDivisions) {
-        String dvID = map['dv_id'];
-        String dvName = map['dv_name'];
-      } // for
-    });
-
-    setState(() {
-      dataDV = itemDivisions;
-    });
-    print('dataDV >> $dataDV');
   }
 
   Widget mySizebox() {
@@ -180,13 +158,13 @@ class _AddFaqState extends State<AddFaq> {
   Future<void> submitThread() async {
     if (txtquestion.isEmpty || txtanswer.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String memberID = myUserModel.id.toString();
       try {
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&action=add&question=$txtquestion&answer=$txtanswer'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -199,8 +177,8 @@ class _AddFaqState extends State<AddFaq> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            title: Text('แก้ไขเรียบร้อย'),
+            content: Text('เพิ่มข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -228,7 +206,7 @@ class _AddFaqState extends State<AddFaq> {
             onPressed: () {
               // var faqID = myFaqModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('faqId=$faqID&action=add&name=$txtname');
+              // // print('faqId=$faqID&action=add&name=$txtname');
 
               submitThread();
             },

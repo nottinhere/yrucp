@@ -71,7 +71,7 @@ class _EditDeptState extends State<EditDept> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_department.php?selectId=$selectId';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -112,7 +112,7 @@ class _EditDeptState extends State<EditDept> {
     String selectId = selectDeptModel.dpId.toString();
     String urlSTH =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?dept=$selectId&level=2';
-    // print('urlSTH >> $urlSTH');
+    // // print('urlSTH >> $urlSTH');
 
     http.Response response = await http.get(urlSTH);
     var result = json.decode(response.body);
@@ -126,7 +126,7 @@ class _EditDeptState extends State<EditDept> {
         _mySelection = personID;
       }
     });
-    print('_mySelection >> $_mySelection');
+    // print('_mySelection >> $_mySelection');
   }
 
   Future<void> logOut() async {
@@ -329,7 +329,7 @@ class _EditDeptState extends State<EditDept> {
   Future<void> submitThread() async {
     if (txtcode.isEmpty || txtname.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String selectId = selectDeptModel.dpId.toString();
       txttoken = txttoken.replaceAll('+', '%2B'); //   (text: txttoken);
@@ -337,7 +337,7 @@ class _EditDeptState extends State<EditDept> {
         memberID = myUserModel.id.toString();
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_department.php?memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&code=$txtcode&token=$txttoken&curHead=$currentHeader&newHead=$_mySelection'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -350,8 +350,8 @@ class _EditDeptState extends State<EditDept> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            title: Text('ดำเนินการเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -381,8 +381,8 @@ class _EditDeptState extends State<EditDept> {
             onPressed: () {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&staff=$_mySelection');
+              // print(
+              //     'memberId=$memberID&selectId=$selectId&action=edit&name=$txtname&staff=$_mySelection');
 
               submitThread();
             },

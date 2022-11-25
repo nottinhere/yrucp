@@ -87,7 +87,7 @@ class _ListComplainState extends State<ListComplain> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -124,7 +124,7 @@ class _ListComplainState extends State<ListComplain> {
       url =
           'https://app.oss.yru.ac.th/yrusv/api/json_data_complain.php?memberId=$memberId&level=$memberLV&dept=$memberDP&searchKey=$searchString&page=$page&sort=$sort';
 
-    print('url >> $url');
+    // print('url >> $url');
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -140,20 +140,20 @@ class _ListComplainState extends State<ListComplain> {
         complainAllModels.add(complainAllModel);
         filterComplainAllModels = complainAllModels;
       });
-      print(
-          ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
+      // print(
+      //     ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
 
       i = i + 1;
     }
   }
 
   Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
+    // print('Here is updateDatalist function');
 
     String id = filterComplainAllModels[index].id.toString();
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
-    // print('url = $url');
+    // // print('url = $url');
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
 
@@ -162,6 +162,12 @@ class _ListComplainState extends State<ListComplain> {
       setState(() {
         complainAllModel = ComplainAllModel.fromJson(map);
         filterComplainAllModels[index].staff_name = complainAllModel.staff_name;
+
+        filterComplainAllModels[index].subject = complainAllModel.subject;
+        filterComplainAllModels[index].department = complainAllModel.department;
+        filterComplainAllModels[index].problem = complainAllModel.problem;
+        filterComplainAllModels[index].postdate = complainAllModel.postdate;
+
         filterComplainAllModels[index].appointdate =
             complainAllModel.appointdate;
         filterComplainAllModels[index].appointtime =
@@ -237,7 +243,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListComplain(2);
         },
       ),
@@ -250,7 +256,9 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade600,
+          //color: Colors.blue.shade600,
+          color: Color.fromARGB(255, 84, 122, 153),
+
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -268,8 +276,132 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListComplain(3);
+        },
+      ),
+    );
+  }
+
+  Widget inprocessTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.orange.shade800,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'กำลังดำเนินการ',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click new item');
+          // routeToListComplain(1);
+        },
+      ),
+    );
+  }
+
+  Widget completeTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.green.shade800,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ดำเนินการเสร็จสิ้น',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget incompleteTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.blue.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  'ไม่สามารถนำเนินการได้',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget cancelTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.yellow.shade900,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
         },
       ),
     );
@@ -279,7 +411,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 0) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -313,7 +446,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.13,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -347,7 +481,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.11,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -381,7 +516,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.14,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -415,7 +551,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 4) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
@@ -465,138 +602,48 @@ class _ListComplainState extends State<ListComplain> {
     );
   }
 
-  Widget inprocessTag() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.08,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.orange.shade800,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'กำลังดำเนินการ',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click new item');
-          // routeToListComplain(1);
-        },
-      ),
-    );
-  }
-
-  Widget completeTag() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.08,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.green.shade800,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'ดำเนินการเรียบร้อบ',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click not receive');
-          // routeToListComplain(4);
-        },
-      ),
-    );
-  }
-
-  Widget incompleteTag() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.08,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.blue.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'ไม่สามารถนำเนินการได้',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click not receive');
-          // routeToListComplain(4);
-        },
-      ),
-    );
-  }
-
-  Widget cancelTag(index) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.20,
-      // height: 80.0,
-      child: GestureDetector(
-        child: Card(
-          color: Colors.red.shade800,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Column(
-              children: <Widget>[
-                Text(
-                  filterComplainAllModels[index].textstatus,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          print('You click not receive');
-          // routeToListComplain(4);
-        },
-      ),
-    );
-  }
+  // Widget cancelTag(index) {
+  //   return Container(
+  //     width: MediaQuery.of(context).size.width * 0.20,
+  //     // height: 80.0,
+  //     child: GestureDetector(
+  //       child: Card(
+  //         color: Colors.yellow.shade600,
+  //         child: Container(
+  //           padding: EdgeInsets.all(4.0),
+  //           alignment: AlignmentDirectional(0.0, 0.0),
+  //           child: Column(
+  //             children: <Widget>[
+  //               Text(
+  //                 filterComplainAllModels[index].textstatus,
+  //                 style: TextStyle(
+  //                     fontSize: 13,
+  //                     fontWeight: FontWeight.bold,
+  //                     color: Colors.white),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       onTap: () {
+  //         // print('You click not receive');
+  //         // routeToListComplain(4);
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget L1_btn(index) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: (filterComplainAllModels[index].status == '4')
+            ? null
+            : MaterialStateMouseCursor.clickable,
         child: Card(
           color: (filterComplainAllModels[index].status == '4')
-              ? Colors.blue.shade200
+              ? Colors.grey.shade500
               : Colors.blue.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
@@ -619,7 +666,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           if (filterComplainAllModels[index].status == '4') {
             null;
           } else {
@@ -647,7 +694,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -671,7 +719,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You are staff');
+          // print('You are staff');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return DetailStaff(
@@ -695,7 +743,8 @@ class _ListComplainState extends State<ListComplain> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.09,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -719,7 +768,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return Detail(
@@ -756,6 +805,9 @@ class _ListComplainState extends State<ListComplain> {
             : Container(),
         (filterComplainAllModels[index].status == '5')
             ? incompleteTag()
+            : Container(),
+        (filterComplainAllModels[index].status == '6')
+            ? cancelTag()
             : Container(),
         SizedBox(
           width: 5.0,
@@ -1040,7 +1092,7 @@ class _ListComplainState extends State<ListComplain> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         complainAllModels.clear();
@@ -1073,7 +1125,7 @@ class _ListComplainState extends State<ListComplain> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -1094,7 +1146,7 @@ class _ListComplainState extends State<ListComplain> {
               icon: Icon(Icons.refresh), //`Icon` to display
               label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
               onPressed: () {
-                print('searchString ===>>> $searchString');
+                // print('searchString ===>>> $searchString');
                 setState(() {
                   page = 1;
                   // sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -1109,7 +1161,7 @@ class _ListComplainState extends State<ListComplain> {
               icon: Icon(Icons.search_off_sharp), //`Icon` to display
               label: Text('ล้างการค้นหา'), //`Text` to display
               onPressed: () {
-                print('searchString ===>>> $searchString');
+                // print('searchString ===>>> $searchString');
                 setState(() {
                   page = 1;
                   // sort = (sort == 'asc') ? 'desc' : 'asc';

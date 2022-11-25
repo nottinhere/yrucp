@@ -50,7 +50,7 @@ class Debouncer {
   Timer timer;
 
   DateTime selectedStartDate =
-      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+      DateTime.now().add(Duration(days: -60)); //  = DateTime.now()
   DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
 
   //constructor
@@ -83,7 +83,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
       Debouncer(milliseconds: 500); // ตั้งค่า เวลาที่จะ delay
   bool statusStart = true;
   DateTime selectedStartDate =
-      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+      DateTime.now().add(Duration(days: -60)); //  = DateTime.now()
   DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
 
   // Method
@@ -110,7 +110,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -128,7 +128,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
     // Admin view all job
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_complain_by_user.php?memberId=$memberId&staff=$staffID&start=$selectedStartDate&end=$selectedEndDate&page=$page&sort=$sort';
-    print('url >> $url');
+    // print('url >> $url');
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -144,20 +144,20 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
         complainAllModels.add(complainAllModel);
         filterComplainAllModels = complainAllModels;
       });
-      print(
-          ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
+      // print(
+      //     ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
 
       i = i + 1;
     }
   }
 
   Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
+    // print('Here is updateDatalist function');
 
     String id = filterComplainAllModels[index].id.toString();
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
-    // print('url = $url');
+    // // print('url = $url');
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
 
@@ -241,7 +241,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListComplain(2);
         },
       ),
@@ -272,7 +272,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListComplain(3);
         },
       ),
@@ -493,7 +493,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListComplain(1);
         },
       ),
@@ -513,7 +513,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'ดำเนินการเรียบร้อบ',
+                  'ดำเนินการเสร็จสิ้น',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -524,7 +524,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -555,7 +555,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -586,7 +586,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -623,7 +623,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           if (filterComplainAllModels[index].status == '4') {
             null;
           } else {
@@ -675,7 +675,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You are staff');
+          // print('You are staff');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return DetailStaff(
@@ -723,7 +723,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return Detail(
@@ -1088,7 +1088,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -1109,7 +1109,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
               icon: Icon(Icons.refresh), //`Icon` to display
               label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
               onPressed: () {
-                print('searchString ===>>> $searchString');
+                // print('searchString ===>>> $searchString');
                 setState(() {
                   page = 1;
                   // sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -1124,7 +1124,7 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
               icon: Icon(Icons.search_off_sharp), //`Icon` to display
               label: Text('ล้างการค้นหา'), //`Text` to display
               onPressed: () {
-                print('searchString ===>>> $searchString');
+                // print('searchString ===>>> $searchString');
                 setState(() {
                   page = 1;
                   // sort = (sort == 'asc') ? 'desc' : 'asc';

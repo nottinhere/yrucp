@@ -59,7 +59,7 @@ class _DetailCartState extends State<DetailCart> {
       Map<String, dynamic> priceListMap = map['price_list'];
 
       Map<String, dynamic> sizeSmap = priceListMap['s'];
-      print(sizeSmap);
+      // print(sizeSmap);
 
       if (sizeSmap == null) {
         sMap.add({'lable': ''});
@@ -209,8 +209,8 @@ class _DetailCartState extends State<DetailCart> {
     return TextButton(
       child: Text('OK'),
       onPressed: () {
-        print(
-            'productID = $productID ,unitSize = $unitSize ,memberID = $memberID, newQTY = $newQTY');
+        // print(
+        //     'productID = $productID ,unitSize = $unitSize ,memberID = $memberID, newQTY = $newQTY');
         editDetailCart(productID, unitSize, memberID);
         Navigator.of(context).pop();
       },
@@ -278,7 +278,7 @@ class _DetailCartState extends State<DetailCart> {
     String unitSize = size;
     String memberID = myUserModel.id.toString();
 
-    print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
+    // print('productID = $productID ,unitSize = $unitSize ,memberID = $memberID');
 
     String url =
         'http://ptnpharma.com/apisupplier/json_removeitemincart.php?productID=$productID&unitSize=$unitSize&memberID=$memberID';

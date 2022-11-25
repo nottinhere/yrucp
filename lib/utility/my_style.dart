@@ -56,7 +56,7 @@ class MyStyle {
   String readProductWhereMode =
       'http://www.ptnpharma.com/apisupplier/json_product.php?searchKey=';
   String getUserWhereUserAndPass =
-      'https://app.oss.yru.ac.th/yrusv/api/json_authen.php'; // json_login.php
+      'https://app.oss.yru.ac.th/yrusv/api/json_chkauth.php'; // json_login.php
   String getProductWhereId =
       'http://www.ptnpharma.com/apisupplier/json_productdetail.php?id=';
 

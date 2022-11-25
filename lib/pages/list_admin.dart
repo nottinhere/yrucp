@@ -84,7 +84,7 @@ class _ListComplainState extends State<ListComplain> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -110,11 +110,11 @@ class _ListComplainState extends State<ListComplain> {
     }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    // print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListComplain ====>>>> $url');
-    // print('result ListComplain ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListComplain ====>>>> $url');
+    // // print('result ListComplain ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -205,7 +205,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListComplain(2);
         },
       ),
@@ -236,7 +236,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListComplain(3);
         },
       ),
@@ -267,7 +267,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListComplain(1);
         },
       ),
@@ -287,7 +287,7 @@ class _ListComplainState extends State<ListComplain> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'ดำเนินการเรียบร้อบ',
+                  'ดำเนินการเสร็จสิ้น',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -298,7 +298,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -329,7 +329,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -360,7 +360,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -391,7 +391,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return Detail(
@@ -436,7 +436,7 @@ class _ListComplainState extends State<ListComplain> {
           ),
         ),
         onTap: () {
-          print('You are staff');
+          // print('You are staff');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return DetailStaff(
@@ -716,7 +716,7 @@ class _ListComplainState extends State<ListComplain> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         complainAllModels.clear();
@@ -749,7 +749,7 @@ class _ListComplainState extends State<ListComplain> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -768,7 +768,7 @@ class _ListComplainState extends State<ListComplain> {
 
   Future<void> readCart() async {
     String memberId = myUserModel.id.toString();
-    print(memberId);
+    // print(memberId);
     String url =
         'http://ptnpharma.com/apisupplier/json_loadmycart.php?memberId=$memberId';
 

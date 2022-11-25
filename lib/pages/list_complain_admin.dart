@@ -89,7 +89,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -115,11 +115,11 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    // print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListComplain ====>>>> $url');
-    // print('result ListComplain ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListComplain ====>>>> $url');
+    // // print('result ListComplain ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -140,20 +140,20 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         complainAllModels.add(complainAllModel);
         filterComplainAllModels = complainAllModels;
       });
-      print(
-          ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
+      // print(
+      //     ' >> ${len} =>($i)  ${filterComplainAllModels[(len + i)].id}  ||  ${filterComplainAllModels[(len + i)].subject}');
 
       i = i + 1;
     }
   }
 
   Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
+    // print('Here is updateDatalist function');
 
     String id = filterComplainAllModels[index].id.toString();
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
-    // print('url = $url');
+    // // print('url = $url');
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
 
@@ -226,7 +226,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListComplain(2);
         },
       ),
@@ -239,7 +239,9 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.blue.shade600,
+          //color: Colors.blue.shade600,
+          color: Color.fromARGB(255, 84, 122, 153),
+
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -257,7 +259,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListComplain(3);
         },
       ),
@@ -288,7 +290,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListComplain(1);
         },
       ),
@@ -308,7 +310,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
             child: Column(
               children: <Widget>[
                 Text(
-                  'ดำเนินการเรียบร้อบ',
+                  'ดำเนินการเสร็จสิ้น',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -319,7 +321,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -350,27 +352,27 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
     );
   }
 
-  Widget cancelTag(index) {
+  Widget cancelTag() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.20,
+      width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.red.shade800,
+          color: Colors.yellow.shade900,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Text(
-                  filterComplainAllModels[index].textstatus,
+                  "ยกเลิกโดยผู้ใช้งาน",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -381,7 +383,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListComplain(4);
         },
       ),
@@ -392,7 +394,8 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -416,7 +419,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You are boss');
+          // print('You are boss');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return DetailStaff(
@@ -442,7 +445,8 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -466,7 +470,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           ),
         ),
         onTap: () {
-          print('You are staff');
+          // print('You are staff');
           confirmDelete(index);
         },
       ),
@@ -527,7 +531,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_deletecomplain.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
-    print('selectId = $selectId  ,url = $url');
+    // print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
       setState(() {
@@ -844,7 +848,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         complainAllModels.clear();
@@ -877,7 +881,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -895,7 +899,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
           icon: Icon(Icons.refresh), //`Icon` to display
           label: Text('รีเฟรชข้อมูลล่าสุด'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -914,7 +918,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Future<void> readCart() async {
     String memberId = myUserModel.id.toString();
-    print(memberId);
+    // print(memberId);
     String url =
         'http://ptnpharma.com/apisupplier/json_loadmycart.php?memberId=$memberId';
 

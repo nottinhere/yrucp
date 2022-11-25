@@ -66,17 +66,17 @@ class _EditFaqState extends State<EditFaq> {
     String selectId = selectFaqModel.id.toString();
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_faq.php?memberId=$memberId&selectId=$selectId';
-    print('urlST >> $urlST');
+    // print('urlST >> $urlST');
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
-    print('result >> $result');
+    // print('result >> $result');
 
     setState(() {
       Map<String, dynamic> map = result['data'];
       FaqModel selectFaqModel = FaqModel.fromJson(map);
       txtquestion = selectFaqModel.question;
       txtanswer = selectFaqModel.answer;
-      print('$txtquestion >> $txtanswer');
+      // print('$txtquestion >> $txtanswer');
     });
   }
 
@@ -94,6 +94,14 @@ class _EditFaqState extends State<EditFaq> {
   }
 
   Widget formBox() {
+    String showquestion = selectFaqModel.question.toString();
+    String showanswer = selectFaqModel.answer.toString();
+
+    // // print('question >> ' + selectFaqModel.question);
+    // // print('answer >> ' + selectFaqModel.answer);
+
+    // print('showquestion >> ' + showquestion);
+    // print('showanswer >> ' + showanswer);
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
@@ -112,8 +120,7 @@ class _EditFaqState extends State<EditFaq> {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: TextFormField(
                       style: TextStyle(color: Colors.black),
-                      initialValue:
-                          selectFaqModel.question, // set default value
+                      initialValue: showquestion, // set default value
                       onChanged: (string) {
                         txtquestion = string.trim();
                       },
@@ -154,7 +161,7 @@ class _EditFaqState extends State<EditFaq> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       style: TextStyle(color: Colors.black),
-                      initialValue: selectFaqModel.answer, // set default value
+                      initialValue: showanswer, // set default value
                       onChanged: (string) {
                         txtanswer = string.trim();
                       },
@@ -194,14 +201,14 @@ class _EditFaqState extends State<EditFaq> {
   Future<void> submitThread() async {
     if (txtquestion.isEmpty || txtanswer.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       String selectId = selectFaqModel.id.toString();
 
       try {
         String url =
             'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer'; //'';
-        print('submitURL >> $url');
+        // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();
         });
@@ -214,8 +221,8 @@ class _EditFaqState extends State<EditFaq> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
-            content: Text('แก้ไขรายชื่อเรียบร้อย'),
+            title: Text('ดำเนินการเรียบร้อย'),
+            content: Text('แก้ไขข้อมูลเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
@@ -245,8 +252,8 @@ class _EditFaqState extends State<EditFaq> {
             onPressed: () {
               memberID = myUserModel.id.toString();
               // var cpID = currentComplainAllModel.id;
-              print(
-                  'memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer');
+              // print(
+              //     'memberId=$memberID&selectId=$selectId&action=edit&question=$txtquestion&answer=$txtanswer');
 
               submitThread();
             },

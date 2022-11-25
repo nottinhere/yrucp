@@ -77,7 +77,7 @@ class _ListProductAlertState extends State<ListProductAlert> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -98,11 +98,11 @@ class _ListProductAlertState extends State<ListProductAlert> {
     }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    // print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListProduct ====>>>> $url');
-    // print('result ListProduct ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListProduct ====>>>> $url');
+    // // print('result ListProduct ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -339,7 +339,7 @@ class _ListProductAlertState extends State<ListProductAlert> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -372,7 +372,7 @@ class _ListProductAlertState extends State<ListProductAlert> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -391,7 +391,7 @@ class _ListProductAlertState extends State<ListProductAlert> {
 
   Future<void> readCart() async {
     String memberId = myUserModel.id.toString();
-    print(memberId);
+    // print(memberId);
     String url =
         'http://ptnpharma.com/apisupplier/json_loadmycart.php?memberId=$memberId';
 

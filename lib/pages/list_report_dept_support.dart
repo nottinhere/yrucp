@@ -7,14 +7,16 @@ import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/report_dept_model.dart';
+import 'package:yrusv/models/report_problem_model.dart';
+import 'package:yrusv/models/report_staff_model.dart';
+
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_problem.dart';
-import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
-import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_dept_rating.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -23,13 +25,13 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ListReportDept extends StatefulWidget {
+class ListReportSelectDept extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListReportSelectDept({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListReportDeptState createState() => _ListReportDeptState();
+  _ListReportSelectDeptState createState() => _ListReportSelectDeptState();
 }
 
 //class
@@ -51,10 +53,16 @@ class Debouncer {
   }
 }
 
-class _ListReportDeptState extends State<ListReportDept> {
+class _ListReportSelectDeptState extends State<ListReportSelectDept> {
   List<ReportDeptModel> reportDeptModels = List(); // set array
   List<ReportDeptModel> filterReportDeptModels = List();
   ReportDeptModel selectReportDeptModel;
+
+  List<ReportProblemModel> reportProblemModels = List(); // set array
+  List<ReportProblemModel> filterReportProblemModels = List();
+
+  List<ReportStaffModel> reportStaffModels = List(); // set array
+  List<ReportStaffModel> filterReportStaffModels = List();
 
   // Explicit
   int myIndex;
@@ -87,6 +95,8 @@ class _ListReportDeptState extends State<ListReportDept> {
 
     setState(() {
       readReport(); // read  ข้อมูลมาแสดง
+      readReportPB();
+      readReportST();
     });
   }
 
@@ -102,9 +112,10 @@ class _ListReportDeptState extends State<ListReportDept> {
 
   Future<void> readReport() async {
     String memberId = myUserModel.id.toString();
+    String dept = myUserModel.department.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
     // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -124,6 +135,60 @@ class _ListReportDeptState extends State<ListReportDept> {
       //     ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
     }
     // print('Count row >> ${filterReportDeptModels.length}');
+  }
+
+  Future<void> readReportPB() async {
+    String memberId = myUserModel.id.toString();
+    String dept = myUserModel.department.toString();
+
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_problem.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+    // print('urlDV >> $urlDV');
+
+    http.Response response = await http.get(urlDV);
+    var result = json.decode(response.body);
+    var item = result['data'];
+    // print('item >> $item');
+    int i = 0;
+    int len = (filterReportProblemModels.length);
+
+    for (var map in item) {
+      ReportProblemModel reportProblemModel = ReportProblemModel.fromJson(map);
+      setState(() {
+        reportProblemModels.add(reportProblemModel);
+        filterReportProblemModels = reportProblemModels;
+      });
+      // print(
+      //     ' >> ${len} =>($i)  ${filterReportProblemModels[(len + i)].dept}  ||  ${filterReportProblemModels[(len + i)].deptName}');
+    }
+    // print('Count row >> ${filterReportProblemModels.length}');
+  }
+
+  Future<void> readReportST() async {
+    String memberId = myUserModel.id.toString();
+    String dept = myUserModel.department.toString();
+
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_staff.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+    // print('urlDV >> $urlDV');
+
+    http.Response response = await http.get(urlDV);
+    var result = json.decode(response.body);
+    var item = result['data'];
+    // print('item >> $item');
+    int i = 0;
+    int len = (filterReportStaffModels.length);
+
+    for (var map in item) {
+      ReportStaffModel reportStaffModel = ReportStaffModel.fromJson(map);
+      setState(() {
+        reportStaffModels.add(reportStaffModel);
+        filterReportStaffModels = reportStaffModels;
+      });
+      // print(
+      //     ' >> ${len} =>($i)  ${filterReportStaffModels[(len + i)].dept}  ||  ${filterReportStaffModels[(len + i)].deptName}');
+    }
+    // print('Count row >> ${filterReportStaffModels.length}');
   }
 
   Future<void> _launchInBrowser(Uri url) async {
@@ -277,6 +342,423 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
+  Widget showProblemItem() {
+    return Expanded(
+      child: ListView.builder(
+        controller: scrollController,
+        itemCount: reportProblemModels.length,
+        itemBuilder: (BuildContext buildContext, int index) {
+          return InkWell(
+            mouseCursor: MaterialStateMouseCursor.clickable,
+            child: Container(
+              padding:
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
+              child: Card(
+                // color: Color.fromRGBO(235, 254, 255, 1.0),
+
+                child: Container(
+                  decoration: myBoxDecoration(),
+                  padding: EdgeInsets.only(bottom: 2.0, top: 2.0),
+                  child: Row(
+                    children: <Widget>[
+                      showTextPB(index),
+                      // showImage(index),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Detail(
+              //     productAllModel: filterProductAllModels[index],
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget showDataPB(int index) {
+    // print('index >> $filterReportProblemModels');
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.97,
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Card(
+                child: Container(
+                  height: 70.0,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  child: Column(
+                    children: [
+                      Text(
+                        '${filterReportProblemModels[index].problemName} ',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(0xff, 16, 149, 161),
+                        ),
+                      ),
+                      Container(
+                        height: 15.0,
+                      ),
+                      Text(
+                        filterReportProblemModels[index].deptName,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(0xff, 16, 149, 161),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.65,
+                  child: Row(
+                    children: [
+                      AllJobboxPB(index),
+                      UnreadJobboxPB(index),
+                      InProcessJobboxPB(index),
+                      CompleteJobboxPB(index),
+                    ],
+                  )),
+              // Container(
+              //   width: MediaQuery.of(context).size.width * 0.18,
+              //   child: Row(
+              //     children: [detail_btn(index)],
+              //   ),
+              // )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showNamePB(int index) {
+    // print('showName');
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          child: Text(
+            'Dept : ' + filterReportProblemModels[index].problemName,
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showTextPB(int index) {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 5.0),
+      // height: MediaQuery.of(context).size.width * 0.5,
+      width: MediaQuery.of(context).size.width * 0.79,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          showDataPB(index),
+          // showName(index),
+        ],
+      ),
+    );
+  }
+
+  Widget AllJobboxPB(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 190.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      'เรื่องทั้งหมด',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Text(
+                      filterReportProblemModels[index].alljob + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget UnreadJobboxPB(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 190.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.red.shade500,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      'ยังไม่ตรวจสอบ',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Text(
+                      filterReportProblemModels[index].unread + ' งาน',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget InProcessJobboxPB(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 190.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.orange.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      'ระหว่างดำเนินการ',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Text(
+                      filterReportProblemModels[index].inprocess + ' งาน',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget CompleteJobboxPB(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 190.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.green.shade500,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      'ดำเนินการเสร็จสิ้น',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                    Container(
+                      height: 8.0,
+                    ),
+                    Text(
+                      filterReportProblemModels[index].complete + ' งาน',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget showStaffItem() {
+    return Expanded(
+      child: ListView.builder(
+        controller: scrollController,
+        itemCount: reportStaffModels.length,
+        itemBuilder: (BuildContext buildContext, int index) {
+          return InkWell(
+            mouseCursor: MaterialStateMouseCursor.clickable,
+            child: Container(
+              padding:
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
+              child: Container(
+                decoration: myBoxDecoration(),
+                padding: EdgeInsets.only(bottom: 2.0, top: 2.0),
+                child: Row(
+                  children: <Widget>[
+                    showTextST(index),
+                    // showImage(index),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget showTextST(int index) {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 5.0),
+      // height: MediaQuery.of(context).size.width * 0.5,
+      width: MediaQuery.of(context).size.width * 0.79,
+      child: showDataST(index),
+    );
+  }
+
+  Widget showDataST(int index) {
+    // print('index >> $filterReportStaffModels');
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.97,
+      height: 30.0,
+      child: Row(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.30,
+            child: Text(
+              filterReportStaffModels[index].staff,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.30,
+            child: Text(
+              filterReportStaffModels[index].deptName,
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.05,
+            child: Text(
+              filterReportStaffModels[index].alljob,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.05,
+            child: Text(
+              filterReportStaffModels[index].inprocess,
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+          ),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.05,
+            child: Text(
+              filterReportStaffModels[index].complete,
+              style: TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.green,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget submitButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -306,14 +788,35 @@ class _ListReportDeptState extends State<ListReportDept> {
   Future<void> submitThread() async {
     try {
       String memberId = myUserModel.id.toString();
+      String dept = myUserModel.id.toString();
       String url =
-          'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
+          'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate'; //'';
       // print('submitURL >> $url');
       await http.get(url).then((value) {
         setState(() {
           page = 1;
           reportDeptModels.clear();
           readReport();
+        });
+      });
+
+      String urlDV =
+          'https://app.oss.yru.ac.th/yrusv/api/json_select_report_problem.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+      await http.get(urlDV).then((value) {
+        setState(() {
+          page = 1;
+          reportProblemModels.clear();
+          readReportPB();
+        });
+      });
+
+      String urlST =
+          'https://app.oss.yru.ac.th/yrusv/api/json_select_report_staff.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+      await http.get(urlST).then((value) {
+        setState(() {
+          page = 1;
+          reportStaffModels.clear();
+          readReportST();
         });
       });
     } catch (e) {}
@@ -325,19 +828,20 @@ class _ListReportDeptState extends State<ListReportDept> {
         top: BorderSide(
           //
           color: Colors.blueGrey.shade100,
-          width: 2.0,
+          width: 1.0,
         ),
         bottom: BorderSide(
           //
           color: Colors.blueGrey.shade100,
-          width: 2.0,
+          width: 1.0,
         ),
       ),
     );
   }
 
   Widget showProductItem() {
-    return Expanded(
+    return Container(
+      height: 130.0,
       child: ListView.builder(
         controller: scrollController,
         itemCount: reportDeptModels.length,
@@ -348,8 +852,7 @@ class _ListReportDeptState extends State<ListReportDept> {
               padding:
                   EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
               child: Card(
-                // color: Color.fromRGBO(235, 254, 255, 1.0),
-
+                color: Color.fromARGB(255, 190, 192, 192),
                 child: Container(
                   decoration: myBoxDecoration(),
                   padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
@@ -445,133 +948,6 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
-  Widget reportViewbyProblem() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  'สรุปจากประเภทงาน',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportProblemDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
-  Widget reportViewbyStaff() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  'สรุปรายบุคคล',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportStaff(
-              index: 2,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
-  Widget reportViewbyRequest() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.11,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  ' สรุปการขอใช้บริการ',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportReqDept(
-              index: 3,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
   Widget reportViewbyRating() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.11,
@@ -579,7 +955,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (myIndex == 4) ? Colors.blue.shade600 : Colors.grey.shade600,
+          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -604,50 +980,8 @@ class _ListReportDeptState extends State<ListReportDept> {
           // routeToListComplain(1);
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportRatingDept(
-              index: 4,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
-  Widget viewListcomment() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 5) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  'ดูข้อแนะนำเพิ่มเติม',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListComment(
-              index: 5,
+            return ListReportRatingSelectDept(
+              index: 1,
               userModel: myUserModel,
             );
           });
@@ -844,15 +1178,11 @@ class _ListReportDeptState extends State<ListReportDept> {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.45,
         child: Row(
           children: [
             reportViewbySupport(),
-            reportViewbyProblem(),
-            reportViewbyStaff(),
-            reportViewbyRequest(),
             reportViewbyRating(),
-            viewListcomment(),
           ],
         ),
       ),
@@ -863,7 +1193,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     String memberId = myUserModel.id.toString();
     String dept = myUserModel.department.toString();
     String urlDL =
-        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
+        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&dept=$dept&start=$selectedStartDate&end=$selectedEndDate'; //'';
     final uri = Uri.parse(urlDL);
 
     return Container(
@@ -907,7 +1237,10 @@ class _ListReportDeptState extends State<ListReportDept> {
             ],
           ),
           Column(
-            children: [Text(''), submitButton()],
+            children: [
+              Text(''),
+              submitButton(),
+            ],
           ),
           Column(
             children: [
@@ -1012,6 +1345,35 @@ class _ListReportDeptState extends State<ListReportDept> {
                 searchForm(),
                 // clearButton(),
                 showContent(),
+                Container(
+                  height: 20.0,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'แยกตามประเภทงาน',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 16, 149, 161),
+                      // decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                showProblemItem(),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'แยกตามบุคคล',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 16, 149, 161),
+                      // decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                showStaffItem(),
               ],
             ),
           ),

@@ -11,6 +11,11 @@ import 'package:yrusv/pages/detail_popup.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:yrusv/widgets/home.dart';
+
+import 'dart:convert';
+import 'package:encrypt/encrypt.dart';
+import 'package:crypto/crypto.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -92,9 +97,9 @@ class _AuthenState extends State<Authen> {
             )),
         onPressed: () {
           formKey.currentState.save();
-          print(
-            'user = $user,password = $password',
-          );
+          // print(
+          //   'user = $user,password = $password',
+          // );
           checkAuthen();
         },
       ),
@@ -148,28 +153,33 @@ class _AuthenState extends State<Authen> {
   Future<void> checkAuthen() async {
     if (user.isEmpty || password.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
-      String url =
-          '${MyStyle().getUserWhereUserAndPass}?username=$user&password=$password';
-      print('url = $url');
+      var en_password = md5.convert(utf8.encode(password)).toString();
+      en_password = sha1.convert(utf8.encode(en_password)).toString();
+      var uri = 'us=$user&pw=$en_password';
+      Codec<String, String> stringToBase64Url = utf8.fuse(base64Url);
+      String query_string = stringToBase64Url.encode(uri);
+
+      String url = '${MyStyle().getUserWhereUserAndPass}?code=' + query_string;
+      // print('url = $url');
 
       http.Response response = await http
           .get(url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
       var result = json.decode(response.body);
 
       int statusInt = result['status'];
-      print('statusInt = $statusInt');
+      // print('statusInt = $statusInt');
 
       if (statusInt == 0) {
         String message = result['message'];
         normalDialogLogin(context, 'ข้อมูลไม่ถูกต้อง', message);
       } else if (statusInt == 1) {
         Map<String, dynamic> map = result['data'];
-        print('map = $map');
+        // print('map = $map');
 
         int userStatus = map['status'];
-        print('userStatus = $userStatus');
+        // print('userStatus = $userStatus');
 
         userModel = UserModel.fromJson(map);
         if (remember) {
@@ -352,9 +362,14 @@ class _AuthenState extends State<Authen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: status ? mainContent() : mainContent(),
+    UserModel myUserModel;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: Home.route,
+      home: Scaffold(
+        body: SafeArea(
+          child: status ? mainContent() : mainContent(),
+        ),
       ),
     );
   }

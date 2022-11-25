@@ -14,12 +14,6 @@ import 'package:yrusv/pages/list_department.dart';
 import 'package:yrusv/pages/list_problem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:side_navigation/side_navigation.dart';
-import 'package:yrusv/pages/changepassword.dart';
-
-import 'package:yrusv/pages/list_report_support.dart';
-import 'package:yrusv/pages/list_problem.dart';
-import 'package:yrusv/pages/list_report_dept_support.dart';
-import 'package:yrusv/pages/list_report_mysupport.dart';
 
 class SideBar extends StatefulWidget {
   final UserModel userModel;
@@ -38,6 +32,7 @@ class _SideBarState extends State<SideBar> {
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
+    print('$myUserModel');
   }
 
   Future<void> logOut() async {
@@ -79,7 +74,6 @@ class _SideBarState extends State<SideBar> {
     ),
   ];
   int selectedIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -93,65 +87,32 @@ class _SideBarState extends State<SideBar> {
               subtitle: Text('(${myUserModel.levelName}) ' +
                   ' ${myUserModel.departmentName} ')),
           // selectedIndex: selectedIndex,
-          items: (myUserModel.level == 1 || myUserModel.level == 2)
-              ? const [
-                  SideNavigationBarItem(
-                    icon: Icons.dashboard,
-                    label: 'หน้าหลัก',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.checklist,
-                    label: 'รายการขอใช้บริการ',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.playlist_add_check,
-                    label: 'รายงานของท่าน',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.question_answer,
-                    label: 'รายการถาม-ตอบ',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.password,
-                    label: 'เปลี่ยนรหัสผ่าน',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.source,
-                    label: 'รายงานผู้รับผิดชอบ',
-                  ),
-
-                  // SideNavigationBarItem(
-                  //   icon: Icons.logout,
-                  //   label: 'ออกจากระบบ',
-                  // ),
-                ]
-              : const [
-                  SideNavigationBarItem(
-                    icon: Icons.dashboard,
-                    label: 'หน้าหลัก',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.checklist,
-                    label: 'รายการขอใช้บริการ',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.playlist_add_check,
-                    label: 'รายงานของท่าน',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.question_answer,
-                    label: 'รายการถาม-ตอบ',
-                  ),
-                  SideNavigationBarItem(
-                    icon: Icons.password,
-                    label: 'เปลี่ยนรหัสผ่าน',
-                  ),
-
-                  // SideNavigationBarItem(
-                  //   icon: Icons.logout,
-                  //   label: 'ออกจากระบบ',
-                  // ),
-                ],
+          items: const [
+            SideNavigationBarItem(
+              icon: Icons.dashboard,
+              label: 'หน้าหลัก',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.checklist,
+              label: 'รายการขอใช้บริการ',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.checklist,
+              label: 'รายงานของท่าน',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.question_answer,
+              label: 'รายการถาม-ตอบ',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.checklist,
+              label: 'เปลี่ยนรหัสผ่าน',
+            ),
+            SideNavigationBarItem(
+              icon: Icons.logout,
+              label: 'ออกจากระบบ',
+            ),
+          ],
           onTap: (index) {
             // print('index mwnu >> $index');
             if (index == 0) {
@@ -178,38 +139,12 @@ class _SideBarState extends State<SideBar> {
             } else if (index == 2) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportMySupport(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 3) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListFaq(
                   userModel: myUserModel,
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 4) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ChangePassword(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 5) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportSelectDept(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 6) {
+            } else if (index == 3) {
               logOut();
             }
           },
@@ -316,20 +251,8 @@ class _AdminSideBarState extends State<AdminSideBar> {
               label: 'รายการขอใช้บริการ',
             ),
             SideNavigationBarItem(
-              icon: Icons.playlist_add_check,
-              label: 'รายงานของท่าน',
-            ),
-            SideNavigationBarItem(
               icon: Icons.question_answer,
               label: 'รายการถาม-ตอบ',
-            ),
-            SideNavigationBarItem(
-              icon: Icons.password,
-              label: 'เปลี่ยนรหัสผ่าน',
-            ),
-            SideNavigationBarItem(
-              icon: Icons.source,
-              label: 'รายงานผู้รับผิดชอบ',
             ),
             SideNavigationBarItem(
               icon: Icons.list_alt_outlined,
@@ -344,7 +267,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
               label: 'จัดการผู้รับผิดชอบ',
             ),
             SideNavigationBarItem(
-              icon: Icons.group_work,
+              icon: Icons.group,
               label: 'จัดการประเภทงาน',
             ),
             SideNavigationBarItem(
@@ -355,10 +278,10 @@ class _AdminSideBarState extends State<AdminSideBar> {
               icon: Icons.question_answer_outlined,
               label: 'จัดการข้อมูลถาม-ตอบ',
             ),
-            // SideNavigationBarItem(
-            //   icon: Icons.logout,
-            //   label: 'ออกจากระบบ',
-            // ),
+            SideNavigationBarItem(
+              icon: Icons.logout,
+              label: 'ออกจากระบบ',
+            ),
           ],
           onTap: (index) {
             // print('index mwnu >> $index');
@@ -369,11 +292,13 @@ class _AdminSideBarState extends State<AdminSideBar> {
                   userModel: myUserModel,
                 );
               });
-              Navigator.of(context).pushAndRemoveUntil(
-                  materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-                  (Route<dynamic> route) {
-                return false;
-              });
+              Navigator.of(context).push(materialPageRoute);
+
+              // Navigator.of(context).pushAndRemoveUntil(
+              //     materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+              //     (Route<dynamic> route) {
+              //   return false;
+              // });
             } else if (index == 1) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -386,38 +311,12 @@ class _AdminSideBarState extends State<AdminSideBar> {
             } else if (index == 2) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportMySupport(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 3) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListFaq(
                   userModel: myUserModel,
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 4) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ChangePassword(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 5) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportSelectDept(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 6) {
+            } else if (index == 3) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListReportDept(
@@ -426,7 +325,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 7) {
+            } else if (index == 4) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListComplainAdmin(
@@ -435,7 +334,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 8) {
+            } else if (index == 5) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListDept(
@@ -443,7 +342,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 9) {
+            } else if (index == 6) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListProblem(
@@ -451,7 +350,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 10) {
+            } else if (index == 7) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListUser(
@@ -459,7 +358,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 11) {
+            } else if (index == 8) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {
                 return ListFaq(
@@ -467,7 +366,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
                 );
               });
               Navigator.of(context).push(materialPageRoute);
-            } else if (index == 12) {
+            } else if (index == 9) {
               logOut();
             }
           },

@@ -78,7 +78,7 @@ class _ListProductState extends State<ListProductHighdemand> {
         page++;
         readData();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -101,11 +101,11 @@ class _ListProductState extends State<ListProductHighdemand> {
     // }
 
     http.Response response = await http.get(url);
-    print('url readData ##################+++++++++++>>> $url');
+    // print('url readData ##################+++++++++++>>> $url');
     var result = json.decode(response.body);
-    // print('result = $result');
-    // print('url ListProduct ====>>>> $url');
-    // print('result ListProduct ========>>>>> $result');
+    // // print('result = $result');
+    // // print('url ListProduct ====>>>> $url');
+    // // print('result ListProduct ========>>>>> $result');
 
     var itemProducts = result['itemsData'];
 
@@ -146,7 +146,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           ),
         ),
         onTap: () {
-          print('You click promotion');
+          // print('You click promotion');
           // routeToListProduct(2);
         },
       ),
@@ -177,7 +177,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           ),
         ),
         onTap: () {
-          print('You click update price');
+          // print('You click update price');
           // routeToListProduct(3);
         },
       ),
@@ -208,7 +208,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           ),
         ),
         onTap: () {
-          print('You click new item');
+          // print('You click new item');
           // routeToListProduct(1);
         },
       ),
@@ -239,7 +239,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),
@@ -270,7 +270,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           ),
         ),
         onTap: () {
-          print('You click not receive');
+          // print('You click not receive');
           // routeToListProduct(4);
         },
       ),
@@ -629,7 +629,7 @@ class _ListProductState extends State<ListProductHighdemand> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -662,7 +662,7 @@ class _ListProductState extends State<ListProductHighdemand> {
           icon: Icon(Icons.sort), //`Icon` to display
           label: Text('เรียงตามสต๊อกคงเหลือ'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               sort = (sort == 'asc') ? 'desc' : 'asc';

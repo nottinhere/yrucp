@@ -6,7 +6,7 @@ class AppController extends GetxController {
   MenuItem menuItem;
 
   void toggleSideBar() {
-    print('TOGGLING SIDE');
+    // print('TOGGLING SIDE');
 
     isDesktop = !isDesktop;
     update();

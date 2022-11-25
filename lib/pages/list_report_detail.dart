@@ -78,7 +78,7 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
   int totolpage;
 
   DateTime selectedStartDate =
-      DateTime.now().add(Duration(days: -30)); //  = DateTime.now()
+      DateTime.now().add(Duration(days: -60)); //  = DateTime.now()
   DateTime selectedEndDate = DateTime.now(); //  = DateTime.now()
 
   // Method
@@ -114,12 +114,12 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_report_detail.php?memberId=$memberId&dept=$myDept&start=$selectedStartDate&end=$selectedEndDate'; //'';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var item = result['data'];
-    print('item >> $item');
+    // print('item >> $item');
     int i = 0;
     int len = (filterReportDeptDetailModels.length);
 
@@ -130,14 +130,14 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
         reportDeptModels.add(reportDeptModel);
         filterReportDeptDetailModels = reportDeptModels;
       });
-      print(
-          ' >> ${len} =>($i)  ${filterReportDeptDetailModels[(len + i)].dept}  ||  ${filterReportDeptDetailModels[(len + i)].deptName}');
+      // print(
+      //     ' >> ${len} =>($i)  ${filterReportDeptDetailModels[(len + i)].dept}  ||  ${filterReportDeptDetailModels[(len + i)].deptName}');
     }
-    print('Count row >> ${filterReportDeptDetailModels.length}');
+    // print('Count row >> ${filterReportDeptDetailModels.length}');
   }
 
   // Future<void> updateDatalist(index) async {
-  //   print('Here is updateDatalist function');
+  //   // print('Here is updateDatalist function');
 
   //   String memberId = myUserModel.id.toString();
   //   String selectId = filterReportDeptDetailModels[index].dept;
@@ -190,7 +190,7 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
           ),
         ),
         onTap: () {
-          print('Detail BTN');
+          // print('Detail BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListComplainByUser(
@@ -207,8 +207,15 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
     );
   }
 
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
+  }
+
   Widget showData(int index) {
-    print('index >> $filterReportDeptDetailModels');
+    // print('index >> $filterReportDeptDetailModels');
     return Row(
       children: <Widget>[
         Container(
@@ -241,7 +248,11 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.18,
                 child: Row(
-                  children: [detail_btn(index)],
+                  children: [
+                    isNumeric(filterReportDeptDetailModels[index].staffID)
+                        ? detail_btn(index)
+                        : Container()
+                  ],
                 ),
               )
             ],
@@ -252,7 +263,7 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
   }
 
   Widget showName(int index) {
-    print('showName');
+    // print('showName');
     return Row(
       children: <Widget>[
         Container(
@@ -435,7 +446,7 @@ class _ListReportDeptDetailState extends State<ListReportDeptDetail> {
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';

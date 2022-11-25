@@ -86,7 +86,7 @@ class _ListUserState extends State<ListUser> {
         page++;
         readStaff();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -103,7 +103,7 @@ class _ListUserState extends State<ListUser> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_staff.php?memberId=$memberId&searchKey=$searchString&page=$page';
-    print('urlDV >> $urlDV');
+    // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -116,11 +116,11 @@ class _ListUserState extends State<ListUser> {
         filterUserModels = userModels;
       });
     }
-    print('Count row >> ${filterUserModels.length}');
+    // print('Count row >> ${filterUserModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
-    print('Here is updateDatalist function');
+    // print('Here is updateDatalist function');
 
     String memberId = myUserModel.id.toString();
     int selectId = filterUserModels[index].id;
@@ -200,7 +200,7 @@ class _ListUserState extends State<ListUser> {
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
-    print('selectId = $selectId  ,url = $url');
+    // print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
       setState(() {
@@ -216,7 +216,8 @@ class _ListUserState extends State<ListUser> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -240,7 +241,7 @@ class _ListUserState extends State<ListUser> {
           ),
         ),
         onTap: () {
-          print('Edit BTN');
+          // print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return EditUser(
@@ -265,7 +266,8 @@ class _ListUserState extends State<ListUser> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -289,7 +291,7 @@ class _ListUserState extends State<ListUser> {
           ),
         ),
         onTap: () {
-          print('Delete BTN');
+          // print('Delete BTN');
           confirmDelete(index);
         },
       ),
@@ -372,7 +374,8 @@ class _ListUserState extends State<ListUser> {
   }
 
   Widget AddStaff() {
-    return GestureDetector(
+    return InkWell(
+      mouseCursor: MaterialStateMouseCursor.clickable,
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -500,7 +503,7 @@ class _ListUserState extends State<ListUser> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -533,7 +536,7 @@ class _ListUserState extends State<ListUser> {
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';

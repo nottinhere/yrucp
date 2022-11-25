@@ -14,7 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
+import 'package:crypto/crypto.dart';
+
 class ChangePassword extends StatefulWidget {
+  static const route = '/ChangePassword';
+
   final UserModel userModel;
 
   ChangePassword({Key key, this.userModel}) : super(key: key);
@@ -47,31 +51,7 @@ class _ChangePasswordState extends State<ChangePassword> {
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
-    setState(() {
-      readDepartment();
-    });
-  }
-
-  List dataDV;
-  Future<void> readDepartment() async {
-    String urlDV = 'https://app.oss.yru.ac.th/yrusv/api/json_data_division.php';
-    print('urlDV >> $urlDV');
-
-    http.Response response = await http.get(urlDV);
-    var result = json.decode(response.body);
-    var itemDivisions = result['itemsData'];
-
-    setState(() {
-      for (var map in itemDivisions) {
-        String dvID = map['dv_id'];
-        String dvName = map['dv_name'];
-      } // for
-    });
-
-    setState(() {
-      dataDV = itemDivisions;
-    });
-    print('dataDV >> $dataDV');
+    setState(() {});
   }
 
   Widget showSubject() {
@@ -175,7 +155,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         ),
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
-                        hintText: 'งาน',
+                        hintText: '',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -194,15 +174,22 @@ class _ChangePasswordState extends State<ChangePassword> {
 
     if (txtnewpass.isEmpty || txtrenewpass.isEmpty) {
       // Have space
-      normalDialog(context, 'Have space', 'กรุณากรอกข้อมูลให้ครบ');
+      normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
       if (txtnewpass != txtrenewpass) {
-        normalDialog(context, 'Have space', 'รหัสผ่านไม่ตรงกัน');
+        normalDialog(context, 'กรุณาตรวจสอบ', 'รหัสผ่านไม่ตรงกัน');
       } else {
         try {
+          var en_password = md5.convert(utf8.encode(txtnewpass)).toString();
+          // en_password = sha1.convert(utf8.encode(en_password)).toString();
+          var uri = 'memberId=$memberID&action=edit&newpassw=$en_password';
+          Codec<String, String> stringToBase64Url = utf8.fuse(base64Url);
+          String query_string = stringToBase64Url.encode(uri);
+
           String url =
-              'https://app.oss.yru.ac.th/yrusv/api/json_submit_changepassword.php?memberId=$memberID&action=edit&data=$txtnewpass'; //'';
-          print('submitURL >> $url');
+              'https://app.oss.yru.ac.th/yrusv/api/json_submit_chgpassw.php?code=' +
+                  query_string; //'';
+          // print('submitURL >> $url');
           await http.get(url).then((value) {
             confirmSubmit();
           });
@@ -216,13 +203,20 @@ class _ChangePasswordState extends State<ChangePassword> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Complete'),
+            title: Text('ดำเนินการเรียบร้อย'),
             content: Text('แก้ไขรหัสผ่านเรียบร้อย'),
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    backProcess();
+                    // Navigator.of(context).pop();
+                    // backProcess();
+                    MaterialPageRoute materialPageRoute =
+                        MaterialPageRoute(builder: (BuildContext buildContext) {
+                      return ChangePassword(
+                        userModel: myUserModel,
+                      );
+                    });
+                    Navigator.of(context).push(materialPageRoute);
                   },
                   child: Text('OK'))
             ],
@@ -245,7 +239,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             onPressed: () {
               // var deptID = myDeptModel.dpId.toString();
               // var cpID = currentComplainAllModel.id;
-              // print('deptId=$deptID&action=add&name=$txtname');
+              // // print('deptId=$deptID&action=add&name=$txtname');
 
               submitThread();
             },

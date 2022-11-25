@@ -88,7 +88,7 @@ class _ListProblemState extends State<ListProblem> {
         page++;
         readProb();
 
-        // print('in the end');
+        // // print('in the end');
 
         // setState(() {
         //   amountListView = amountListView + 2;
@@ -105,7 +105,7 @@ class _ListProblemState extends State<ListProblem> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_problem.php?memberId=$memberId&searchKey=$searchString&page=$page';
-    print('urlDV >> ${urlDV}');
+    // print('urlDV >> ${urlDV}');
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
     var itemProducts = result['itemsData'];
@@ -117,7 +117,7 @@ class _ListProblemState extends State<ListProblem> {
         filterProbModels = probModels;
       });
     }
-    print('Count row >> ${filterProbModels.length}');
+    // print('Count row >> ${filterProbModels.length}');
   }
 
   Future<void> updateDatalist(index) async {
@@ -125,7 +125,7 @@ class _ListProblemState extends State<ListProblem> {
 
     String urlSL =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_problem.php?selectId=$selectId';
-    print('urlSL >> $urlSL');
+    // print('urlSL >> $urlSL');
 
     http.Response responseSL = await http.get(urlSL);
     var resultSL = json.decode(responseSL.body);
@@ -133,8 +133,8 @@ class _ListProblemState extends State<ListProblem> {
 
     selectProbModel = ProblemModel.fromJson(itemSelect);
     setState(() {
-      print('itemSelect = ${selectProbModel.subject}');
-      print('itemSelect = ${selectProbModel.dpName}');
+      // print('itemSelect = ${selectProbModel.subject}');
+      // print('itemSelect = ${selectProbModel.dpName}');
 
       filterProbModels[index].subject = selectProbModel.subject;
       filterProbModels[index].dpName = selectProbModel.dpName;
@@ -195,13 +195,13 @@ class _ListProblemState extends State<ListProblem> {
   }
 
   Future<void> deleteCart(int index) async {
-    String selectId = filterProbModels[index].dpId.toString();
+    String selectId = filterProbModels[index].pId.toString();
     String memberID = myUserModel.id.toString();
 
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_problem.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
-    print('selectId = $selectId  ,url = $url');
+    // print('selectId = $selectId  ,url = $url');
 
     await http.get(url).then((response) {
       setState(() {
@@ -217,7 +217,8 @@ class _ListProblemState extends State<ListProblem> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -241,7 +242,7 @@ class _ListProblemState extends State<ListProblem> {
           ),
         ),
         onTap: () {
-          print('Edit BTN');
+          // print('Edit BTN');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return EditProb(
@@ -267,7 +268,8 @@ class _ListProblemState extends State<ListProblem> {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
       // height: 80.0,
-      child: GestureDetector(
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: Colors.blue.shade600,
           child: Container(
@@ -291,7 +293,7 @@ class _ListProblemState extends State<ListProblem> {
           ),
         ),
         onTap: () {
-          print('Delete BTN');
+          // print('Delete BTN');
           confirmDelete(index);
         },
       ),
@@ -358,7 +360,8 @@ class _ListProblemState extends State<ListProblem> {
   }
 
   Widget AddProblem() {
-    return GestureDetector(
+    return InkWell(
+      mouseCursor: MaterialStateMouseCursor.clickable,
       onTap: () {
         MaterialPageRoute materialPageRoute =
             MaterialPageRoute(builder: (BuildContext buildContext) {
@@ -486,7 +489,7 @@ class _ListProblemState extends State<ListProblem> {
         // trailing: IconButton(
         //     icon: Icon(Icons.search),
         //     onPressed: () {
-        //       print('searchString ===>>> $searchString');
+        //       // print('searchString ===>>> $searchString');
         //       setState(() {
         //         page = 1;
         //         productAllModels.clear();
@@ -519,7 +522,7 @@ class _ListProblemState extends State<ListProblem> {
           icon: Icon(Icons.search_off_sharp), //`Icon` to display
           label: Text('ล้างการค้นหา'), //`Text` to display
           onPressed: () {
-            print('searchString ===>>> $searchString');
+            // print('searchString ===>>> $searchString');
             setState(() {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
@@ -552,7 +555,7 @@ class _ListProblemState extends State<ListProblem> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('จัดการข้อมูลหมวดหมู่'),
+        title: Text('จัดการประเภทงาน'),
         actions: <Widget>[
           AddProblem(),
         ],

@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/report_dept_model.dart';
+import 'package:yrusv/models/report_problem_model.dart';
+
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/pages/list_report_request.dart';
-import 'package:yrusv/pages/list_report_problem.dart';
+import 'package:yrusv/pages/list_report_support.dart';
 import 'package:yrusv/pages/list_report_staff.dart';
+import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
@@ -21,15 +23,15 @@ import 'package:uipickers/uipickers.dart';
 import 'detail.dart';
 import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class ListReportDept extends StatefulWidget {
+class ListReportProblemDept extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListReportProblemDept({Key key, this.index, this.userModel})
+      : super(key: key);
 
   @override
-  _ListReportDeptState createState() => _ListReportDeptState();
+  _ListReportProblemDeptState createState() => _ListReportProblemDeptState();
 }
 
 //class
@@ -51,10 +53,10 @@ class Debouncer {
   }
 }
 
-class _ListReportDeptState extends State<ListReportDept> {
-  List<ReportDeptModel> reportDeptModels = List(); // set array
-  List<ReportDeptModel> filterReportDeptModels = List();
-  ReportDeptModel selectReportDeptModel;
+class _ListReportProblemDeptState extends State<ListReportProblemDept> {
+  List<ReportProblemModel> reportProblemModels = List(); // set array
+  List<ReportProblemModel> filterReportProblemModels = List();
+  ReportProblemModel selectReportProblemModel;
 
   // Explicit
   int myIndex;
@@ -104,7 +106,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_problem.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
     // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -112,27 +114,18 @@ class _ListReportDeptState extends State<ListReportDept> {
     var item = result['data'];
     // print('item >> $item');
     int i = 0;
-    int len = (filterReportDeptModels.length);
+    int len = (filterReportProblemModels.length);
 
     for (var map in item) {
-      ReportDeptModel reportDeptModel = ReportDeptModel.fromJson(map);
+      ReportProblemModel reportProblemModel = ReportProblemModel.fromJson(map);
       setState(() {
-        reportDeptModels.add(reportDeptModel);
-        filterReportDeptModels = reportDeptModels;
+        reportProblemModels.add(reportProblemModel);
+        filterReportProblemModels = reportProblemModels;
       });
       // print(
-      //     ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
+      //     ' >> ${len} =>($i)  ${filterReportProblemModels[(len + i)].dept}  ||  ${filterReportProblemModels[(len + i)].deptName}');
     }
-    // print('Count row >> ${filterReportDeptModels.length}');
-  }
-
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw 'Could not launch $url';
-    }
+    // print('Count row >> ${filterReportProblemModels.length}');
   }
 
   Future<void> logOut() async {
@@ -175,7 +168,7 @@ class _ListReportDeptState extends State<ListReportDept> {
             return ListReportDeptDetail(
               index: 0,
               userModel: myUserModel,
-              dept: filterReportDeptModels[index].dept,
+              dept: filterReportProblemModels[index].dept,
               datestart: selectedStartDate,
               dateend: selectedEndDate,
             );
@@ -187,7 +180,7 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showData(int index) {
-    // print('index >> $filterReportDeptModels');
+    // print('index >> $filterReportProblemModels');
     return Row(
       children: <Widget>[
         Container(
@@ -202,7 +195,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                   child: Column(
                     children: [
                       Text(
-                        '[${filterReportDeptModels[index].code}] ',
+                        '${filterReportProblemModels[index].problemName} ',
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -213,9 +206,9 @@ class _ListReportDeptState extends State<ListReportDept> {
                         height: 15.0,
                       ),
                       Text(
-                        filterReportDeptModels[index].deptName,
+                        filterReportProblemModels[index].deptName,
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(0xff, 16, 149, 161),
                         ),
@@ -254,7 +247,7 @@ class _ListReportDeptState extends State<ListReportDept> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterReportDeptModels[index].code,
+            'Dept : ' + filterReportProblemModels[index].problemName,
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -312,7 +305,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       await http.get(url).then((value) {
         setState(() {
           page = 1;
-          reportDeptModels.clear();
+          reportProblemModels.clear();
           readReport();
         });
       });
@@ -340,7 +333,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: reportDeptModels.length,
+        itemCount: reportProblemModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return InkWell(
             mouseCursor: MaterialStateMouseCursor.clickable,
@@ -401,7 +394,7 @@ class _ListReportDeptState extends State<ListReportDept> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              reportDeptModels.clear();
+              reportProblemModels.clear();
               readReport();
             });
           },
@@ -439,7 +432,14 @@ class _ListReportDeptState extends State<ListReportDept> {
           ),
         ),
         onTap: () {
-          // routeToListComplain(0);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportDept(
+              index: 0,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -473,16 +473,7 @@ class _ListReportDeptState extends State<ListReportDept> {
             ),
           ),
         ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportProblemDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
+        onTap: () {},
       ),
     );
   }
@@ -687,7 +678,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].alljob + ' งาน',
+                      filterReportProblemModels[index].alljob + ' งาน',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontSize: 20,
@@ -733,7 +724,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].unread + ' งาน',
+                      filterReportProblemModels[index].unread + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -778,7 +769,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].inprocess + ' งาน',
+                      filterReportProblemModels[index].inprocess + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -823,7 +814,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].complete + ' งาน',
+                      filterReportProblemModels[index].complete + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -860,12 +851,6 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget searchForm() {
-    String memberId = myUserModel.id.toString();
-    String dept = myUserModel.department.toString();
-    String urlDL =
-        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
-    final uri = Uri.parse(urlDL);
-
     return Container(
       // decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
@@ -909,43 +894,6 @@ class _ListReportDeptState extends State<ListReportDept> {
           Column(
             children: [Text(''), submitButton()],
           ),
-          Column(
-            children: [
-              Text(''),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12,
-                // height: 80.0,
-                child: InkWell(
-                  mouseCursor: MaterialStateMouseCursor.clickable,
-                  child: Card(
-                    color: Colors.green.shade700,
-                    child: Container(
-                      padding: EdgeInsets.all(4.0),
-                      alignment: AlignmentDirectional(0.0, 0.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.download,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            ' รายงานสรุปผู้รับผิดชอบ',
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    _launchInBrowser(uri);
-                  },
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );
@@ -963,7 +911,7 @@ class _ListReportDeptState extends State<ListReportDept> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              reportDeptModels.clear();
+              reportProblemModels.clear();
               readReport();
             });
           }),
@@ -971,7 +919,7 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showContent() {
-    return reportDeptModels.length == 0
+    return reportProblemModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
@@ -991,7 +939,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปจากผู้รับผิดชอบ'),
+        title: Text('สรุปจากประเภทงาน'),
         actions: <Widget>[
           // AddStaff(),
         ],

@@ -44,7 +44,7 @@ class _DetailState extends State<DetailPopup> {
 
   Future<void> getPopupWhereID() async {
     String url = 'http://ptnpharma.com/apisupplier/json_popupdetail.php';
-    print('urlPopup >> $url');
+    // print('urlPopup >> $url');
 
     http.Response response = await http.get(url);
     var result = json.decode(response.body);
@@ -233,7 +233,7 @@ class _DetailState extends State<DetailPopup> {
           ),
         ),
         onTap: () {
-          print('You click home');
+          // print('You click home');
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return MyService(

@@ -6,12 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:yrusv/models/report_dept_model.dart';
+import 'package:yrusv/models/report_dept_rating_model.dart';
+import 'package:yrusv/models/report_problem_model.dart';
+
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yrusv/pages/list_report_request.dart';
+import 'package:yrusv/pages/list_report_support.dart';
 import 'package:yrusv/pages/list_report_problem.dart';
 import 'package:yrusv/pages/list_report_staff.dart';
+import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
@@ -23,13 +26,13 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ListReportDept extends StatefulWidget {
+class ListReportRatingDept extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListReportRatingDept({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListReportDeptState createState() => _ListReportDeptState();
+  _ListReportRatingDeptState createState() => _ListReportRatingDeptState();
 }
 
 //class
@@ -51,10 +54,10 @@ class Debouncer {
   }
 }
 
-class _ListReportDeptState extends State<ListReportDept> {
-  List<ReportDeptModel> reportDeptModels = List(); // set array
-  List<ReportDeptModel> filterReportDeptModels = List();
-  ReportDeptModel selectReportDeptModel;
+class _ListReportRatingDeptState extends State<ListReportRatingDept> {
+  List<ReportDeptRatingModel> reportDeptRatingModels = List(); // set array
+  List<ReportDeptRatingModel> filterReportDeptRatingModels = List();
+  ReportDeptRatingModel selectReportDeptRatingModel;
 
   // Explicit
   int myIndex;
@@ -104,7 +107,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_report_rating.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
     // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -112,18 +115,19 @@ class _ListReportDeptState extends State<ListReportDept> {
     var item = result['data'];
     // print('item >> $item');
     int i = 0;
-    int len = (filterReportDeptModels.length);
+    int len = (filterReportDeptRatingModels.length);
 
     for (var map in item) {
-      ReportDeptModel reportDeptModel = ReportDeptModel.fromJson(map);
+      ReportDeptRatingModel reportDeptRatingModel =
+          ReportDeptRatingModel.fromJson(map);
       setState(() {
-        reportDeptModels.add(reportDeptModel);
-        filterReportDeptModels = reportDeptModels;
+        reportDeptRatingModels.add(reportDeptRatingModel);
+        filterReportDeptRatingModels = reportDeptRatingModels;
       });
       // print(
-      //     ' >> ${len} =>($i)  ${filterReportDeptModels[(len + i)].dept}  ||  ${filterReportDeptModels[(len + i)].deptName}');
+      //     ' >> ${len} =>($i)  ${filterReportDeptRatingModels[(len + i)].dept}  ||  ${filterReportDeptRatingModels[(len + i)].deptName}');
     }
-    // print('Count row >> ${filterReportDeptModels.length}');
+    // print('Count row >> ${filterReportDeptRatingModels.length}');
   }
 
   Future<void> _launchInBrowser(Uri url) async {
@@ -175,7 +179,7 @@ class _ListReportDeptState extends State<ListReportDept> {
             return ListReportDeptDetail(
               index: 0,
               userModel: myUserModel,
-              dept: filterReportDeptModels[index].dept,
+              dept: filterReportDeptRatingModels[index].dept,
               datestart: selectedStartDate,
               dateend: selectedEndDate,
             );
@@ -187,7 +191,7 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showData(int index) {
-    // print('index >> $filterReportDeptModels');
+    // print('index >> $filterReportDeptRatingModels');
     return Row(
       children: <Widget>[
         Container(
@@ -197,14 +201,14 @@ class _ListReportDeptState extends State<ListReportDept> {
             children: <Widget>[
               Card(
                 child: Container(
-                  height: 100.0,
+                  height: 70.0,
                   width: MediaQuery.of(context).size.width * 0.25,
                   child: Column(
                     children: [
                       Text(
-                        '[${filterReportDeptModels[index].code}] ',
+                        '[${filterReportDeptRatingModels[index].code}] ',
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(0xff, 16, 149, 161),
                         ),
@@ -213,9 +217,9 @@ class _ListReportDeptState extends State<ListReportDept> {
                         height: 15.0,
                       ),
                       Text(
-                        filterReportDeptModels[index].deptName,
+                        filterReportDeptRatingModels[index].deptName,
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(0xff, 16, 149, 161),
                         ),
@@ -225,13 +229,15 @@ class _ListReportDeptState extends State<ListReportDept> {
                 ),
               ),
               Container(
-                  width: MediaQuery.of(context).size.width * 0.65,
+                  width: MediaQuery.of(context).size.width * 0.70,
                   child: Row(
                     children: [
-                      AllJobbox(index),
-                      UnreadJobbox(index),
-                      InProcessJobbox(index),
-                      CompleteJobbox(index),
+                      norating(index),
+                      star5(index),
+                      star4(index),
+                      star3(index),
+                      star2(index),
+                      star1(index),
                     ],
                   )),
               // Container(
@@ -254,7 +260,7 @@ class _ListReportDeptState extends State<ListReportDept> {
         Container(
           width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
           child: Text(
-            'Dept : ' + filterReportDeptModels[index].code,
+            'Dept : ' + filterReportDeptRatingModels[index].deptName,
             style: MyStyle().h3bStyle,
           ),
         ),
@@ -312,7 +318,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       await http.get(url).then((value) {
         setState(() {
           page = 1;
-          reportDeptModels.clear();
+          reportDeptRatingModels.clear();
           readReport();
         });
       });
@@ -340,7 +346,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Expanded(
       child: ListView.builder(
         controller: scrollController,
-        itemCount: reportDeptModels.length,
+        itemCount: reportDeptRatingModels.length,
         itemBuilder: (BuildContext buildContext, int index) {
           return InkWell(
             mouseCursor: MaterialStateMouseCursor.clickable,
@@ -401,7 +407,7 @@ class _ListReportDeptState extends State<ListReportDept> {
           onSubmitted: (value) {
             setState(() {
               page = 1;
-              reportDeptModels.clear();
+              reportDeptRatingModels.clear();
               readReport();
             });
           },
@@ -439,7 +445,14 @@ class _ListReportDeptState extends State<ListReportDept> {
           ),
         ),
         onTap: () {
-          // routeToListComplain(0);
+          MaterialPageRoute materialPageRoute =
+              MaterialPageRoute(builder: (BuildContext buildContext) {
+            return ListReportDept(
+              index: 0,
+              userModel: myUserModel,
+            );
+          });
+          Navigator.of(context).push(materialPageRoute);
         },
       ),
     );
@@ -657,40 +670,325 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
-  Widget AllJobbox(int index) {
+  Widget norating(int index) {
     // all product
     return Container(
       // width: MediaQuery.of(context).size.width * 0.45,
-      width: 190.0,
-      height: 110.0,
+      width: 150.0,
+      height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         hoverColor: Colors.blue.shade100,
         child: Card(
           color: Colors.grey.shade600,
           child: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(8.0),
             alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               children: <Widget>[
                 Column(
                   children: [
                     Text(
-                      'เรื่องทั้งหมด',
+                      'ไม่ได้ให้ตะแนน ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].norating + ' งาน',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star1(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
                     Container(
-                      height: 15.0,
+                      height: 5.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].alljob + ' งาน',
+                      filterReportDeptRatingModels[index].start1 + ' งาน',
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star2(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start2 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star3(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start3 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star4(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start4 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star5(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start5 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
@@ -709,7 +1007,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Container(
       // width: MediaQuery.of(context).size.width * 0.45,
       width: 190.0,
-      height: 110.0,
+      height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         hoverColor: Colors.blue.shade100,
@@ -733,7 +1031,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].unread + ' งาน',
+                      filterReportDeptRatingModels[index].start1 + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -754,7 +1052,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Container(
       // width: MediaQuery.of(context).size.width * 0.45,
       width: 190.0,
-      height: 110.0,
+      height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         hoverColor: Colors.blue.shade100,
@@ -778,7 +1076,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].inprocess + ' งาน',
+                      filterReportDeptRatingModels[index].start1 + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -799,7 +1097,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Container(
       // width: MediaQuery.of(context).size.width * 0.45,
       width: 190.0,
-      height: 110.0,
+      height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         hoverColor: Colors.blue.shade100,
@@ -823,7 +1121,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                       height: 15.0,
                     ),
                     Text(
-                      filterReportDeptModels[index].complete + ' งาน',
+                      filterReportDeptRatingModels[index].start1 + ' งาน',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -852,7 +1150,7 @@ class _ListReportDeptState extends State<ListReportDept> {
             reportViewbyStaff(),
             reportViewbyRequest(),
             reportViewbyRating(),
-            viewListcomment(),
+            viewListcomment()
           ],
         ),
       ),
@@ -861,9 +1159,8 @@ class _ListReportDeptState extends State<ListReportDept> {
 
   Widget searchForm() {
     String memberId = myUserModel.id.toString();
-    String dept = myUserModel.department.toString();
     String urlDL =
-        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
+        'https://app.oss.yru.ac.th/line/export/report_rating.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
     final uri = Uri.parse(urlDL);
 
     return Container(
@@ -929,7 +1226,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                             color: Colors.white,
                           ),
                           Text(
-                            ' รายงานสรุปผู้รับผิดชอบ',
+                            ' รายงานการประเมิน',
                             style: TextStyle(
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -943,9 +1240,9 @@ class _ListReportDeptState extends State<ListReportDept> {
                     _launchInBrowser(uri);
                   },
                 ),
-              ),
+              )
             ],
-          )
+          ),
         ],
       ),
     );
@@ -963,7 +1260,7 @@ class _ListReportDeptState extends State<ListReportDept> {
               page = 1;
               // sort = (sort == 'asc') ? 'desc' : 'asc';
               searchString = '';
-              reportDeptModels.clear();
+              reportDeptRatingModels.clear();
               readReport();
             });
           }),
@@ -971,7 +1268,7 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showContent() {
-    return reportDeptModels.length == 0
+    return reportDeptRatingModels.length == 0
         ? showProductItem() // showProgressIndicate()
         : showProductItem();
   }
@@ -991,7 +1288,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปจากผู้รับผิดชอบ'),
+        title: Text('สรุปการประเมิน'),
         actions: <Widget>[
           // AddStaff(),
         ],

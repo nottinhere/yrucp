@@ -7,29 +7,28 @@ import 'package:http/http.dart' as http;
 // import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/report_dept_model.dart';
+import 'package:yrusv/models/report_dept_rating_model.dart';
+
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_problem.dart';
-import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
-import 'package:yrusv/pages/list_comment.dart';
 
 import 'package:uipickers/uipickers.dart';
 
 import 'detail.dart';
 import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class ListReportDept extends StatefulWidget {
+class ListReportMySupport extends StatefulWidget {
   final int index;
   final UserModel userModel;
-  ListReportDept({Key key, this.index, this.userModel}) : super(key: key);
+  ListReportMySupport({Key key, this.index, this.userModel}) : super(key: key);
 
   @override
-  _ListReportDeptState createState() => _ListReportDeptState();
+  _ListReportMySupportState createState() => _ListReportMySupportState();
 }
 
 //class
@@ -51,10 +50,13 @@ class Debouncer {
   }
 }
 
-class _ListReportDeptState extends State<ListReportDept> {
+class _ListReportMySupportState extends State<ListReportMySupport> {
   List<ReportDeptModel> reportDeptModels = List(); // set array
   List<ReportDeptModel> filterReportDeptModels = List();
   ReportDeptModel selectReportDeptModel;
+
+  List<ReportDeptRatingModel> reportDeptRatingModels = List(); // set array
+  List<ReportDeptRatingModel> filterReportDeptRatingModels = List();
 
   // Explicit
   int myIndex;
@@ -87,6 +89,7 @@ class _ListReportDeptState extends State<ListReportDept> {
 
     setState(() {
       readReport(); // read  ข้อมูลมาแสดง
+      readRating();
     });
   }
 
@@ -104,7 +107,7 @@ class _ListReportDeptState extends State<ListReportDept> {
     String memberId = myUserModel.id.toString();
 
     String urlDV =
-        'https://app.oss.yru.ac.th/yrusv/api/json_select_report.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_myreport.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
     // print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
@@ -126,13 +129,31 @@ class _ListReportDeptState extends State<ListReportDept> {
     // print('Count row >> ${filterReportDeptModels.length}');
   }
 
-  Future<void> _launchInBrowser(Uri url) async {
-    if (!await launchUrl(
-      url,
-      mode: LaunchMode.externalApplication,
-    )) {
-      throw 'Could not launch $url';
+  Future<void> readRating() async {
+    String memberId = myUserModel.id.toString();
+
+    String urlDV =
+        'https://app.oss.yru.ac.th/yrusv/api/json_select_myreport_rating.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
+    // print('urlDV >> $urlDV');
+
+    http.Response response = await http.get(urlDV);
+    var result = json.decode(response.body);
+    var item = result['data'];
+    // print('item >> $item');
+    int i = 0;
+    int len = (filterReportDeptRatingModels.length);
+
+    for (var map in item) {
+      ReportDeptRatingModel reportDeptRatingModel =
+          ReportDeptRatingModel.fromJson(map);
+      setState(() {
+        reportDeptRatingModels.add(reportDeptRatingModel);
+        filterReportDeptRatingModels = reportDeptRatingModels;
+      });
+      // print(
+      //     ' >> ${len} =>($i)  ${filterReportDeptRatingModels[(len + i)].dept}  ||  ${filterReportDeptRatingModels[(len + i)].deptName}');
     }
+    // print('Count row >> ${filterReportDeptRatingModels.length}');
   }
 
   Future<void> logOut() async {
@@ -202,7 +223,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                   child: Column(
                     children: [
                       Text(
-                        '[${filterReportDeptModels[index].code}] ',
+                        '${filterReportDeptModels[index].code} ',
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -213,7 +234,7 @@ class _ListReportDeptState extends State<ListReportDept> {
                         height: 15.0,
                       ),
                       Text(
-                        filterReportDeptModels[index].deptName,
+                        '[ ${filterReportDeptModels[index].deptName} ]',
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
@@ -337,7 +358,8 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget showProductItem() {
-    return Expanded(
+    return Container(
+      height: 150.0,
       child: ListView.builder(
         controller: scrollController,
         itemCount: reportDeptModels.length,
@@ -374,6 +396,473 @@ class _ListReportDeptState extends State<ListReportDept> {
             },
           );
         },
+      ),
+    );
+  }
+
+  Widget showDataRT(int index) {
+    // print('index >> $filterReportDeptRatingModels');
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.97,
+          child: Row(
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Card(
+                child: Container(
+                  height: 70.0,
+                  width: MediaQuery.of(context).size.width * 0.25,
+                  child: Column(
+                    children: [
+                      Text(
+                        filterReportDeptRatingModels[index].code,
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(0xff, 16, 149, 161),
+                        ),
+                      ),
+                      Container(
+                        height: 15.0,
+                      ),
+                      Text(
+                        '[${filterReportDeptRatingModels[index].deptName}] ',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(0xff, 16, 149, 161),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.70,
+                  child: Row(
+                    children: [
+                      norating(index),
+                      star5(index),
+                      star4(index),
+                      star3(index),
+                      star2(index),
+                      star1(index),
+                    ],
+                  )),
+              // Container(
+              //   width: MediaQuery.of(context).size.width * 0.18,
+              //   child: Row(
+              //     children: [detail_btn(index)],
+              //   ),
+              // )
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showNameRT(int index) {
+    // print('showName');
+    return Row(
+      children: <Widget>[
+        Container(
+          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+          child: Text(
+            'Dept : ' + filterReportDeptRatingModels[index].deptName,
+            style: MyStyle().h3bStyle,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget showTextRT(int index) {
+    return Container(
+      padding: EdgeInsets.only(left: 10.0, right: 5.0),
+      // height: MediaQuery.of(context).size.width * 0.5,
+      width: MediaQuery.of(context).size.width * 0.79,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          showDataRT(index),
+          // showName(index),
+        ],
+      ),
+    );
+  }
+
+  Widget showRatingItem() {
+    return Expanded(
+      child: ListView.builder(
+        controller: scrollController,
+        itemCount: reportDeptRatingModels.length,
+        itemBuilder: (BuildContext buildContext, int index) {
+          return InkWell(
+            mouseCursor: MaterialStateMouseCursor.clickable,
+            child: Container(
+              padding:
+                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
+              child: Card(
+                // color: Color.fromRGBO(235, 254, 255, 1.0),
+
+                child: Container(
+                  decoration: myBoxDecoration(),
+                  padding: EdgeInsets.only(bottom: 8.0, top: 8.0),
+                  child: Row(
+                    children: <Widget>[
+                      showTextRT(index),
+                      // showImage(index),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            onTap: () {
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Detail(
+              //     productAllModel: filterProductAllModels[index],
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget norating(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Text(
+                      'ไม่ได้ให้ตะแนน ',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].norating + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star1(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start1 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star2(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start2 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star3(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start3 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star4(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start4 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget star5(int index) {
+    // all product
+    return Container(
+      // width: MediaQuery.of(context).size.width * 0.45,
+      width: 150.0,
+      height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        hoverColor: Colors.blue.shade100,
+        child: Card(
+          color: Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(8.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5.0,
+                    ),
+                    Text(
+                      filterReportDeptRatingModels[index].start5 + ' งาน',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -487,48 +976,6 @@ class _ListReportDeptState extends State<ListReportDept> {
     );
   }
 
-  Widget reportViewbyStaff() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  'สรุปรายบุคคล',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportStaff(
-              index: 2,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
   Widget reportViewbyRequest() {
     return Container(
       width: MediaQuery.of(context).size.width * 0.11,
@@ -536,7 +983,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
+          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -562,7 +1009,7 @@ class _ListReportDeptState extends State<ListReportDept> {
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListReportReqDept(
-              index: 3,
+              index: 2,
               userModel: myUserModel,
             );
           });
@@ -579,7 +1026,7 @@ class _ListReportDeptState extends State<ListReportDept> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (myIndex == 4) ? Colors.blue.shade600 : Colors.grey.shade600,
+          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -605,49 +1052,7 @@ class _ListReportDeptState extends State<ListReportDept> {
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return ListReportRatingDept(
-              index: 4,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
-  Widget viewListcomment() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 5) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  'ดูข้อแนะนำเพิ่มเติม',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListComment(
-              index: 5,
+              index: 3,
               userModel: myUserModel,
             );
           });
@@ -844,15 +1249,13 @@ class _ListReportDeptState extends State<ListReportDept> {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.45,
         child: Row(
           children: [
             reportViewbySupport(),
             reportViewbyProblem(),
-            reportViewbyStaff(),
             reportViewbyRequest(),
             reportViewbyRating(),
-            viewListcomment(),
           ],
         ),
       ),
@@ -860,12 +1263,6 @@ class _ListReportDeptState extends State<ListReportDept> {
   }
 
   Widget searchForm() {
-    String memberId = myUserModel.id.toString();
-    String dept = myUserModel.department.toString();
-    String urlDL =
-        'https://app.oss.yru.ac.th/line/export/report_support.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate'; //'';
-    final uri = Uri.parse(urlDL);
-
     return Container(
       // decoration: MyStyle().boxLightGray,
       // color: Colors.grey,
@@ -909,43 +1306,6 @@ class _ListReportDeptState extends State<ListReportDept> {
           Column(
             children: [Text(''), submitButton()],
           ),
-          Column(
-            children: [
-              Text(''),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12,
-                // height: 80.0,
-                child: InkWell(
-                  mouseCursor: MaterialStateMouseCursor.clickable,
-                  child: Card(
-                    color: Colors.green.shade700,
-                    child: Container(
-                      padding: EdgeInsets.all(4.0),
-                      alignment: AlignmentDirectional(0.0, 0.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.download,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            ' รายงานสรุปผู้รับผิดชอบ',
-                            style: TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  onTap: () {
-                    _launchInBrowser(uri);
-                  },
-                ),
-              ),
-            ],
-          )
         ],
       ),
     );
@@ -1008,10 +1368,35 @@ class _ListReportDeptState extends State<ListReportDept> {
           Expanded(
             child: Column(
               children: <Widget>[
-                topMenu(),
+                // topMenu(),
                 searchForm(),
                 // clearButton(),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'สรุปงานที่รับผิดชอบ',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 16, 149, 161),
+                      // decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
                 showContent(),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'คะแนนประเมิน',
+                    style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(0xff, 16, 149, 161),
+                      // decoration: TextDecoration.underline,
+                    ),
+                  ),
+                ),
+                showRatingItem(),
               ],
             ),
           ),
