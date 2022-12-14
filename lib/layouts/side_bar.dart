@@ -119,11 +119,10 @@ class _SideBarState extends State<SideBar> {
                     icon: Icons.source,
                     label: 'รายงานผู้รับผิดชอบ',
                   ),
-
-                  // SideNavigationBarItem(
-                  //   icon: Icons.logout,
-                  //   label: 'ออกจากระบบ',
-                  // ),
+                  SideNavigationBarItem(
+                    icon: Icons.logout,
+                    label: 'ออกจากระบบ',
+                  ),
                 ]
               : const [
                   SideNavigationBarItem(
@@ -146,71 +145,43 @@ class _SideBarState extends State<SideBar> {
                     icon: Icons.password,
                     label: 'เปลี่ยนรหัสผ่าน',
                   ),
-
-                  // SideNavigationBarItem(
-                  //   icon: Icons.logout,
-                  //   label: 'ออกจากระบบ',
-                  // ),
+                  SideNavigationBarItem(
+                    icon: Icons.logout,
+                    label: 'ออกจากระบบ',
+                  ),
                 ],
           onTap: (index) {
             // print('index mwnu >> $index');
-            if (index == 0) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return MyService(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).pushAndRemoveUntil(
-                  materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-                  (Route<dynamic> route) {
-                return false;
-              });
-            } else if (index == 1) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListComplain(
-                  index: (myUserModel.level == 2) ? 2 : 4,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 2) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportMySupport(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 3) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListFaq(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 4) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ChangePassword(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 5) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportSelectDept(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
-            } else if (index == 6) {
-              logOut();
+            if (myUserModel.level == 1 || myUserModel.level == 2) {
+              if (index == 0) {
+                Navigator.of(context).pushNamed(Home.route);
+              } else if (index == 1) {
+                Navigator.of(context).pushNamed(ListComplain.route);
+              } else if (index == 2) {
+                Navigator.of(context).pushNamed(ListReportMySupport.route);
+              } else if (index == 3) {
+                Navigator.of(context).pushNamed(ListFaq.route);
+              } else if (index == 4) {
+                Navigator.of(context).pushNamed(ChangePassword.route);
+              } else if (index == 5) {
+                Navigator.of(context).pushNamed(ListReportSelectDept.route);
+              } else if (index == 6) {
+                logOut();
+              }
+            } else {
+              if (index == 0) {
+                Navigator.of(context).pushNamed(Home.route);
+              } else if (index == 1) {
+                Navigator.of(context).pushNamed(ListComplain.route);
+              } else if (index == 2) {
+                Navigator.of(context).pushNamed(ListReportMySupport.route);
+              } else if (index == 3) {
+                Navigator.of(context).pushNamed(ListFaq.route);
+              } else if (index == 4) {
+                Navigator.of(context).pushNamed(ChangePassword.route);
+              } else if (index == 5) {
+                logOut();
+              }
             }
           },
         ),
@@ -287,9 +258,9 @@ class _AdminSideBarState extends State<AdminSideBar> {
     Center(
       child: Text('จัดการข้อมูลถาม-ตอบ'),
     ),
-    // Center(
-    //   child: Text('ออกจากระบบ'),
-    // ),
+    Center(
+      child: Text('ออกจากระบบ'),
+    ),
   ];
   int selectedIndex = 0;
 
@@ -355,118 +326,130 @@ class _AdminSideBarState extends State<AdminSideBar> {
               icon: Icons.question_answer_outlined,
               label: 'จัดการข้อมูลถาม-ตอบ',
             ),
-            // SideNavigationBarItem(
-            //   icon: Icons.logout,
-            //   label: 'ออกจากระบบ',
-            // ),
+            SideNavigationBarItem(
+              icon: Icons.logout,
+              label: 'ออกจากระบบ',
+            ),
           ],
           onTap: (index) {
             // print('index mwnu >> $index');
             if (index == 0) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return MyService(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).pushAndRemoveUntil(
-                  materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-                  (Route<dynamic> route) {
-                return false;
-              });
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return Home(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).pushAndRemoveUntil(
+              //     materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
+              //     (Route<dynamic> route) {
+              //   return false;
+              // });
+              Navigator.of(context).pushNamed(Home.route);
             } else if (index == 1) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListComplain(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListComplain(
+              //     index: 0,
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListComplain.route);
             } else if (index == 2) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportMySupport(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListReportMySupport(
+              //     index: 0,
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListReportMySupport.route);
             } else if (index == 3) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListFaq(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListFaq(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListFaq.route);
             } else if (index == 4) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ChangePassword(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ChangePassword(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ChangePassword.route);
             } else if (index == 5) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportSelectDept(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListReportSelectDept(
+              //     index: 0,
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListReportSelectDept.route);
             } else if (index == 6) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListReportDept(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListReportDept(
+              //     index: 0,
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListReportDept.route);
             } else if (index == 7) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListComplainAdmin(
-                  index: 0,
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListComplainAdmin(
+              //     index: 0,
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListComplainAdmin.route);
             } else if (index == 8) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListDept(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListDept(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListDept.route);
             } else if (index == 9) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListProblem(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListProblem(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListProblem.route);
             } else if (index == 10) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListUser(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListUser(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListUser.route);
             } else if (index == 11) {
-              MaterialPageRoute materialPageRoute =
-                  MaterialPageRoute(builder: (BuildContext buildContext) {
-                return ListFaq(
-                  userModel: myUserModel,
-                );
-              });
-              Navigator.of(context).push(materialPageRoute);
+              // MaterialPageRoute materialPageRoute =
+              //     MaterialPageRoute(builder: (BuildContext buildContext) {
+              //   return ListFaq(
+              //     userModel: myUserModel,
+              //   );
+              // });
+              // Navigator.of(context).push(materialPageRoute);
+              Navigator.of(context).pushNamed(ListFaq.route);
             } else if (index == 12) {
               logOut();
             }

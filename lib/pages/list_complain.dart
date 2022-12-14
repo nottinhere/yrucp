@@ -20,6 +20,8 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:yrusv/layouts/top_bar.dart';
 
 class ListComplain extends StatefulWidget {
+  static const String route = '/ListRequest';
+
   final int index;
   final UserModel userModel;
 
@@ -677,13 +679,19 @@ class _ListComplainState extends State<ListComplain> {
                 userModel: myUserModel,
               );
             });
-            // Navigator.of(context).push(materialPageRoute);
             Navigator.of(context)
                 .push(materialPageRoute)
                 .then((value) => setState(() {
                       // readData();
                       updateDatalist(index);
                     }));
+            // Navigator.of(context).pushNamed(
+            //   Detail.route,
+            //   arguments: {complainAllModel: filterComplainAllModels[index]},
+            // ).then((value) => setState(() {
+            //       // readData();
+            //       updateDatalist(index);
+            //     }));
           }
         },
       ),
@@ -720,6 +728,7 @@ class _ListComplainState extends State<ListComplain> {
         ),
         onTap: () {
           // print('You are staff');
+
           MaterialPageRoute materialPageRoute =
               MaterialPageRoute(builder: (BuildContext buildContext) {
             return DetailStaff(
@@ -734,6 +743,16 @@ class _ListComplainState extends State<ListComplain> {
                     // readData();
                     showTag(index);
                   }));
+          /* 
+          Navigator.pushNamed(context, DetailStaff.route,
+              arguments: ScreenArguments(
+                filterComplainAllModels[index],
+                myUserModel,
+              )).then((value) => setState(() {
+                // readData();
+                showTag(index);
+              }));
+                 */
         },
       ),
     );
@@ -845,7 +864,7 @@ class _ListComplainState extends State<ListComplain> {
                 ),
               ),
               Text(
-                'ผู้แจ้ง :   ${filterComplainAllModels[index].postby}',
+                'ผู้แจ้ง :   ${filterComplainAllModels[index].ps_fullname}',
                 style: TextStyle(
                   fontSize: 13.0,
                   // fontWeight: FontWeight.bold,
@@ -1246,4 +1265,11 @@ class _ListComplainState extends State<ListComplain> {
       ),
     );
   }
+}
+
+class ScreenArguments {
+  final ComplainAllModel complainAllModel;
+  final UserModel myUserModel;
+
+  ScreenArguments(this.complainAllModel, this.myUserModel);
 }

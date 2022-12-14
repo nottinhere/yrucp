@@ -15,6 +15,8 @@ import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class AddDept extends StatefulWidget {
+  static const String route = '/AddDept';
+
   final UserModel userModel;
 
   AddDept({Key key, this.userModel}) : super(key: key);

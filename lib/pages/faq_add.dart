@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:yrusv/models/staff_all_model.dart';
 import 'package:yrusv/models/user_model.dart';
 import 'package:yrusv/models/faq_model.dart';
+import 'package:yrusv/pages/list_faq.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,8 @@ import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class AddFaq extends StatefulWidget {
+  static const String route = '/AddFaq';
+
   final UserModel userModel;
 
   AddFaq({Key key, this.userModel}) : super(key: key);
@@ -182,8 +185,9 @@ class _AddFaqState extends State<AddFaq> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop();
-                    backProcess();
+                    // Navigator.of(context).pop();
+                    // backProcess();
+                    Navigator.of(context).pushNamed(ListFaq.route);
                   },
                   child: Text('OK'))
             ],

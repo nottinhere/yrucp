@@ -26,6 +26,8 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListReportSelectDept extends StatefulWidget {
+  static const String route = '/ListReportSelectDepartment';
+
   final int index;
   final UserModel userModel;
   ListReportSelectDept({Key key, this.index, this.userModel}) : super(key: key);
@@ -978,14 +980,15 @@ class _ListReportSelectDeptState extends State<ListReportSelectDept> {
         ),
         onTap: () {
           // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportRatingSelectDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportRatingSelectDept(
+          //     index: 1,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportRatingSelectDept.route);
         },
       ),
     );

@@ -18,6 +18,8 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListDept extends StatefulWidget {
+  static const String route = '/ListDepartment';
+
   final int index;
   final UserModel userModel;
 
@@ -135,6 +137,7 @@ class _ListDeptState extends State<ListDept> {
       // print('itemSelect = ${selectDeptModel.dpName}');
       filterDeptModels[index].dpName = selectDeptModel.dpName;
       filterDeptModels[index].code = selectDeptModel.code;
+      filterDeptModels[index].status = selectDeptModel.status;
     });
   }
 
@@ -208,6 +211,67 @@ class _ListDeptState extends State<ListDept> {
       });
       // readDept();
     });
+  }
+
+  Future<void> changeStatus(index) async {
+    int memberId = myUserModel.id;
+    String selectId = filterDeptModels[index].dpId;
+    String nextStatus = (filterDeptModels[index].status == '0') ? '1' : '0';
+
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusdept.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
+    // print('url >> $urlST');
+    http.Response response = await http.get(urlST);
+
+    await http.get(urlST).then((response) {
+      setState(() {
+        page = 1;
+        filterDeptModels.clear();
+        readDept();
+      });
+      // readDept();
+    });
+  }
+
+  Widget status_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (filterDeptModels[index].status == '0')
+              ? Colors.grey.shade500
+              : Colors.blue.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  (filterDeptModels[index].status == '0')
+                      ? Icons.remove_red_eye
+                      : Icons.remove_red_eye_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  (filterDeptModels[index].status == '0')
+                      ? ' ปิดการใช้งาน'
+                      : ' เปิดใช้งาน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          changeStatus(index);
+        },
+      ),
+    );
   }
 
   Widget edit_btn(index) {
@@ -299,12 +363,19 @@ class _ListDeptState extends State<ListDept> {
 
   Widget showBTN(int index) {
     return Row(
-      children: [edit_btn(index), delete_btn(index)],
+      children: [
+        (filterDeptModels[index].status == '1') ? edit_btn(index) : Container(),
+        (filterDeptModels[index].status == '1')
+            ? delete_btn(index)
+            : Container(),
+        status_btn(index),
+      ],
     );
   }
 
   Widget showPercentStock(int index) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width * 0.75,

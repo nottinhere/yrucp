@@ -17,7 +17,7 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:crypto/crypto.dart';
 
 class ChangePassword extends StatefulWidget {
-  static const route = '/ChangePassword';
+  static const String route = '/ChangePassword';
 
   final UserModel userModel;
 
@@ -180,8 +180,8 @@ class _ChangePasswordState extends State<ChangePassword> {
         normalDialog(context, 'กรุณาตรวจสอบ', 'รหัสผ่านไม่ตรงกัน');
       } else {
         try {
+          /*
           var en_password = md5.convert(utf8.encode(txtnewpass)).toString();
-          // en_password = sha1.convert(utf8.encode(en_password)).toString();
           var uri = 'memberId=$memberID&action=edit&newpassw=$en_password';
           Codec<String, String> stringToBase64Url = utf8.fuse(base64Url);
           String query_string = stringToBase64Url.encode(uri);
@@ -191,6 +191,18 @@ class _ChangePasswordState extends State<ChangePassword> {
                   query_string; //'';
           // print('submitURL >> $url');
           await http.get(url).then((value) {
+            confirmSubmit();
+          });
+          */
+
+          String url =
+              'https://app.oss.yru.ac.th/yrusv/api/json_submit_chgpassw.php'; //'';
+          // print('submitURL >> $url');
+          await http.post(Uri.parse(url), body: {
+            'memberId': memberID,
+            'action': 'edit',
+            'newpassw': txtnewpass
+          }).then((value) {
             confirmSubmit();
           });
         } catch (e) {}

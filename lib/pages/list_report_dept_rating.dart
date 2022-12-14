@@ -24,6 +24,8 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListReportRatingSelectDept extends StatefulWidget {
+  static const String route = '/ListReportRatingSelectDepartment';
+
   final int index;
   final UserModel userModel;
   ListReportRatingSelectDept({Key key, this.index, this.userModel})
@@ -447,14 +449,15 @@ class _ListReportRatingSelectDeptState
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportSelectDept(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportSelectDept(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportSelectDept.route);
         },
       ),
     );
@@ -490,14 +493,14 @@ class _ListReportRatingSelectDeptState
         ),
         onTap: () {
           // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportRatingDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportRatingDept(
+          //     index: 1,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
         },
       ),
     );

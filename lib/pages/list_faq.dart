@@ -19,7 +19,7 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListFaq extends StatefulWidget {
-  static const route = '/ListFaq';
+  static const String route = '/ListFaq';
 
   final int index;
   final UserModel userModel;
@@ -363,8 +363,10 @@ class _ListFaqState extends State<ListFaq> {
           );
         });
         // Navigator.of(context).push(materialPageRoute);
+        // Navigator.of(context).pushNamed(AddFaq.route);
+
         Navigator.of(context)
-            .push(materialPageRoute)
+            .pushNamed(AddFaq.route)
             .then((value) => setState(() {
                   page = 1;
                   faqModels.clear();

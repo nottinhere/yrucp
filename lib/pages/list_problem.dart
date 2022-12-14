@@ -18,6 +18,8 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListProblem extends StatefulWidget {
+  static const String route = '/ListCategory';
+
   final int index;
   final UserModel userModel;
 
@@ -138,6 +140,7 @@ class _ListProblemState extends State<ListProblem> {
 
       filterProbModels[index].subject = selectProbModel.subject;
       filterProbModels[index].dpName = selectProbModel.dpName;
+      filterProbModels[index].status = selectProbModel.status;
     });
   }
 
@@ -211,6 +214,68 @@ class _ListProblemState extends State<ListProblem> {
       });
       // readProb();
     });
+  }
+
+  Future<void> changeStatus(index) async {
+    int memberId = myUserModel.id;
+    String selectId = filterProbModels[index].pId;
+    String nextStatus = (filterProbModels[index].status == '0') ? '1' : '0';
+
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusproblem.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
+    // print('url >> $urlST');
+    http.Response response = await http.get(urlST);
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    await http.get(urlST).then((response) {
+      setState(() {
+        page = 1;
+        filterProbModels.clear();
+        readProb();
+      });
+      // readDept();
+    });
+  }
+
+  Widget status_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (filterProbModels[index].status == '0')
+              ? Colors.grey.shade500
+              : Colors.blue.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  (filterProbModels[index].status == '0')
+                      ? Icons.remove_red_eye
+                      : Icons.remove_red_eye_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  (filterProbModels[index].status == '0')
+                      ? ' ปิดการใช้งาน'
+                      : ' เปิดใช้งาน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          changeStatus(index);
+        },
+      ),
+    );
   }
 
   Widget edit_btn(index) {
@@ -302,12 +367,19 @@ class _ListProblemState extends State<ListProblem> {
 
   Widget showBTN(int index) {
     return Row(
-      children: [edit_btn(index), delete_btn(index)],
+      children: [
+        (filterProbModels[index].status == '1') ? edit_btn(index) : Container(),
+        (filterProbModels[index].status == '1')
+            ? delete_btn(index)
+            : Container(),
+        status_btn(index),
+      ],
     );
   }
 
   Widget showPercentStock(int index) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Container(
           width: MediaQuery.of(context).size.width * 0.77,

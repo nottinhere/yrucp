@@ -12,6 +12,7 @@ import 'package:yrusv/utility/normal_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:yrusv/widgets/home.dart';
+import 'package:yrusv/pages/route.dart';
 
 import 'dart:convert';
 import 'package:encrypt/encrypt.dart';
@@ -34,12 +35,17 @@ class _AuthenState extends State<Authen> {
   String subjectPopup = '';
   String imagePopup = '';
   String statusPopup = '';
+  String gotoPath = '';
 
   // Method
   @override
   void initState() {
     super.initState();
     checkLogin();
+    setState(() {
+      final uri = Uri.parse(Uri.base.toString());
+      gotoPath = uri.fragment;
+    });
   }
 
   Future<void> checkLogin() async {
@@ -155,21 +161,24 @@ class _AuthenState extends State<Authen> {
       // Have space
       normalDialog(context, 'กรุณาตรวจสอบ', 'กรุณากรอกข้อมูลให้ครบ');
     } else {
-      var en_password = md5.convert(utf8.encode(password)).toString();
-      en_password = sha1.convert(utf8.encode(en_password)).toString();
-      var uri = 'us=$user&pw=$en_password';
-      Codec<String, String> stringToBase64Url = utf8.fuse(base64Url);
-      String query_string = stringToBase64Url.encode(uri);
+      // var en_password = md5.convert(utf8.encode(password)).toString();
+      // en_password = sha1.convert(utf8.encode(en_password)).toString();
+      // var uri = 'us=$user&pw=$en_password';
+      // Codec<String, String> stringToBase64Url = utf8.fuse(base64Url);
+      // String query_string = stringToBase64Url.encode(uri);
 
-      String url = '${MyStyle().getUserWhereUserAndPass}?code=' + query_string;
+      // String url = '${MyStyle().getUserWhereUserAndPass}?code=' + query_string;
       // print('url = $url');
+      // http.Response response = await http
+      //     .get(url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
 
+      String url = '${MyStyle().getUserWhereUserAndPass}';
       http.Response response = await http
-          .get(url); // await จะต้องทำงานใน await จะเสร็จจึงจะไปทำ process ต่อไป
+          .post(Uri.parse(url), body: {'user': user, 'password': password});
+      // print('url = $url || user = $user || password = $password');
       var result = json.decode(response.body);
 
       int statusInt = result['status'];
-      // print('statusInt = $statusInt');
 
       if (statusInt == 0) {
         String message = result['message'];
@@ -192,11 +201,11 @@ class _AuthenState extends State<Authen> {
   }
 
   void gotoService() {
+    // print('Before gotoroute > ' + gotoPath);
+
     MaterialPageRoute materialPageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
-      return MyService(
-        userModel: userModel,
-      );
+      return RoutePage(userModel: userModel, gotoURL: gotoPath);
     });
 
     Navigator.of(context).pushAndRemoveUntil(
@@ -204,52 +213,6 @@ class _AuthenState extends State<Authen> {
         (Route<dynamic> route) {
       return false;
     });
-  }
-
-  void gotoPopupdetail() {
-    MaterialPageRoute materialPageRoute =
-        MaterialPageRoute(builder: (BuildContext buildContext) {
-      return DetailPopup(
-        // index: index,
-        userModel: userModel,
-      );
-    });
-    Navigator.of(context).push(materialPageRoute);
-  }
-
-  void _onBasicAlertPressed(context) {
-    var alertStyle = AlertStyle(
-      isCloseButton: false,
-      isOverlayTapDismiss: false,
-      titleStyle: TextStyle(
-        color: Colors.red,
-      ),
-    );
-
-    Alert(
-      context: context,
-      style: alertStyle,
-      title: "ประกาศ !!!",
-      desc: subjectPopup,
-      buttons: [
-        DialogButton(
-          child: Text(
-            "Close",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          onPressed: () => gotoService(),
-          color: Color.fromRGBO(255, 77, 77, 1.0),
-        ),
-        DialogButton(
-          child: Text(
-            "รายละเอียด",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          onPressed: () => gotoPopupdetail(),
-          color: Color.fromRGBO(51, 153, 255, 1.0),
-        ),
-      ],
-    ).show();
   }
 
   Future<void> saveSharePreference() async {
@@ -264,9 +227,7 @@ class _AuthenState extends State<Authen> {
   void routeToMyService() {
     MaterialPageRoute materialPageRoute =
         MaterialPageRoute(builder: (BuildContext buildContext) {
-      return MyService(
-        userModel: userModel,
-      );
+      return RoutePage(userModel: userModel, gotoURL: gotoPath);
     });
     Navigator.of(context).pushAndRemoveUntil(
         materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
@@ -365,7 +326,7 @@ class _AuthenState extends State<Authen> {
     UserModel myUserModel;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Home.route,
+      // initialRoute: Home.route,
       home: Scaffold(
         body: SafeArea(
           child: status ? mainContent() : mainContent(),

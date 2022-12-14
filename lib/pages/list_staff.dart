@@ -17,6 +17,8 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListUser extends StatefulWidget {
+  static const String route = '/ListUser';
+
   final int index;
   final UserModel userModel;
   ListUser({Key key, this.index, this.userModel}) : super(key: key);
@@ -212,6 +214,68 @@ class _ListUserState extends State<ListUser> {
     });
   }
 
+  Future<void> changeStatus(index) async {
+    int memberId = myUserModel.id;
+    String selectId = filterUserModels[index].id.toString();
+    int nextStatus = (filterUserModels[index].status == 0) ? 1 : 0;
+
+    String urlST =
+        'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusstaff.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
+    print('url >> $urlST');
+    http.Response response = await http.get(urlST);
+    // Navigator.of(context, rootNavigator: true).pop();
+
+    await http.get(urlST).then((response) {
+      setState(() {
+        page = 1;
+        filterUserModels.clear();
+        readStaff();
+      });
+      // readDept();
+    });
+  }
+
+  Widget status_btn(index) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (filterUserModels[index].status == 0)
+              ? Colors.grey.shade500
+              : Colors.blue.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  (filterUserModels[index].status == 0)
+                      ? Icons.remove_red_eye
+                      : Icons.remove_red_eye_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  (filterUserModels[index].status == 0)
+                      ? ' ปิดการใช้งาน'
+                      : ' เปิดใช้งาน',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          changeStatus(index);
+        },
+      ),
+    );
+  }
+
   Widget edit_btn(index) {
     return Container(
       width: MediaQuery.of(context).size.width * 0.08,
@@ -307,7 +371,7 @@ class _ListUserState extends State<ListUser> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                width: MediaQuery.of(context).size.width * 0.35,
+                width: MediaQuery.of(context).size.width * 0.32,
                 child: Text(
                   'ชื่อ : ' + filterUserModels[index].personName,
                   style: TextStyle(
@@ -318,7 +382,7 @@ class _ListUserState extends State<ListUser> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.18,
+                width: MediaQuery.of(context).size.width * 0.11,
                 child: Text(
                   'Contact : ' + filterUserModels[index].personContact,
                   style: TextStyle(
@@ -329,9 +393,18 @@ class _ListUserState extends State<ListUser> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width * 0.17,
+                width: MediaQuery.of(context).size.width * 0.25,
                 child: Row(
-                  children: [edit_btn(index), delete_btn(index)],
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    (filterUserModels[index].status == 1)
+                        ? edit_btn(index)
+                        : Container(),
+                    (filterUserModels[index].status == 1)
+                        ? delete_btn(index)
+                        : Container(),
+                    status_btn(index),
+                  ],
                 ),
               )
             ],
@@ -364,7 +437,7 @@ class _ListUserState extends State<ListUser> {
       // height: MediaQuery.of(context).size.width * 0.5,
       width: MediaQuery.of(context).size.width * 0.79,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           showData(index),
           showName(index),

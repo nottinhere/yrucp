@@ -3,6 +3,7 @@ class ProblemModel {
   String subject;
   String dpId;
   String dpName;
+  String status;
 
   ProblemModel({this.pId, this.subject, this.dpId, this.dpName});
 
@@ -11,6 +12,7 @@ class ProblemModel {
     subject = json['subject'];
     dpId = json['dp_id'];
     dpName = json['dp_name'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class ProblemModel {
     data['subject'] = this.subject;
     data['dp_id'] = this.dpId;
     data['dp_name'] = this.dpName;
+    data['status'] = this.status;
     return data;
   }
 }

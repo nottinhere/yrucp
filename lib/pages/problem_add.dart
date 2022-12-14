@@ -15,6 +15,8 @@ import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class AddProb extends StatefulWidget {
+  static const String route = '/AddProb';
+
   final UserModel userModel;
 
   AddProb({Key key, this.userModel}) : super(key: key);

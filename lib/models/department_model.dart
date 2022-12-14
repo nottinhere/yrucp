@@ -3,6 +3,7 @@ class DepartmentModel {
   String dpName;
   String code;
   String accessToken;
+  String status;
   int memInDept;
 
   DepartmentModel({this.dpId, this.dpName, this.code, this.accessToken});
@@ -12,6 +13,7 @@ class DepartmentModel {
     dpName = json['dp_name'];
     code = json['code'];
     accessToken = json['access_token'];
+    status = json['status'];
     memInDept = json['memInDept'];
   }
 
@@ -21,6 +23,7 @@ class DepartmentModel {
     data['dp_name'] = this.dpName;
     data['code'] = this.code;
     data['access_token'] = this.accessToken;
+    data['status'] = this.status;
     data['memInDept'] = this.memInDept;
     return data;
   }

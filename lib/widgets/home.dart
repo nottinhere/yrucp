@@ -158,11 +158,12 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          routeToListComplain((myUserModel.level == 1)
-              ? 0
-              : (myUserModel.level == 2)
-                  ? 2
-                  : 4);
+          // routeToListComplain((myUserModel.level == 1)
+          //     ? 0
+          //     : (myUserModel.level == 2)
+          //         ? 2
+          //         : 4);
+          Navigator.of(context).pushNamed(ListComplain.route);
         },
       ),
     );
@@ -198,14 +199,15 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportSelectDept(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportSelectDept(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportSelectDept.route);
         },
       ),
     );
@@ -248,14 +250,15 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportMySupport(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportMySupport(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportMySupport.route);
         },
       ),
     );
@@ -309,7 +312,7 @@ class _HomeState extends State<Home> {
 
           // ListFaq.route
 
-          // Navigator.of(context).pushNamed(ListFaq.route);
+          Navigator.of(context).pushNamed(ListFaq.route);
         },
       ),
     );
@@ -347,15 +350,14 @@ class _HomeState extends State<Home> {
           ),
         ),
         onTap: () {
-          // print('You click Changepassword');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ChangePassword(
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-          // Navigator.of(context).pushNamed(ChangePassword.route);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ChangePassword(
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ChangePassword.route);
         },
       ),
     );
@@ -391,14 +393,15 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportDept(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportDept(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportDept.route);
         },
       ),
     );
@@ -435,14 +438,15 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListComplainAdmin(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListComplainAdmin(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListComplainAdmin.route);
         },
       ),
     );
@@ -480,13 +484,14 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListDept(
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListDept(
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListDept.route);
         },
       ),
     );
@@ -525,13 +530,14 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click promotion');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListProblem(
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListProblem(
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListProblem.route);
         },
       ),
     );
@@ -570,13 +576,14 @@ class _HomeState extends State<Home> {
         ),
         onTap: () {
           // print('You click listUser');
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListUser(
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListUser(
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListUser.route);
         },
       ),
     );
@@ -603,7 +610,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/q-a.png'),
                 ),
                 Text(
-                  'ถาม-ตอบ-',
+                  'ถาม-ตอบ',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -1085,62 +1092,70 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     /****************************** */
-    Route<dynamic> generateRoute(RouteSettings settings) {
-      print('settings.name >> ' + settings.name);
-      var uri = Uri.parse(settings.name);
-      switch (uri.path) {
-        case Home.route:
-          return MaterialPageRoute(builder: (_) => Home());
-          break;
-        case ListFaq.route:
-          return MaterialPageRoute(
-              builder: (_) => ListFaq(
-                    userModel: myUserModel,
-                  ));
-          break;
-        case ChangePassword.route:
-          return MaterialPageRoute(
-              builder: (_) => ChangePassword(
-                    userModel: myUserModel,
-                  ));
-          break;
-      }
-    }
+    // Route<dynamic> generateRoute(RouteSettings settings) {
+    //   print('settings.name >> ' + settings.name);
+    //   var uri = Uri.parse(settings.name);
+    //   switch (uri.path) {
+    //     case Home.route:
+    //       return MaterialPageRoute(builder: (_) => Home());
+    //       break;
+    //     case ListFaq.route:
+    //       return MaterialPageRoute(
+    //           builder: (_) => ListFaq(
+    //                 userModel: myUserModel,
+    //               ));
+    //       break;
+    //     case ChangePassword.route:
+    //       return MaterialPageRoute(
+    //           builder: (_) => ChangePassword(
+    //                 userModel: myUserModel,
+    //               ));
+    //       break;
+    //   }
+    // }
     /****************************** */
 
-    return MaterialApp(
-        onGenerateRoute: generateRoute,
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          Home.route: (context) => Home(),
-          ListFaq.route: (context) => ListFaq(
-                userModel: myUserModel,
-              ),
-          ChangePassword.route: (context) => ChangePassword(
-                userModel: myUserModel,
-              ),
-        },
-        home: Scaffold(
-          body: Row(
-            children: [
-              // (myUserModel.level == 1)
-              //     ? AdminSideBar(userModel: myUserModel)
-              //     : SideBar(userModel: myUserModel),
-              Expanded(
-                child: Column(
-                  children: <Widget>[
-                    headTitle('เมนู', Icons.home),
-                    homeMenu(),
-                    (myUserModel.level == 1) ? adminMenu() : Container(),
-                    // (myUserModel.level == 1 || myUserModel.level == 2)
-                    //     ? Center(child: showProductItem())
-                    //     : Container(),
-                  ],
-                ),
-              ),
-            ],
+    return // MaterialApp(
+        // onGenerateRoute: generateRoute,
+        // debugShowCheckedModeBanner: false,
+        // // initialRoute: Home.route,
+        // routes: {
+        //   Home.route: (context) => Home(
+        //       // userModel: myUserModel,
+        //       ),
+        //   ListFaq.route: (context) => ListFaq(
+        //         userModel: myUserModel,
+        //       ),
+        //   ChangePassword.route: (context) => ChangePassword(
+        //         userModel: myUserModel,
+        //       ),
+        // },
+        //home:
+        Scaffold(
+      appBar: AppBar(
+        backgroundColor: MyStyle().barColor,
+        title: Text('หน้าหลัก'),
+      ),
+      body: Row(
+        children: [
+          (myUserModel.level == 1)
+              ? AdminSideBar(userModel: myUserModel)
+              : SideBar(userModel: myUserModel),
+          Expanded(
+            child: Column(
+              children: <Widget>[
+                headTitle('เมนู', Icons.home),
+                homeMenu(),
+                (myUserModel.level == 1) ? adminMenu() : Container(),
+                // (myUserModel.level == 1 || myUserModel.level == 2)
+                //     ? Center(child: showProductItem())
+                //     : Container(),
+              ],
+            ),
           ),
-        ));
+        ],
+      ),
+      // ),
+    );
   }
 }

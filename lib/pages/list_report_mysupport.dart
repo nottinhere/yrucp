@@ -23,6 +23,8 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListReportMySupport extends StatefulWidget {
+  static const String route = '/ReportMySupport';
+
   final int index;
   final UserModel userModel;
   ListReportMySupport({Key key, this.index, this.userModel}) : super(key: key);

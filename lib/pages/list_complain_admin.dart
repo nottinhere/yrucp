@@ -19,6 +19,8 @@ import 'detail_cart.dart';
 import 'package:yrusv/layouts/side_bar.dart';
 
 class ListComplainAdmin extends StatefulWidget {
+  static const String route = '/ListComplainAdmin';
+
   final int index;
   final UserModel userModel;
 
@@ -608,7 +610,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                 ),
               ),
               Text(
-                'ผู้แจ้ง :   ${filterComplainAllModels[index].postby}',
+                'ผู้แจ้ง :   ${filterComplainAllModels[index].ps_fullname}',
                 style: TextStyle(
                   fontSize: 13.0,
                   // fontWeight: FontWeight.bold,

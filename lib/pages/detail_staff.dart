@@ -18,6 +18,8 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailStaff extends StatefulWidget {
+  static const String route = '/detailstaff';
+
   final ComplainAllModel complainAllModel;
   final UserModel userModel;
 
@@ -659,19 +661,19 @@ class _DetailStaffState extends State<DetailStaff> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Text(
-                      'YRU passport',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(0xff, 16, 149, 161),
-                        // decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ],
-                ),
+                // Column(
+                //   children: <Widget>[
+                //     Text(
+                //       'YRU passport',
+                //       style: TextStyle(
+                //         fontSize: 20.0,
+                //         fontWeight: FontWeight.bold,
+                //         color: Color.fromARGB(0xff, 16, 149, 161),
+                //         // decoration: TextDecoration.underline,
+                //       ),
+                //     ),
+                //   ],
+                // ),
 
                 Column(
                   children: <Widget>[
@@ -731,14 +733,14 @@ class _DetailStaffState extends State<DetailStaff> {
                   width: MediaQuery.of(context).size.width * 0.60,
                   child: Column(
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width *
-                            0.90, //0.7 - 50,
-                        child: Text(
-                          'เรื่อง : ' + complainAllModel.subject,
-                          style: MyStyle().h3bStyle,
-                        ),
-                      ),
+                      // Container(
+                      //   width: MediaQuery.of(context).size.width *
+                      //       0.90, //0.7 - 50,
+                      //   child: Text(
+                      //     'เรื่อง : ' + complainAllModel.subject,
+                      //     style: MyStyle().h3bStyle,
+                      //   ),
+                      // ),
                       Container(
                         width: MediaQuery.of(context).size.width *
                             0.90, //0.7 - 50,

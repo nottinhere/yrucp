@@ -27,6 +27,8 @@ import 'package:yrusv/layouts/side_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ListReportRatingDept extends StatefulWidget {
+  static const String route = '/ListReportRatingDepartment';
+
   final int index;
   final UserModel userModel;
   ListReportRatingDept({Key key, this.index, this.userModel}) : super(key: key);
@@ -445,14 +447,15 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportDept(
-              index: 0,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportDept(
+          //     index: 0,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportDept.route);
         },
       ),
     );
@@ -487,14 +490,15 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportProblemDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportProblemDept(
+          //     index: 1,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportProblemDept.route);
         },
       ),
     );
@@ -529,14 +533,15 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportStaff(
-              index: 2,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportStaff(
+          //     index: 2,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportStaff.route);
         },
       ),
     );
@@ -572,14 +577,15 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
         ),
         onTap: () {
           // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportReqDept(
-              index: 3,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportReqDept(
+          //     index: 3,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportReqDept.route);
         },
       ),
     );
@@ -657,14 +663,15 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListComment(
-              index: 5,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListComment(
+          //     index: 5,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListComment.route);
         },
       ),
     );
