@@ -12,6 +12,9 @@ import 'package:yrusv/models/report_problem_model.dart';
 import 'package:yrusv/utility/my_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yrusv/pages/list_report_dept_support.dart';
+import 'package:yrusv/pages/list_report_mysupport.dart';
+import 'package:yrusv/pages/list_report_dept_support.dart';
+import 'package:yrusv/pages/list_report_dept_rating.dart';
 
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
@@ -420,9 +423,9 @@ class _ListReportRatingSelectDeptState
     );
   }
 
-  Widget reportViewbySupport() {
+  Widget reportViewMySupport() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.12,
       // height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
@@ -438,7 +441,7 @@ class _ListReportRatingSelectDeptState
                   color: Colors.white,
                 ),
                 Text(
-                  'สรุปจากผู้รับผิดชอบ',
+                  'รายงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -449,28 +452,55 @@ class _ListReportRatingSelectDeptState
           ),
         ),
         onTap: () {
-          // MaterialPageRoute materialPageRoute =
-          //     MaterialPageRoute(builder: (BuildContext buildContext) {
-          //   return ListReportSelectDept(
-          //     index: 0,
-          //     userModel: myUserModel,
-          //   );
-          // });
-          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportMySupport.route);
+        },
+      ),
+    );
+  }
+
+  Widget reportViewbyDeptSupport() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.12,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  'รายงานสรุปของแผนก',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
           Navigator.of(context).pushNamed(ListReportSelectDept.route);
         },
       ),
     );
   }
 
-  Widget reportViewbyRating() {
+  Widget reportViewbyDeptRating() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.11,
+      width: MediaQuery.of(context).size.width * 0.12,
       // height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (myIndex == 1) ? Colors.blue.shade600 : Colors.grey.shade600,
+          color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -491,17 +521,7 @@ class _ListReportRatingSelectDeptState
             ),
           ),
         ),
-        onTap: () {
-          // routeToListComplain(1);
-          // MaterialPageRoute materialPageRoute =
-          //     MaterialPageRoute(builder: (BuildContext buildContext) {
-          //   return ListReportRatingDept(
-          //     index: 1,
-          //     userModel: myUserModel,
-          //   );
-          // });
-          // Navigator.of(context).push(materialPageRoute);
-        },
+        onTap: () {},
       ),
     );
   }
@@ -1023,8 +1043,9 @@ class _ListReportRatingSelectDeptState
         width: MediaQuery.of(context).size.width * 0.45,
         child: Row(
           children: [
-            reportViewbySupport(),
-            reportViewbyRating(),
+            reportViewMySupport(),
+            reportViewbyDeptSupport(),
+            reportViewbyDeptRating(),
           ],
         ),
       ),
@@ -1259,7 +1280,7 @@ class _ListReportRatingSelectDeptState
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปการประเมิน'),
+        title: Text('รายงาน :: สรุปการประเมิน'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -1271,8 +1292,8 @@ class _ListReportRatingSelectDeptState
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 2)
+              : SideBar(userModel: myUserModel, curSelectMenu: 2),
           Expanded(
             child: Column(
               children: <Widget>[

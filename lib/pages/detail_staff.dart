@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:yrusv/constants.dart';
 import 'package:yrusv/models/product_all_model.dart';
 import 'package:yrusv/models/complain_all_model.dart';
 import 'package:yrusv/models/staff_all_model.dart';
@@ -321,7 +322,7 @@ class _DetailStaffState extends State<DetailStaff> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.yellow.shade900,
+          color: Colors.purple,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -329,6 +330,37 @@ class _DetailStaffState extends State<DetailStaff> {
               children: <Widget>[
                 Text(
                   "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget adminRejectTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.purple,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ดูแล",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -362,6 +394,7 @@ class _DetailStaffState extends State<DetailStaff> {
         (complainAllModel.status == '4') ? completeTag() : Container(),
         (complainAllModel.status == '5') ? incompleteTag() : Container(),
         (complainAllModel.status == '6') ? cancelTag() : Container(),
+        (complainAllModel.status == '7') ? adminRejectTag() : Container(),
         SizedBox(
           width: 5.0,
           height: 8.0,
@@ -1075,9 +1108,11 @@ class _DetailStaffState extends State<DetailStaff> {
       child: GestureDetector(
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            onSurface: Colors.green,
+            onSurface: Colors.grey,
           ),
-          child: const Text('ลงเวลาเข้า'),
+          child: (isButtonCheckinActive == true)
+              ? const Text('ลงเวลาเข้า', style: TextStyle(color: Colors.white))
+              : const Text('ลงเวลาเข้า', style: TextStyle(color: Colors.black)),
           onPressed: isButtonCheckinActive
               ? () {
                   // print('You click checkin');
@@ -1149,9 +1184,11 @@ class _DetailStaffState extends State<DetailStaff> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             onSurface:
-                (isButtonCheckinActive == true) ? Colors.black : Colors.green,
+                (isButtonCheckinActive == true) ? Colors.black : Colors.grey,
           ),
-          child: const Text('ลงเวลาออก'),
+          child: (isButtonCheckoutActive == true)
+              ? const Text('ลงเวลาออก', style: TextStyle(color: Colors.white))
+              : const Text('ลงเวลาออก', style: TextStyle(color: Colors.black)),
           onPressed: (isButtonCheckoutActive && isButtonCheckinActive == false)
               ? () {
                   // print('You click checkout');
@@ -1483,8 +1520,8 @@ class _DetailStaffState extends State<DetailStaff> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 1)
+              : SideBar(userModel: myUserModel, curSelectMenu: 1),
           Expanded(child: showDetailStaffList()),
         ],
       ),
@@ -1514,8 +1551,12 @@ class _DetailStaffState extends State<DetailStaff> {
         showTag(),
         showHeader(),
         // showSubject(),
-        showResponsible(),
-        showFormDeal(),
+        (complainAllModel.status != '6' && complainAllModel.status != '7')
+            ? showResponsible()
+            : Container(),
+        (complainAllModel.status != '6' && complainAllModel.status != '7')
+            ? showFormDeal()
+            : Container(),
         // feedbackBox(),
 
         // showPhoto(),

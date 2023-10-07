@@ -150,9 +150,9 @@ class _ListUserState extends State<ListUser> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -185,12 +185,12 @@ class _ListUserState extends State<ListUser> {
 
   Widget comfirmButton(int index) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(
           index,
         );
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       },
     );
   }
@@ -212,6 +212,8 @@ class _ListUserState extends State<ListUser> {
       });
       // readStaff();
     });
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pushNamed(ListUser.route);
   }
 
   Future<void> changeStatus(index) async {
@@ -221,7 +223,7 @@ class _ListUserState extends State<ListUser> {
 
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusstaff.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
-    print('url >> $urlST');
+    // print('url >> $urlST');
     http.Response response = await http.get(urlST);
     // Navigator.of(context, rootNavigator: true).pop();
 
@@ -333,7 +335,9 @@ class _ListUserState extends State<ListUser> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: Colors.blue.shade600,
+          color: (filterUserModels[index].postInMem == 0)
+              ? Colors.blue.shade600
+              : Colors.grey.shade500,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -344,7 +348,8 @@ class _ListUserState extends State<ListUser> {
                   color: Colors.white,
                 ),
                 Text(
-                  ' ลบข้อมูล',
+                  ' ลบข้อมูล ',
+                  //    + '(' + filterUserModels[index].postInMem.toString() + ')'
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -356,7 +361,9 @@ class _ListUserState extends State<ListUser> {
         ),
         onTap: () {
           // print('Delete BTN');
-          confirmDelete(index);
+          (filterUserModels[index].postInMem == 0)
+              ? confirmDelete(index)
+              : null;
         },
       ),
     );
@@ -654,8 +661,8 @@ class _ListUserState extends State<ListUser> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 9)
+              : SideBar(userModel: myUserModel, curSelectMenu: 9),
           Expanded(
             child: Column(
               children: <Widget>[

@@ -511,7 +511,7 @@ class _DetailState extends State<Detail> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.yellow.shade900,
+          color: Colors.purple,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -519,6 +519,37 @@ class _DetailState extends State<Detail> {
               children: <Widget>[
                 Text(
                   "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget adminRejectTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.purple,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ดูแล",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -552,6 +583,7 @@ class _DetailState extends State<Detail> {
         (complainAllModel.status == '4') ? completeTag() : Container(),
         (complainAllModel.status == '5') ? incompleteTag() : Container(),
         (complainAllModel.status == '6') ? cancelTag() : Container(),
+        (complainAllModel.status == '7') ? adminRejectTag() : Container(),
         SizedBox(
           width: 5.0,
           height: 8.0,
@@ -1571,7 +1603,23 @@ class _DetailState extends State<Detail> {
   }
 
   Future<void> submitThread() async {
-    try {
+    id = currentComplainAllModel.id.toString();
+    // String url = '${MyStyle().getProductWhereId}$id';
+    String urlSelectCP =
+        'https://app.oss.yru.ac.th/yrusv/api/json_data_complaindetail.php?id=$id';
+    print('urlSelectCP = $urlSelectCP');
+    http.Response response = await http.get(urlSelectCP);
+    var resultSelectCP = json.decode(response.body);
+
+    Map<String, dynamic> map = resultSelectCP['itemsData'][0];
+    ComplainAllModel dataSelectCP = ComplainAllModel.fromJson(map);
+    var selectStaff = dataSelectCP.staff;
+    var selectStatus = dataSelectCP.status;
+    print('selectStaff = $selectStaff');
+
+    // //try {
+    if (selectStatus == '1' || selectStatus == '2') {
+      // if (selectStaff == '-') {
       var medID = currentComplainAllModel.id;
       var cpID = currentComplainAllModel.id;
 
@@ -1583,7 +1631,15 @@ class _DetailState extends State<Detail> {
       await http.get(url).then((value) {
         confirmSubmit();
       });
-    } catch (e) {}
+      // } else {
+      //   normalDialog(
+      //       context, 'ไม่สามารถแก้ไขได้', 'เนื่องจากงานได้เริ่มดำเนินการแล้ว');
+      // }
+    } else {
+      normalDialog(
+          context, 'ไม่สามารถแก้ไขได้', 'เนื่องจากงานได้เริ่มดำเนินการแล้ว');
+    }
+    //} catch (e) {}
   }
 
   Future<void> confirmSubmit() async {
@@ -1681,7 +1737,7 @@ class _DetailState extends State<Detail> {
 
       String url =
           'https://app.oss.yru.ac.th/yrusv/api/json_submit_transfer.php?memberId=$memberID&cpID=$cpID&selectedPB=$_mySelectionPB&fromDV=$fromDV&postdate=$postdate'; //'';
-      // print('submitURL >> $url');
+      print('submitURL >> $url');
       await http.get(url).then((value) {
         confirmTransferSubmit();
       });
@@ -1786,8 +1842,8 @@ class _DetailState extends State<Detail> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 1)
+              : SideBar(userModel: myUserModel, curSelectMenu: 1),
           Expanded(child: showDetailList()),
         ],
       ),
@@ -1818,8 +1874,13 @@ class _DetailState extends State<Detail> {
         showHeader(),
         // showSubject(),
         // showResponsible(),
-        showResponsible_staff(),
-        showFormDeal(),
+        (complainAllModel.status != '6' && complainAllModel.status != '7')
+            ? showResponsible_staff()
+            : Container(),
+        (complainAllModel.status != '6' && complainAllModel.status != '7')
+            ? showFormDeal()
+            : Container(),
+
         // feedbackBox(),
         if (complainAllModel.status == '1' || complainAllModel.status == '2')
           transferBox(),

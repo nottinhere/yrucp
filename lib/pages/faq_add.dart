@@ -185,9 +185,9 @@ class _AddFaqState extends State<AddFaq> {
             actions: <Widget>[
               TextButton(
                   onPressed: () {
-                    // Navigator.of(context).pop();
-                    // backProcess();
-                    Navigator.of(context).pushNamed(ListFaq.route);
+                    Navigator.of(context).pop();
+                    backProcess();
+                    // Navigator.of(context).pushNamed(ListFaq.route);
                   },
                   child: Text('OK'))
             ],
@@ -259,8 +259,8 @@ class _AddFaqState extends State<AddFaq> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 3)
+              : SideBar(userModel: myUserModel, curSelectMenu: 3),
           Expanded(child: showController()),
         ],
       ),

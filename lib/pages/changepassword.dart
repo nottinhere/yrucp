@@ -300,8 +300,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 4)
+              : SideBar(userModel: myUserModel, curSelectMenu: 4),
           Expanded(child: showController()),
         ],
       ),

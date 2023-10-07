@@ -431,8 +431,8 @@ class _EditDeptState extends State<EditDept> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 7)
+              : SideBar(userModel: myUserModel, curSelectMenu: 7),
           Expanded(child: showController()),
         ],
       ),

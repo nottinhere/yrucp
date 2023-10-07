@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
-import 'package:easy_sidemenu/easy_sidemenu.dart';
+// import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:yrusv/pages/list_report_support.dart';
 import 'package:yrusv/widgets/home.dart';
 import 'package:yrusv/pages/my_service.dart';
@@ -23,8 +23,9 @@ import 'package:yrusv/pages/list_report_mysupport.dart';
 
 class SideBar extends StatefulWidget {
   final UserModel userModel;
+  final int curSelectMenu;
 
-  SideBar({Key key, this.userModel}) : super(key: key);
+  SideBar({Key key, this.userModel, this.curSelectMenu}) : super(key: key);
 
   @override
   _SideBarState createState() => _SideBarState();
@@ -33,11 +34,14 @@ class SideBar extends StatefulWidget {
 class _SideBarState extends State<SideBar> {
   UserModel myUserModel;
   PageController page = PageController();
+  int selectedIndex;
+  int currentcSelectMenu;
 
   @override
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
+    currentcSelectMenu = widget.curSelectMenu;
   }
 
   Future<void> logOut() async {
@@ -78,7 +82,7 @@ class _SideBarState extends State<SideBar> {
       child: Text('123456'),
     ),
   ];
-  int selectedIndex = 0;
+  // int selectedIndexStaff = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +96,7 @@ class _SideBarState extends State<SideBar> {
               title: Text(myUserModel.personName),
               subtitle: Text('(${myUserModel.levelName}) ' +
                   ' ${myUserModel.departmentName} ')),
-          // selectedIndex: selectedIndex,
+          selectedIndex: currentcSelectMenu,
           items: (myUserModel.level == 1 || myUserModel.level == 2)
               ? const [
                   SideNavigationBarItem(
@@ -105,7 +109,7 @@ class _SideBarState extends State<SideBar> {
                   ),
                   SideNavigationBarItem(
                     icon: Icons.playlist_add_check,
-                    label: 'รายงานของท่าน',
+                    label: 'รายงาน',
                   ),
                   SideNavigationBarItem(
                     icon: Icons.question_answer,
@@ -115,10 +119,10 @@ class _SideBarState extends State<SideBar> {
                     icon: Icons.password,
                     label: 'เปลี่ยนรหัสผ่าน',
                   ),
-                  SideNavigationBarItem(
-                    icon: Icons.source,
-                    label: 'รายงานผู้รับผิดชอบ',
-                  ),
+                  // SideNavigationBarItem(
+                  //   icon: Icons.source,
+                  //   label: 'รายงานผู้รับผิดชอบ',
+                  // ),
                   SideNavigationBarItem(
                     icon: Icons.logout,
                     label: 'ออกจากระบบ',
@@ -135,7 +139,7 @@ class _SideBarState extends State<SideBar> {
                   ),
                   SideNavigationBarItem(
                     icon: Icons.playlist_add_check,
-                    label: 'รายงานของท่าน',
+                    label: 'รายงาน',
                   ),
                   SideNavigationBarItem(
                     icon: Icons.question_answer,
@@ -150,40 +154,53 @@ class _SideBarState extends State<SideBar> {
                     label: 'ออกจากระบบ',
                   ),
                 ],
-          onTap: (index) {
-            // print('index mwnu >> $index');
+          onTap: (indexTabST) {
+            // print('indexTabST menu >> $indexTabST');
             if (myUserModel.level == 1 || myUserModel.level == 2) {
-              if (index == 0) {
+              if (indexTabST == 0) {
                 Navigator.of(context).pushNamed(Home.route);
-              } else if (index == 1) {
+              } else if (indexTabST == 1) {
                 Navigator.of(context).pushNamed(ListComplain.route);
-              } else if (index == 2) {
+              } else if (indexTabST == 2) {
                 Navigator.of(context).pushNamed(ListReportMySupport.route);
-              } else if (index == 3) {
+              } else if (indexTabST == 3) {
                 Navigator.of(context).pushNamed(ListFaq.route);
-              } else if (index == 4) {
+              } else if (indexTabST == 4) {
                 Navigator.of(context).pushNamed(ChangePassword.route);
-              } else if (index == 5) {
+              } else if (indexTabST == 5) {
                 Navigator.of(context).pushNamed(ListReportSelectDept.route);
-              } else if (index == 6) {
+              } else if (indexTabST == 6) {
                 logOut();
               }
             } else {
-              if (index == 0) {
+              if (indexTabST == 0) {
                 Navigator.of(context).pushNamed(Home.route);
-              } else if (index == 1) {
+              } else if (indexTabST == 1) {
                 Navigator.of(context).pushNamed(ListComplain.route);
-              } else if (index == 2) {
+              } else if (indexTabST == 2) {
                 Navigator.of(context).pushNamed(ListReportMySupport.route);
-              } else if (index == 3) {
+              } else if (indexTabST == 3) {
                 Navigator.of(context).pushNamed(ListFaq.route);
-              } else if (index == 4) {
+              } else if (indexTabST == 4) {
                 Navigator.of(context).pushNamed(ChangePassword.route);
-              } else if (index == 5) {
+              } else if (indexTabST == 5) {
                 logOut();
               }
             }
           },
+          theme: SideNavigationBarTheme(
+            itemTheme: const SideNavigationBarItemTheme(
+                unselectedItemColor: Colors.black,
+                selectedItemColor: Color.fromARGB(255, 128, 19, 0),
+                // iconSize: 32.5,
+                labelTextStyle: TextStyle(
+                    fontSize: 16,
+                    // !! Won't work !! Custom text style colors gets overridden
+                    // by unselectedItemColor and selectedItemColor
+                    color: Colors.black)),
+            togglerTheme: SideNavigationBarTogglerTheme.standard(),
+            dividerTheme: SideNavigationBarDividerTheme.standard(),
+          ),
         ),
 
         /// Make it take the rest of the available width
@@ -199,8 +216,9 @@ class _SideBarState extends State<SideBar> {
 
 class AdminSideBar extends StatefulWidget {
   final UserModel userModel;
+  final int curSelectMenu;
 
-  AdminSideBar({Key key, this.userModel}) : super(key: key);
+  AdminSideBar({Key key, this.userModel, this.curSelectMenu}) : super(key: key);
 
   @override
   _AdminSideBarState createState() => _AdminSideBarState();
@@ -209,11 +227,14 @@ class AdminSideBar extends StatefulWidget {
 class _AdminSideBarState extends State<AdminSideBar> {
   UserModel myUserModel;
   PageController page = PageController();
+  int selectedIndex;
+  int currentcSelectMenu;
 
   @override
   void initState() {
     super.initState();
     myUserModel = widget.userModel;
+    currentcSelectMenu = widget.curSelectMenu;
   }
 
   Future<void> logOut() async {
@@ -262,10 +283,12 @@ class _AdminSideBarState extends State<AdminSideBar> {
       child: Text('ออกจากระบบ'),
     ),
   ];
-  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    // selectedIndex =
+    //     (selectedIndex == null || selectedIndex == 0) ? 0 : selectedIndex;
+
     return Row(
       children: [
         SideNavigationBar(
@@ -276,7 +299,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
               title: Text(myUserModel.personName),
               subtitle: Text('(${myUserModel.levelName}) ' +
                   ' ${myUserModel.departmentName} ')),
-          // selectedIndex: selectedIndex,
+          selectedIndex: currentcSelectMenu,
           items: const [
             SideNavigationBarItem(
               icon: Icons.dashboard,
@@ -288,7 +311,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
             ),
             SideNavigationBarItem(
               icon: Icons.playlist_add_check,
-              label: 'รายงานของท่าน',
+              label: 'รายงาน',
             ),
             SideNavigationBarItem(
               icon: Icons.question_answer,
@@ -298,10 +321,10 @@ class _AdminSideBarState extends State<AdminSideBar> {
               icon: Icons.password,
               label: 'เปลี่ยนรหัสผ่าน',
             ),
-            SideNavigationBarItem(
-              icon: Icons.source,
-              label: 'รายงานผู้รับผิดชอบ',
-            ),
+            // SideNavigationBarItem(
+            //   icon: Icons.source,
+            //   label: 'รายงานผู้รับผิดชอบ',
+            // ),
             SideNavigationBarItem(
               icon: Icons.list_alt_outlined,
               label: 'รายงานสรุป',
@@ -331,129 +354,46 @@ class _AdminSideBarState extends State<AdminSideBar> {
               label: 'ออกจากระบบ',
             ),
           ],
-          onTap: (index) {
-            // print('index mwnu >> $index');
-            if (index == 0) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return Home(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).pushAndRemoveUntil(
-              //     materialPageRoute, // pushAndRemoveUntil  clear หน้าก่อนหน้า route with out airrow back
-              //     (Route<dynamic> route) {
-              //   return false;
-              // });
+          onTap: (indexTab) {
+            if (indexTab == 0) {
               Navigator.of(context).pushNamed(Home.route);
-            } else if (index == 1) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListComplain(
-              //     index: 0,
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 1) {
               Navigator.of(context).pushNamed(ListComplain.route);
-            } else if (index == 2) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListReportMySupport(
-              //     index: 0,
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 2) {
               Navigator.of(context).pushNamed(ListReportMySupport.route);
-            } else if (index == 3) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListFaq(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 3) {
               Navigator.of(context).pushNamed(ListFaq.route);
-            } else if (index == 4) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ChangePassword(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 4) {
               Navigator.of(context).pushNamed(ChangePassword.route);
-            } else if (index == 5) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListReportSelectDept(
-              //     index: 0,
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
-              Navigator.of(context).pushNamed(ListReportSelectDept.route);
-            } else if (index == 6) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListReportDept(
-              //     index: 0,
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 5) {
               Navigator.of(context).pushNamed(ListReportDept.route);
-            } else if (index == 7) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListComplainAdmin(
-              //     index: 0,
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 6) {
               Navigator.of(context).pushNamed(ListComplainAdmin.route);
-            } else if (index == 8) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListDept(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 7) {
               Navigator.of(context).pushNamed(ListDept.route);
-            } else if (index == 9) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListProblem(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 8) {
               Navigator.of(context).pushNamed(ListProblem.route);
-            } else if (index == 10) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListUser(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 9) {
               Navigator.of(context).pushNamed(ListUser.route);
-            } else if (index == 11) {
-              // MaterialPageRoute materialPageRoute =
-              //     MaterialPageRoute(builder: (BuildContext buildContext) {
-              //   return ListFaq(
-              //     userModel: myUserModel,
-              //   );
-              // });
-              // Navigator.of(context).push(materialPageRoute);
+            } else if (indexTab == 10) {
               Navigator.of(context).pushNamed(ListFaq.route);
-            } else if (index == 12) {
+            } else if (indexTab == 11) {
               logOut();
             }
           },
+          theme: SideNavigationBarTheme(
+            itemTheme: const SideNavigationBarItemTheme(
+                unselectedItemColor: Colors.black,
+                selectedItemColor: Color.fromARGB(255, 128, 19, 0),
+                // iconSize: 32.5,
+                labelTextStyle: TextStyle(
+                    fontSize: 16,
+                    // !! Won't work !! Custom text style colors gets overridden
+                    // by unselectedItemColor and selectedItemColor
+                    color: Colors.black)),
+            togglerTheme: SideNavigationBarTogglerTheme.standard(),
+            dividerTheme: SideNavigationBarDividerTheme.standard(),
+          ),
         ),
 
         // Make it take the rest of the available width

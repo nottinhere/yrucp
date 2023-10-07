@@ -15,6 +15,8 @@ import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_problem.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
+import 'package:yrusv/pages/list_report_dept_support.dart';
+import 'package:yrusv/pages/list_report_dept_rating.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -214,14 +216,14 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.97,
+          width: MediaQuery.of(context).size.width * 0.80,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Card(
                 child: Container(
                   height: 100.0,
-                  width: MediaQuery.of(context).size.width * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.22,
                   child: Column(
                     children: [
                       Text(
@@ -407,10 +409,11 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
     return Row(
       children: <Widget>[
         Container(
-          width: MediaQuery.of(context).size.width * 0.97,
+          width: MediaQuery.of(context).size.width * 0.80,
           child: Row(
             // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              /*
               Card(
                 child: Container(
                   height: 70.0,
@@ -440,8 +443,9 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
                   ),
                 ),
               ),
+              */
               Container(
-                  width: MediaQuery.of(context).size.width * 0.70,
+                  width: MediaQuery.of(context).size.width * 0.60,
                   child: Row(
                     children: [
                       norating(index),
@@ -556,7 +560,7 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
                 Column(
                   children: [
                     Text(
-                      'ไม่ได้ให้ตะแนน ',
+                      'ไม่ได้ให้คะแนน ',
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
@@ -901,9 +905,9 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
     );
   }
 
-  Widget reportViewbySupport() {
+  Widget reportViewMySupport() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.12,
       // height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
@@ -919,7 +923,7 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
                   color: Colors.white,
                 ),
                 Text(
-                  'สรุปจากผู้รับผิดชอบ',
+                  'รายงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -929,16 +933,14 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
             ),
           ),
         ),
-        onTap: () {
-          // routeToListComplain(0);
-        },
+        onTap: () {},
       ),
     );
   }
 
-  Widget reportViewbyProblem() {
+  Widget reportViewbyDeptSupport() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.10,
+      width: MediaQuery.of(context).size.width * 0.12,
       // height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
@@ -954,7 +956,7 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
                   color: Colors.white,
                 ),
                 Text(
-                  'สรุปจากประเภทงาน',
+                  'รายงานสรุปของแผนก',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -965,70 +967,20 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
           ),
         ),
         onTap: () {
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportProblemDept(
-              index: 1,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportSelectDept.route);
         },
       ),
     );
   }
 
-  Widget reportViewbyRequest() {
+  Widget reportViewbyDeptRating() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.11,
+      width: MediaQuery.of(context).size.width * 0.12,
       // height: 80.0,
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
           color: (myIndex == 2) ? Colors.blue.shade600 : Colors.grey.shade600,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            alignment: AlignmentDirectional(0.0, 0.0),
-            child: Row(
-              children: <Widget>[
-                Icon(
-                  Icons.assignment_turned_in_outlined,
-                  color: Colors.white,
-                ),
-                Text(
-                  ' สรุปการขอใช้บริการ',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-        onTap: () {
-          // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportReqDept(
-              index: 2,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
-        },
-      ),
-    );
-  }
-
-  Widget reportViewbyRating() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.11,
-      // height: 80.0,
-      child: InkWell(
-        mouseCursor: MaterialStateMouseCursor.clickable,
-        child: Card(
-          color: (myIndex == 3) ? Colors.blue.shade600 : Colors.grey.shade600,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -1050,15 +1002,7 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
           ),
         ),
         onTap: () {
-          // routeToListComplain(1);
-          MaterialPageRoute materialPageRoute =
-              MaterialPageRoute(builder: (BuildContext buildContext) {
-            return ListReportRatingDept(
-              index: 3,
-              userModel: myUserModel,
-            );
-          });
-          Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportRatingSelectDept.route);
         },
       ),
     );
@@ -1254,10 +1198,13 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
         width: MediaQuery.of(context).size.width * 0.45,
         child: Row(
           children: [
-            reportViewbySupport(),
-            reportViewbyProblem(),
-            reportViewbyRequest(),
-            reportViewbyRating(),
+            reportViewMySupport(),
+            (myUserModel.level == 1 || myUserModel.level == 2)
+                ? reportViewbyDeptSupport()
+                : Container(),
+            (myUserModel.level == 1 || myUserModel.level == 2)
+                ? reportViewbyDeptRating()
+                : Container(),
           ],
         ),
       ),
@@ -1353,7 +1300,7 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปจากผู้รับผิดชอบ'),
+        title: Text('รายงาน'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -1365,12 +1312,12 @@ class _ListReportMySupportState extends State<ListReportMySupport> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 2)
+              : SideBar(userModel: myUserModel, curSelectMenu: 2),
           Expanded(
             child: Column(
               children: <Widget>[
-                // topMenu(),
+                topMenu(),
                 searchForm(),
                 // clearButton(),
                 Align(

@@ -73,7 +73,7 @@ class _SideBarState extends State<SideBar> {
       child: Text('123456'),
     ),
   ];
-  int selectedIndex = 0;
+  int selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -86,7 +86,7 @@ class _SideBarState extends State<SideBar> {
               title: Text(myUserModel.personName),
               subtitle: Text('(${myUserModel.levelName}) ' +
                   ' ${myUserModel.departmentName} ')),
-          // selectedIndex: selectedIndex,
+          selectedIndex: selectedIndex,
           items: const [
             SideNavigationBarItem(
               icon: Icons.dashboard,
@@ -98,7 +98,7 @@ class _SideBarState extends State<SideBar> {
             ),
             SideNavigationBarItem(
               icon: Icons.checklist,
-              label: 'รายงานของท่าน',
+              label: 'รายงาน',
             ),
             SideNavigationBarItem(
               icon: Icons.question_answer,
@@ -226,7 +226,8 @@ class _AdminSideBarState extends State<AdminSideBar> {
     //   child: Text('ออกจากระบบ'),
     // ),
   ];
-  int selectedIndex = 0;
+
+  int selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -240,7 +241,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
               title: Text(myUserModel.personName),
               subtitle: Text('(${myUserModel.levelName}) ' +
                   ' ${myUserModel.departmentName} ')),
-          // selectedIndex: selectedIndex,
+          selectedIndex: selectedIndex,
           items: const [
             SideNavigationBarItem(
               icon: Icons.dashboard,
@@ -284,7 +285,7 @@ class _AdminSideBarState extends State<AdminSideBar> {
             ),
           ],
           onTap: (index) {
-            // print('index mwnu >> $index');
+            print('index menu >> $index');
             if (index == 0) {
               MaterialPageRoute materialPageRoute =
                   MaterialPageRoute(builder: (BuildContext buildContext) {

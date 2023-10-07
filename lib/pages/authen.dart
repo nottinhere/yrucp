@@ -28,7 +28,7 @@ class _AuthenState extends State<Authen> {
   String user, password; // default value is null
   final formKey = GlobalKey<FormState>();
   UserModel userModel;
-  bool remember = false; // false => unCheck      true = Check
+  bool remember = true; // false => unCheck      true = Check
   bool status = true;
 
   PopupModel popupModel;

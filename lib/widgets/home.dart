@@ -237,13 +237,13 @@ class _HomeState extends State<Home> {
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
-                Text(
-                  'ของท่าน',
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
+                // Text(
+                //   'ของท่าน',
+                //   style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.bold,
+                //       color: Colors.black),
+                // ),
               ],
             ),
           ),
@@ -381,7 +381,7 @@ class _HomeState extends State<Home> {
                   child: Image.asset('images/icon_report.png'),
                 ),
                 Text(
-                  'รายงาน',
+                  'รายงานสรุป',
                   style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -1052,9 +1052,9 @@ class _HomeState extends State<Home> {
               ReportMyComplain(),
               ViewQA(),
               ChangePasswordbox(),
-              (myUserModel.level == 1 || myUserModel.level == 2)
-                  ? ReportDeptComplain()
-                  : Container(),
+              // (myUserModel.level == 1 || myUserModel.level == 2)
+              //     ? ReportDeptComplain()
+              //     : Container(),
               LogoutBox(),
             ],
           ),
@@ -1139,8 +1139,8 @@ class _HomeState extends State<Home> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 0)
+              : SideBar(userModel: myUserModel, curSelectMenu: 0),
           Expanded(
             child: Column(
               children: <Widget>[

@@ -308,8 +308,8 @@ class _EditProbState extends State<EditProb> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 8)
+              : SideBar(userModel: myUserModel, curSelectMenu: 8),
           Expanded(child: showController()),
         ],
       ),

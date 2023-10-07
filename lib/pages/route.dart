@@ -21,6 +21,7 @@ import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_tablestyle.dart';
 
 import 'package:yrusv/pages/list_report_dept_support.dart';
 import 'package:yrusv/pages/list_report_dept_rating.dart';
@@ -61,7 +62,7 @@ class _RoutePageState extends State<RoutePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: initialURL != '/' ? initialURL : Home.route,
+      initialRoute: initialURL != '/' ? initialURL : ListComplain.route,
       routes: {
         Home.route: (context) => Home(
               userModel: myUserModel,
@@ -121,13 +122,17 @@ class _RoutePageState extends State<RoutePage> {
               index: 5,
               userModel: myUserModel,
             ),
+        ListReportTeble.route: (context) => ListReportTeble(
+              index: 6,
+              userModel: myUserModel,
+            ),
         ListReportSelectDept.route: (context) => ListReportSelectDept(
-              index: 0,
+              index: 1,
               userModel: myUserModel,
             ),
         ListReportRatingSelectDept.route: (context) =>
             ListReportRatingSelectDept(
-              index: 1,
+              index: 2,
               userModel: myUserModel,
             ),
         AddFaq.route: (context) => AddFaq(

@@ -148,9 +148,11 @@ class _ListFaqState extends State<ListFaq> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
+        // backProcess();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -183,12 +185,12 @@ class _ListFaqState extends State<ListFaq> {
 
   Widget comfirmButton(int index) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(
           index,
         );
-        Navigator.of(context).pop();
+        // Navigator.of(context, rootNavigator: false).pop();
       },
     );
   }
@@ -200,15 +202,21 @@ class _ListFaqState extends State<ListFaq> {
     String url =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_faq.php?memberId=$memberID&selectId=$selectId&action=delete'; //'';
 
-    // print('selectId = $selectId  ,url = $url');
-
-    await http.get(url).then((response) {
+    await http.get(url).then((value) {
       setState(() {
         page = 1;
         faqModels.clear();
         readFaq();
       });
     });
+    // Navigator.of(context).pop();
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pushNamed(ListFaq.route);
+    // // backProcess();
+  }
+
+  void backProcess() {
+    Navigator.of(context).pop();
   }
 
   Widget edit_btn(index) {
@@ -548,8 +556,8 @@ class _ListFaqState extends State<ListFaq> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 3)
+              : SideBar(userModel: myUserModel, curSelectMenu: 3),
           Expanded(
             child: Column(
               children: <Widget>[

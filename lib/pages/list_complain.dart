@@ -384,7 +384,7 @@ class _ListComplainState extends State<ListComplain> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.yellow.shade900,
+          color: Colors.purple,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -392,6 +392,37 @@ class _ListComplainState extends State<ListComplain> {
               children: <Widget>[
                 Text(
                   "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget adminRejectTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.purple,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ดูแล",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -828,6 +859,9 @@ class _ListComplainState extends State<ListComplain> {
         (filterComplainAllModels[index].status == '6')
             ? cancelTag()
             : Container(),
+        (filterComplainAllModels[index].status == '7')
+            ? adminRejectTag()
+            : Container(),
         SizedBox(
           width: 5.0,
           height: 8.0,
@@ -897,12 +931,18 @@ class _ListComplainState extends State<ListComplain> {
   Widget showSubject(int index) {
     return Row(
       children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-          child: Text(
-            filterComplainAllModels[index].subject,
-            style: MyStyle().h3bStyle,
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+            child: Text(
+              filterComplainAllModels[index].detail,
+              style: MyStyle().h3bStyle,
+            ),
           ),
+        ),
+        Container(
+          height: 50.0,
         ),
       ],
     );
@@ -922,7 +962,7 @@ class _ListComplainState extends State<ListComplain> {
                 filterComplainAllModels[index].problem,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -939,7 +979,7 @@ class _ListComplainState extends State<ListComplain> {
                 filterComplainAllModels[index].department,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -956,7 +996,7 @@ class _ListComplainState extends State<ListComplain> {
                 filterComplainAllModels[index].staff_name,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -1249,8 +1289,8 @@ class _ListComplainState extends State<ListComplain> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 1)
+              : SideBar(userModel: myUserModel, curSelectMenu: 1),
           Expanded(
             child: Column(
               children: <Widget>[

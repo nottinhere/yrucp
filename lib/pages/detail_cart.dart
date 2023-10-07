@@ -230,7 +230,7 @@ class _DetailCartState extends State<DetailCart> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -265,7 +265,7 @@ class _DetailCartState extends State<DetailCart> {
 
   Widget comfirmButton(int index, String size) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(index, size);
         Navigator.of(context).pop();

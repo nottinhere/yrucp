@@ -152,9 +152,9 @@ class _ListProblemState extends State<ListProblem> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -187,7 +187,7 @@ class _ListProblemState extends State<ListProblem> {
 
   Widget comfirmButton(int index) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(
           index,
@@ -214,12 +214,14 @@ class _ListProblemState extends State<ListProblem> {
       });
       // readProb();
     });
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pushNamed(ListProblem.route);
   }
 
   Future<void> changeStatus(index) async {
     int memberId = myUserModel.id;
     String selectId = filterProbModels[index].pId;
-    String nextStatus = (filterProbModels[index].status == '0') ? '1' : '0';
+    int nextStatus = (filterProbModels[index].status == 0) ? 1 : 0;
 
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusproblem.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
@@ -244,7 +246,7 @@ class _ListProblemState extends State<ListProblem> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (filterProbModels[index].status == '0')
+          color: (filterProbModels[index].status == 0)
               ? Colors.grey.shade500
               : Colors.blue.shade600,
           child: Container(
@@ -253,13 +255,13 @@ class _ListProblemState extends State<ListProblem> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  (filterProbModels[index].status == '0')
+                  (filterProbModels[index].status == 0)
                       ? Icons.remove_red_eye
                       : Icons.remove_red_eye_outlined,
                   color: Colors.white,
                 ),
                 Text(
-                  (filterProbModels[index].status == '0')
+                  (filterProbModels[index].status == 0)
                       ? ' ปิดการใช้งาน'
                       : ' เปิดใช้งาน',
                   style: TextStyle(
@@ -336,7 +338,9 @@ class _ListProblemState extends State<ListProblem> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: Colors.blue.shade600,
+          color: (filterProbModels[index].postInCate == 0)
+              ? Colors.blue.shade600
+              : Colors.grey.shade500,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -359,7 +363,10 @@ class _ListProblemState extends State<ListProblem> {
         ),
         onTap: () {
           // print('Delete BTN');
-          confirmDelete(index);
+          color:
+          (filterProbModels[index].postInCate == 0)
+              ? confirmDelete(index)
+              : null;
         },
       ),
     );
@@ -368,8 +375,9 @@ class _ListProblemState extends State<ListProblem> {
   Widget showBTN(int index) {
     return Row(
       children: [
-        (filterProbModels[index].status == '1') ? edit_btn(index) : Container(),
-        (filterProbModels[index].status == '1')
+        // edit_btn(index), delete_btn(index),
+        ((filterProbModels[index].status) == 1) ? edit_btn(index) : Container(),
+        ((filterProbModels[index].status) == 1)
             ? delete_btn(index)
             : Container(),
         status_btn(index),
@@ -635,8 +643,8 @@ class _ListProblemState extends State<ListProblem> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 8)
+              : SideBar(userModel: myUserModel, curSelectMenu: 8),
           Expanded(
             child: Column(
               children: <Widget>[

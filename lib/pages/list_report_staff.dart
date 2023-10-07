@@ -16,6 +16,7 @@ import 'package:yrusv/pages/list_report_problem.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_tablestyle.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -187,7 +188,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
       child: Row(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: Text(
               filterReportStaffModels[index].staff,
               style: TextStyle(
@@ -197,7 +198,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.28,
             child: Text(
               filterReportStaffModels[index].deptName,
               style: TextStyle(
@@ -206,19 +207,21 @@ class _ListReportStaffState extends State<ListReportStaff> {
               ),
             ),
           ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.05,
-            child: Text(
-              filterReportStaffModels[index].alljob,
-              style: TextStyle(
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
+          Center(
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.08,
+              child: Text(
+                filterReportStaffModels[index].alljob,
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.05,
+            width: MediaQuery.of(context).size.width * 0.08,
             child: Text(
               filterReportStaffModels[index].inprocess,
               style: TextStyle(
@@ -229,7 +232,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.05,
+            width: MediaQuery.of(context).size.width * 0.08,
             child: Text(
               filterReportStaffModels[index].complete,
               style: TextStyle(
@@ -328,29 +331,31 @@ class _ListReportStaffState extends State<ListReportStaff> {
   }
 
   Widget showProductItem() {
-    return Expanded(
-      child: ListView.builder(
-        controller: scrollController,
-        itemCount: reportStaffModels.length,
-        itemBuilder: (BuildContext buildContext, int index) {
-          return InkWell(
-            mouseCursor: MaterialStateMouseCursor.clickable,
-            child: Container(
-              padding:
-                  EdgeInsets.only(top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
+    return Container(
+      child: Expanded(
+        child: ListView.builder(
+          controller: scrollController,
+          itemCount: reportStaffModels.length,
+          itemBuilder: (BuildContext buildContext, int index) {
+            return InkWell(
+              mouseCursor: MaterialStateMouseCursor.clickable,
               child: Container(
-                decoration: myBoxDecoration(),
-                padding: EdgeInsets.only(bottom: 2.0, top: 2.0),
-                child: Row(
-                  children: <Widget>[
-                    showText(index),
-                    // showImage(index),
-                  ],
+                padding: EdgeInsets.only(
+                    top: 0.0, bottom: 0.0, left: 4.0, right: 4.0),
+                child: Container(
+                  decoration: myBoxDecoration(),
+                  padding: EdgeInsets.only(bottom: 2.0, top: 2.0),
+                  child: Row(
+                    children: <Widget>[
+                      showText(index),
+                      // showImage(index),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
@@ -579,16 +584,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
           ),
         ),
         onTap: () {
-          // routeToListComplain(1);
-          // MaterialPageRoute materialPageRoute =
-          //     MaterialPageRoute(builder: (BuildContext buildContext) {
-          //   return ListReportRatingDept(
-          //     index: 4,
-          //     userModel: myUserModel,
-          //   );
-          // });
-          // Navigator.of(context).push(materialPageRoute);
-          Navigator.of(context).pushNamed(ListReportRatingDept.route);
+          Navigator.of(context).pushNamed(ListReportTeble.route);
         },
       ),
     );
@@ -632,6 +628,50 @@ class _ListReportStaffState extends State<ListReportStaff> {
           // });
           // Navigator.of(context).push(materialPageRoute);
           Navigator.of(context).pushNamed(ListComment.route);
+        },
+      ),
+    );
+  }
+
+  Widget reportViewTablestyle() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 6) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' ตารางสรุปข้อมูล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // routeToListComplain(1);
+          // MaterialPageRoute materialPageRoute =
+          //     MaterialPageRoute(builder: (BuildContext buildContext) {
+          //   return ListReportRatingDept(
+          //     index: 4,
+          //     userModel: myUserModel,
+          //   );
+          // });
+          // Navigator.of(context).push(materialPageRoute);
+          Navigator.of(context).pushNamed(ListReportTeble.route);
         },
       ),
     );
@@ -824,7 +864,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Row(
           children: [
             reportViewbySupport(),
@@ -833,6 +873,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
             reportViewbyRequest(),
             reportViewbyRating(),
             viewListcomment(),
+            reportViewTablestyle(),
           ],
         ),
       ),
@@ -928,7 +969,7 @@ class _ListReportStaffState extends State<ListReportStaff> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปรายบุคคล'),
+        title: Text('รายงาน :: สรุปรายบุคคล'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -940,14 +981,88 @@ class _ListReportStaffState extends State<ListReportStaff> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 5)
+              : SideBar(userModel: myUserModel, curSelectMenu: 5),
           Expanded(
             child: Column(
               children: <Widget>[
                 topMenu(),
                 searchForm(),
                 // clearButton(),
+                Container(
+                  color: Colors.grey.shade300, //
+
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(2.0),
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Text(
+                          'รายชื่อ',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(2.0),
+                        width: MediaQuery.of(context).size.width * 0.27,
+                        child: Text(
+                          'ฝ่ายรับผิดชอบ',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(2.0),
+                        width: MediaQuery.of(context).size.width * 0.08,
+                        child: Center(
+                          child: Text(
+                            'เรื่องทั้งหมด',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(2.0),
+                          width: MediaQuery.of(context).size.width * 0.08,
+                          child: Text(
+                            'ระหว่างดำเนินการ',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(2.0),
+                          width: MediaQuery.of(context).size.width * 0.08,
+                          child: Text(
+                            'ดำเนินการเสร็จสิ้น',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 showContent(),
               ],
             ),

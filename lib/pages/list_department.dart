@@ -149,9 +149,10 @@ class _ListDeptState extends State<ListDept> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -184,12 +185,12 @@ class _ListDeptState extends State<ListDept> {
 
   Widget comfirmButton(int index) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(
           index,
         );
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       },
     );
   }
@@ -211,12 +212,14 @@ class _ListDeptState extends State<ListDept> {
       });
       // readDept();
     });
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pushNamed('/ListDepartment');
   }
 
   Future<void> changeStatus(index) async {
     int memberId = myUserModel.id;
     String selectId = filterDeptModels[index].dpId;
-    String nextStatus = (filterDeptModels[index].status == '0') ? '1' : '0';
+    int nextStatus = (filterDeptModels[index].status == 0) ? 1 : 0;
 
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_submit_changestatusdept.php?memberId=$memberId&selectId=$selectId&status=$nextStatus';
@@ -240,7 +243,7 @@ class _ListDeptState extends State<ListDept> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: (filterDeptModels[index].status == '0')
+          color: (filterDeptModels[index].status == 0)
               ? Colors.grey.shade500
               : Colors.blue.shade600,
           child: Container(
@@ -249,13 +252,13 @@ class _ListDeptState extends State<ListDept> {
             child: Row(
               children: <Widget>[
                 Icon(
-                  (filterDeptModels[index].status == '0')
+                  (filterDeptModels[index].status == 0)
                       ? Icons.remove_red_eye
                       : Icons.remove_red_eye_outlined,
                   color: Colors.white,
                 ),
                 Text(
-                  (filterDeptModels[index].status == '0')
+                  (filterDeptModels[index].status == 0)
                       ? ' ปิดการใช้งาน'
                       : ' เปิดใช้งาน',
                   style: TextStyle(
@@ -332,7 +335,11 @@ class _ListDeptState extends State<ListDept> {
       child: InkWell(
         mouseCursor: MaterialStateMouseCursor.clickable,
         child: Card(
-          color: Colors.blue.shade600,
+          color: (filterDeptModels[index].cateInDept == 0 &&
+                  filterDeptModels[index].postInDept == 0 &&
+                  filterDeptModels[index].memInDept == 0)
+              ? Colors.blue.shade600
+              : Colors.grey.shade500,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -355,7 +362,11 @@ class _ListDeptState extends State<ListDept> {
         ),
         onTap: () {
           // print('Delete BTN');
-          confirmDelete(index);
+          (filterDeptModels[index].cateInDept == 0 &&
+                  filterDeptModels[index].postInDept == 0 &&
+                  filterDeptModels[index].memInDept == 0)
+              ? confirmDelete(index)
+              : null;
         },
       ),
     );
@@ -364,8 +375,8 @@ class _ListDeptState extends State<ListDept> {
   Widget showBTN(int index) {
     return Row(
       children: [
-        (filterDeptModels[index].status == '1') ? edit_btn(index) : Container(),
-        (filterDeptModels[index].status == '1')
+        ((filterDeptModels[index].status) == 1) ? edit_btn(index) : Container(),
+        ((filterDeptModels[index].status) == 1)
             ? delete_btn(index)
             : Container(),
         status_btn(index),
@@ -394,7 +405,7 @@ class _ListDeptState extends State<ListDept> {
                 ),
               ),
               (filterDeptModels[index].memInDept > 0)
-                  ? showBTN(index)
+                  ? Container()
                   : Text(
                       'กรุณาเพิ่มสมาชิกเข้ากลุ่มงาน',
                       style: TextStyle(
@@ -403,6 +414,9 @@ class _ListDeptState extends State<ListDept> {
                         color: Colors.red,
                       ),
                     ),
+              (filterDeptModels[index].memInDept > 0)
+                  ? showBTN(index)
+                  : Container(),
             ],
           ),
         ),
@@ -642,8 +656,8 @@ class _ListDeptState extends State<ListDept> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 7)
+              : SideBar(userModel: myUserModel, curSelectMenu: 7),
           Expanded(
             child: Column(
               children: <Widget>[

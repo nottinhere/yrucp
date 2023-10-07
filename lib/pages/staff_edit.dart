@@ -158,7 +158,7 @@ class _EditUserState extends State<EditUser> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
         Navigator.of(context, rootNavigator: true).pop();
       },
@@ -182,7 +182,7 @@ class _EditUserState extends State<EditUser> {
 
   Widget comfirmButton() {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         resetPassword();
         Navigator.of(context).pop();
@@ -539,8 +539,8 @@ class _EditUserState extends State<EditUser> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 9)
+              : SideBar(userModel: myUserModel, curSelectMenu: 9),
           Expanded(child: showController()),
         ],
       ),

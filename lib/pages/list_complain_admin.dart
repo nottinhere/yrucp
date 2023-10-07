@@ -367,7 +367,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       // height: 80.0,
       child: GestureDetector(
         child: Card(
-          color: Colors.yellow.shade900,
+          color: Colors.purple,
           child: Container(
             padding: EdgeInsets.all(4.0),
             alignment: AlignmentDirectional(0.0, 0.0),
@@ -375,6 +375,37 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
               children: <Widget>[
                 Text(
                   "ยกเลิกโดยผู้ใช้งาน",
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          // print('You click not receive');
+          // routeToListComplain(4);
+        },
+      ),
+    );
+  }
+
+  Widget adminRejectTag() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.08,
+      // height: 80.0,
+      child: GestureDetector(
+        child: Card(
+          color: Colors.purple,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "ยกเลิกโดยผู้ดูแล",
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -461,7 +492,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                   color: Colors.white,
                 ),
                 Text(
-                  ' ลบข้อมูล',
+                  ' ยกเลิกงาน',
                   style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -481,9 +512,9 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget cancelButton() {
     return TextButton(
-      child: Text('Cancel'),
+      child: Text('ยกเลิก'),
       onPressed: () {
-        Navigator.of(context).pop();
+        Navigator.of(context, rootNavigator: true).pop();
       },
     );
   }
@@ -504,8 +535,8 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('ยืนยันการลบข้อมูล'),
-            content: Text('คุณต้องการลบข้อมูล : $titleQues'),
+            title: Text('ยืนยันการยกเลิก'),
+            content: Text('คุณต้องการยกเลิกงาน : $titleQues'),
             actions: <Widget>[
               cancelButton(),
               comfirmButton(index),
@@ -516,12 +547,12 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
 
   Widget comfirmButton(int index) {
     return TextButton(
-      child: Text('Confirm'),
+      child: Text('ยืนยัน'),
       onPressed: () {
         deleteCart(
           index,
         );
-        Navigator.of(context).pop();
+        // Navigator.of(context).pop();
       },
     );
   }
@@ -543,6 +574,9 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       });
       // readData();
     });
+    // Navigator.of(context).pop();
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pushNamed(ListComplainAdmin.route);
   }
 
   Widget showTag(index) {
@@ -573,6 +607,12 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
             : Container(),
         (filterComplainAllModels[index].status == '5')
             ? incompleteTag()
+            : Container(),
+        (filterComplainAllModels[index].status == '6')
+            ? cancelTag()
+            : Container(),
+        (filterComplainAllModels[index].status == '7')
+            ? adminRejectTag()
             : Container(),
         SizedBox(
           width: 5.0,
@@ -643,12 +683,18 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
   Widget showSubject(int index) {
     return Row(
       children: <Widget>[
-        Container(
-          width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-          child: Text(
-            filterComplainAllModels[index].subject,
-            style: MyStyle().h3bStyle,
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
+            child: Text(
+              filterComplainAllModels[index].detail,
+              style: MyStyle().h3bStyle,
+            ),
           ),
+        ),
+        Container(
+          height: 50.0,
         ),
       ],
     );
@@ -668,7 +714,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                 filterComplainAllModels[index].problem,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -685,7 +731,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                 filterComplainAllModels[index].department,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -702,7 +748,7 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
                 filterComplainAllModels[index].staff_name,
                 style: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+                  // fontWeight: FontWeight.bold,
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
@@ -990,8 +1036,8 @@ class _ListComplainAdminState extends State<ListComplainAdmin> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 6)
+              : SideBar(userModel: myUserModel, curSelectMenu: 6),
           Expanded(
             child: Column(
               children: <Widget>[

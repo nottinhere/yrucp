@@ -18,6 +18,7 @@ import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_tablestyle.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -677,6 +678,41 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
     );
   }
 
+  Widget reportViewTablestyle() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 6) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' ตารางสรุปข้อมูล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.of(context).pushNamed(ListReportTeble.route);
+        },
+      ),
+    );
+  }
+
   Widget norating(int index) {
     // all product
     return Container(
@@ -1149,7 +1185,7 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Row(
           children: [
             reportViewbySupport(),
@@ -1157,7 +1193,8 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
             reportViewbyStaff(),
             reportViewbyRequest(),
             reportViewbyRating(),
-            viewListcomment()
+            viewListcomment(),
+            reportViewTablestyle(),
           ],
         ),
       ),
@@ -1295,7 +1332,7 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปการประเมิน'),
+        title: Text('รายงาน :: สรุปการประเมิน'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -1307,8 +1344,8 @@ class _ListReportRatingDeptState extends State<ListReportRatingDept> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 5)
+              : SideBar(userModel: myUserModel, curSelectMenu: 5),
           Expanded(
             child: Column(
               children: <Widget>[

@@ -16,6 +16,8 @@ import 'package:yrusv/pages/list_report_staff.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
+import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_tablestyle.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -107,7 +109,7 @@ class _ListCommentState extends State<ListComment> {
 
     String urlDV =
         'https://app.oss.yru.ac.th/yrusv/api/json_data_comment.php?memberId=$memberId&start=$selectedStartDate&end=$selectedEndDate&page=$page'; //'';
-    // print('urlDV >> $urlDV');
+    print('urlDV >> $urlDV');
 
     http.Response response = await http.get(urlDV);
     var result = json.decode(response.body);
@@ -626,12 +628,47 @@ class _ListCommentState extends State<ListComment> {
     );
   }
 
+  Widget reportViewTablestyle() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 6) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' ตารางสรุปข้อมูล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.of(context).pushNamed(ListReportTeble.route);
+        },
+      ),
+    );
+  }
+
   Widget topMenu() {
     return Align(
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Row(
           children: [
             reportViewbySupport(),
@@ -640,6 +677,7 @@ class _ListCommentState extends State<ListComment> {
             reportViewbyRequest(),
             reportViewbyRating(),
             viewListcomment(),
+            reportViewTablestyle(),
           ],
         ),
       ),
@@ -735,7 +773,7 @@ class _ListCommentState extends State<ListComment> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('ข้อแนะนำเพิ่มเติม'),
+        title: Text('รายงาน :: ข้อแนะนำเพิ่มเติม'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -747,8 +785,8 @@ class _ListCommentState extends State<ListComment> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 5)
+              : SideBar(userModel: myUserModel, curSelectMenu: 5),
           Expanded(
             child: Column(
               children: <Widget>[

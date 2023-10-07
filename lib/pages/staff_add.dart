@@ -363,8 +363,8 @@ class _AddUserState extends State<AddUser> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 9)
+              : SideBar(userModel: myUserModel, curSelectMenu: 9),
           Expanded(child: showController()),
         ],
       ),

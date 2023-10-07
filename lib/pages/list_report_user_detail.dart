@@ -1193,8 +1193,8 @@ class _ListComplainByUserState extends State<ListComplainByUser> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 0)
+              : SideBar(userModel: myUserModel, curSelectMenu: 0),
           Expanded(
             child: Column(
               children: <Widget>[

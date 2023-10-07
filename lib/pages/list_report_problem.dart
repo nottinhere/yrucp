@@ -17,6 +17,7 @@ import 'package:yrusv/pages/list_report_request.dart';
 import 'package:yrusv/pages/list_report_detail.dart';
 import 'package:yrusv/pages/list_report_rating.dart';
 import 'package:yrusv/pages/list_comment.dart';
+import 'package:yrusv/pages/list_report_tablestyle.dart';
 
 import 'package:uipickers/uipickers.dart';
 
@@ -655,6 +656,41 @@ class _ListReportProblemDeptState extends State<ListReportProblemDept> {
     );
   }
 
+  Widget reportViewTablestyle() {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.11,
+      // height: 80.0,
+      child: InkWell(
+        mouseCursor: MaterialStateMouseCursor.clickable,
+        child: Card(
+          color: (myIndex == 6) ? Colors.blue.shade600 : Colors.grey.shade600,
+          child: Container(
+            padding: EdgeInsets.all(4.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
+            child: Row(
+              children: <Widget>[
+                Icon(
+                  Icons.assignment_turned_in_outlined,
+                  color: Colors.white,
+                ),
+                Text(
+                  ' ตารางสรุปข้อมูล',
+                  style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.of(context).pushNamed(ListReportTeble.route);
+        },
+      ),
+    );
+  }
+
   Widget AllJobbox(int index) {
     // all product
     return Container(
@@ -842,7 +878,7 @@ class _ListReportProblemDeptState extends State<ListReportProblemDept> {
       alignment: Alignment.centerLeft,
       child: Container(
         padding: EdgeInsets.all(10.0),
-        width: MediaQuery.of(context).size.width * 0.65,
+        width: MediaQuery.of(context).size.width * 0.75,
         child: Row(
           children: [
             reportViewbySupport(),
@@ -851,6 +887,7 @@ class _ListReportProblemDeptState extends State<ListReportProblemDept> {
             reportViewbyRequest(),
             reportViewbyRating(),
             viewListcomment(),
+            reportViewTablestyle(),
           ],
         ),
       ),
@@ -946,7 +983,7 @@ class _ListReportProblemDeptState extends State<ListReportProblemDept> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: MyStyle().barColorAdmin,
-        title: Text('สรุปจากประเภทงาน'),
+        title: Text('รายงาน :: สรุปจากประเภทงาน'),
         actions: <Widget>[
           // AddStaff(),
         ],
@@ -958,8 +995,8 @@ class _ListReportProblemDeptState extends State<ListReportProblemDept> {
       body: Row(
         children: [
           (myUserModel.level == 1)
-              ? AdminSideBar(userModel: myUserModel)
-              : SideBar(userModel: myUserModel),
+              ? AdminSideBar(userModel: myUserModel, curSelectMenu: 5)
+              : SideBar(userModel: myUserModel, curSelectMenu: 5),
           Expanded(
             child: Column(
               children: <Widget>[
