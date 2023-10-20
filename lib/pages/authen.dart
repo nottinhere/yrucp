@@ -112,6 +112,33 @@ class _AuthenState extends State<Authen> {
     );
   }
 
+  // Method
+  Widget YRUpassportloginButton() {
+    return Container(
+      width: 250.0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+          // shape: RoundedRectangleBorder(
+          //   borderRadius: BorderRadius.circular(12.0),
+          // ),
+          // color: MyStyle().textColor,
+          child: Text('เข้าสู่ระบบด้วย YRUpassport',
+              style: TextStyle(
+                color: Colors.white,
+              )),
+          onPressed: () {
+            formKey.currentState.save();
+            // print(
+            //   'user = $user,password = $password',
+            // );
+            checkAuthen();
+          },
+        ),
+      ),
+    );
+  }
+
   Future<void> logOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
@@ -175,7 +202,7 @@ class _AuthenState extends State<Authen> {
       String url = '${MyStyle().getUserWhereUserAndPass}';
       http.Response response = await http
           .post(Uri.parse(url), body: {'user': user, 'password': password});
-      // print('url = $url || user = $user || password = $password');
+      print('url = $url || user = $user || password = $password');
       var result = json.decode(response.body);
 
       int statusInt = result['status'];
@@ -361,6 +388,7 @@ class _AuthenState extends State<Authen> {
                 rememberCheckbox(),
                 mySizeBox(),
                 loginButton(),
+                YRUpassportloginButton(),
               ],
             ),
           ),
