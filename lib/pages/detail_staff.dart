@@ -100,7 +100,6 @@ class _DetailStaffState extends State<DetailStaff> {
               : false;
         });
       } // for
-
     }
   }
 
@@ -544,7 +543,7 @@ class _DetailStaffState extends State<DetailStaff> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    child: Text(
+                    child: SelectableText(
                       'ผู้ช่วย :: ' + complainAllModel.helper_name,
                       style: TextStyle(
                         fontSize: 18.0,
@@ -554,7 +553,7 @@ class _DetailStaffState extends State<DetailStaff> {
                     ),
                   ),
                   Container(
-                    child: Text(
+                    child: SelectableText(
                       'ข้อมูลเพิ่มเติม :: ' + complainAllModel.note,
                       style: TextStyle(
                         fontSize: 18.0,
@@ -596,7 +595,7 @@ class _DetailStaffState extends State<DetailStaff> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text(
+                    SelectableText(
                       'หมายเลขเรื่อง :${complainAllModel.id}',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -610,8 +609,8 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('หมวดหมู่'),
-                    Text(
+                    SelectableText('หมวดหมู่'),
+                    SelectableText(
                       complainAllModel.problem,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -624,8 +623,8 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('งานที่รับผิดชอบ'),
-                    Text(
+                    SelectableText('งานที่รับผิดชอบ'),
+                    SelectableText(
                       complainAllModel.department,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -640,7 +639,7 @@ class _DetailStaffState extends State<DetailStaff> {
                   children: [
                     Column(
                       children: <Widget>[
-                        Text(
+                        SelectableText(
                           'วันที่รับแจ้ง : ${complainAllModel.postdate} ',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -655,7 +654,7 @@ class _DetailStaffState extends State<DetailStaff> {
                     Column(
                       children: [
                         // Icon(Icons.restaurant, color: Colors.green[500]),
-                        Text(
+                        SelectableText(
                           'ผู้แจ้ง : ' + complainAllModel.postby,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -668,7 +667,7 @@ class _DetailStaffState extends State<DetailStaff> {
                     Column(
                       children: [
                         // Icon(Icons.restaurant, color: Colors.green[500]),
-                        Text(
+                        SelectableText(
                           'เบอร์ติดต่อ : ' + complainAllModel.contactnumber,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -710,8 +709,8 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('ชื่อผู้แจ้ง'),
-                    Text(
+                    SelectableText('ชื่อผู้แจ้ง'),
+                    SelectableText(
                       complainAllModel.ps_fullname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -724,8 +723,8 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('Position'),
-                    Text(
+                    SelectableText('Position'),
+                    SelectableText(
                       complainAllModel.ps_positionname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -738,8 +737,8 @@ class _DetailStaffState extends State<DetailStaff> {
 
                 Column(
                   children: <Widget>[
-                    Text('Department'),
-                    Text(
+                    SelectableText('Department'),
+                    SelectableText(
                       complainAllModel.ps_deptname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -777,7 +776,7 @@ class _DetailStaffState extends State<DetailStaff> {
                       Container(
                         width: MediaQuery.of(context).size.width *
                             0.90, //0.7 - 50,
-                        child: Text(
+                        child: SelectableText(
                           'สถานที่ : ' + complainAllModel.location,
                           style: MyStyle().h3bStyle,
                         ),
@@ -788,7 +787,7 @@ class _DetailStaffState extends State<DetailStaff> {
                           // Icon(Icons.timer, color: Colors.green[500]),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
+                            child: SelectableText(
                               'รายละเอียด',
                               style: TextStyle(
                                 fontSize: 18.0,
@@ -798,7 +797,7 @@ class _DetailStaffState extends State<DetailStaff> {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
+                            child: SelectableText(
                               complainAllModel.detail,
                               style: TextStyle(
                                 fontSize: 18.0,
@@ -874,7 +873,7 @@ class _DetailStaffState extends State<DetailStaff> {
             SizedBox(height: 10),
             Container(
               width: MediaQuery.of(context).size.width * 0.90, //0.7 - 50,
-              child: Text(
+              child: SelectableText(
                 'ข้อมูลการเข้าปฎิบัติงาน',
                 style: TextStyle(
                   fontSize: 18.0,
@@ -899,7 +898,7 @@ class _DetailStaffState extends State<DetailStaff> {
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
-          Text(
+          SelectableText(
             'วันเริ่มงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
@@ -907,7 +906,7 @@ class _DetailStaffState extends State<DetailStaff> {
           ),
           Container(
               child: Column(children: <Widget>[
-            Text(
+            SelectableText(
               complainAllModel.startdate_fix,
               style: TextStyle(
                 fontSize: 16.0,
@@ -926,13 +925,13 @@ class _DetailStaffState extends State<DetailStaff> {
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
-          Text(
+          SelectableText(
             'วันจบงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
           ),
-          Text(
+          SelectableText(
             complainAllModel.enddate_fix,
             style: TextStyle(
               fontSize: 16.0,
@@ -951,13 +950,13 @@ class _DetailStaffState extends State<DetailStaff> {
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
-          Text(
+          SelectableText(
             'ผู้รับผิดชอบ',
             style: TextStyle(
               decoration: TextDecoration.underline,
             ),
           ),
-          Text(
+          SelectableText(
             complainAllModel.staff_name,
             style: TextStyle(
               fontSize: 16.0,
@@ -979,7 +978,7 @@ class _DetailStaffState extends State<DetailStaff> {
           SizedBox(height: 20),
 
           // Icon(Icons.kitchen, color: Colors.green[500]),
-          Text(
+          SelectableText(
             'ข้อความตอบกลับหัวหน้างาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
@@ -1021,7 +1020,7 @@ class _DetailStaffState extends State<DetailStaff> {
           SizedBox(height: 20),
 
           // Icon(Icons.kitchen, color: Colors.green[500]),
-          Text(
+          SelectableText(
             'ข้อความตอบกลับผู้แจ้งเรื่อง',
             style: TextStyle(
               decoration: TextDecoration.underline,
@@ -1111,8 +1110,10 @@ class _DetailStaffState extends State<DetailStaff> {
             onSurface: Colors.grey,
           ),
           child: (isButtonCheckinActive == true)
-              ? const Text('ลงเวลาเข้า', style: TextStyle(color: Colors.white))
-              : const Text('ลงเวลาเข้า', style: TextStyle(color: Colors.black)),
+              ? const SelectableText('ลงเวลาเข้า',
+                  style: TextStyle(color: Colors.white))
+              : const SelectableText('ลงเวลาเข้า',
+                  style: TextStyle(color: Colors.black)),
           onPressed: isButtonCheckinActive
               ? () {
                   // print('You click checkin');
@@ -1146,7 +1147,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Widget startdateShow() {
     return Container(
         child: Column(children: <Widget>[
-      Text(
+      SelectableText(
         complainAllModel.startdate_fix,
         style: TextStyle(
           fontSize: 16.0,
@@ -1162,7 +1163,7 @@ class _DetailStaffState extends State<DetailStaff> {
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
-          Text(
+          SelectableText(
             'วันเริ่มงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,
@@ -1187,8 +1188,10 @@ class _DetailStaffState extends State<DetailStaff> {
                 (isButtonCheckinActive == true) ? Colors.black : Colors.grey,
           ),
           child: (isButtonCheckoutActive == true)
-              ? const Text('ลงเวลาออก', style: TextStyle(color: Colors.white))
-              : const Text('ลงเวลาออก', style: TextStyle(color: Colors.black)),
+              ? const SelectableText('ลงเวลาออก',
+                  style: TextStyle(color: Colors.white))
+              : const SelectableText('ลงเวลาออก',
+                  style: TextStyle(color: Colors.black)),
           onPressed: (isButtonCheckoutActive && isButtonCheckinActive == false)
               ? () {
                   // print('You click checkout');
@@ -1210,7 +1213,7 @@ class _DetailStaffState extends State<DetailStaff> {
   Widget enddateShow() {
     return Container(
         child: Column(children: <Widget>[
-      Text(
+      SelectableText(
         complainAllModel.enddate_fix,
         style: TextStyle(
           fontSize: 16.0,
@@ -1226,7 +1229,7 @@ class _DetailStaffState extends State<DetailStaff> {
       width: MediaQuery.of(context).size.width * 0.25,
       child: Column(
         children: <Widget>[
-          Text(
+          SelectableText(
             'วันจบงาน',
             style: TextStyle(
               decoration: TextDecoration.underline,

@@ -57,6 +57,8 @@ class MyStyle {
       'http://www.ptnpharma.com/apisupplier/json_product.php?searchKey=';
   String getUserWhereUserAndPass =
       'https://app.oss.yru.ac.th/yrusv/api/json_chkauth.php'; // json_login.php
+  String getUserWhereYRUpassport =
+      'https://app.oss.yru.ac.th/yrusv/api/json_chkauthpassport.php?codeStr='; // json_login.php
   String getProductWhereId =
       'http://www.ptnpharma.com/apisupplier/json_productdetail.php?id=';
 

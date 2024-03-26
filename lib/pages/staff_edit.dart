@@ -50,7 +50,11 @@ class _EditUserState extends State<EditUser> {
 
   String id; // productID
   bool isToggledLevel;
-  String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
+  String txtuser = '',
+      txtname = '',
+      txtcontact = '',
+      txtdiv = '',
+      txtpassport = '';
   String memberID;
   String strhelperID;
 
@@ -128,6 +132,8 @@ class _EditUserState extends State<EditUser> {
     String selectId = selectUserModel.id.toString();
     String urlST =
         'https://app.oss.yru.ac.th/yrusv/api/json_select_staff.php?memberId=$memberId&selectId=$selectId';
+    // print('urlST >> $urlST');
+
     http.Response response = await http.get(urlST);
     var result = json.decode(response.body);
     setState(() {
@@ -136,9 +142,10 @@ class _EditUserState extends State<EditUser> {
       txtuser = selectUserModel.user;
       txtname = selectUserModel.personName;
       txtcontact = selectUserModel.personContact;
+      txtpassport = selectUserModel.yRUpassport;
+
       isToggledLevel = (selectUserModel.level == 1) ? true : false;
 
-      // print('selectUserModel >> $selectUserModel');
       _mySelection = (selectUserModel.department == '-')
           ? null
           : selectUserModel.department.toString();
@@ -204,6 +211,8 @@ class _EditUserState extends State<EditUser> {
   }
 
   Widget formBox() {
+    // print('txtpassport >> $txtpassport');
+
     return Card(
       child: Container(
         // decoration: MyStyle().boxLightGreen,
@@ -217,40 +226,40 @@ class _EditUserState extends State<EditUser> {
             children: [
               Column(
                 children: <Widget>[
-                  Text('User :'),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      initialValue: selectUserModel.user, // set default value
-                      onChanged: (string) {
-                        txtuser = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
+                  // Text('User :'),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * 0.3,
+                  //   child: TextFormField(
+                  //     style: TextStyle(color: Colors.black),
+                  //     initialValue: selectUserModel.user, // set default value
+                  //     onChanged: (string) {
+                  //       txtuser = string.trim();
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       fillColor: Colors.grey.shade200,
+                  //       filled: true,
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //         borderSide:
+                  //             const BorderSide(color: Colors.white, width: 0.0),
+                  //       ),
+                  //       enabledBorder: const OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //         borderSide:
+                  //             const BorderSide(color: Colors.white, width: 0.0),
+                  //       ),
 
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'User',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
+                  //       contentPadding: EdgeInsets.only(
+                  //         top: 6.0,
+                  //       ),
+                  //       prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                  //       // border: InputBorder.none,
+                  //       hintText: 'User',
+                  //       hintStyle: TextStyle(color: Colors.grey),
+                  //     ),
+                  //   ),
+                  // ),
+                  // mySizebox(),
                   Text('ชื่อ - นามสกุล :'),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
@@ -281,6 +290,41 @@ class _EditUserState extends State<EditUser> {
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
                         hintText: 'ชื่อ - นามสกุล',
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  mySizebox(),
+                  Text('YRUpassport :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      initialValue:
+                          txtpassport, // set default value    // selectUserModel.yRUpassport
+                      onChanged: (string) {
+                        txtpassport = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'YRUpassport',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -358,24 +402,6 @@ class _EditUserState extends State<EditUser> {
               ),
               Column(
                 children: <Widget>[
-                  Text('Reset password :'),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.15,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.orangeAccent // Background color
-                          ),
-                      onPressed: () {
-                        // print('Reset password');
-                        confirmChange();
-                      },
-                      child: const Text(
-                        'Reset password',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
                   Column(
                     children: [
                       Text('ผู้ดูแลระบบ :'),
@@ -405,8 +431,30 @@ class _EditUserState extends State<EditUser> {
                       ),
                     ],
                   ),
+                  mySizebox(),
+                  // Text('Reset password :'),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * 0.15,
+                  //   child: ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //         primary: Colors.orangeAccent // Background color
+                  //         ),
+                  //     onPressed: () {
+                  //       // print('Reset password');
+                  //       confirmChange();
+                  //     },
+                  //     child: const Text(
+                  //       'Reset password',
+                  //       style: TextStyle(color: Colors.black),
+                  //     ),
+                  //   ),
+                  // ),
+                  // mySizebox(),
                 ],
-              )
+              ),
+              mySizebox(),
+              Text(''),
+              Container(),
             ],
           ),
         ),
@@ -415,7 +463,7 @@ class _EditUserState extends State<EditUser> {
   }
 
   Future<void> submitThread() async {
-    if (txtuser.isEmpty ||
+    if (txtpassport.isEmpty ||
         txtname.isEmpty ||
         txtcontact.isEmpty ||
         _mySelection == null) {
@@ -426,7 +474,7 @@ class _EditUserState extends State<EditUser> {
 
       try {
         String url =
-            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection&isToggledLevel=$isToggledLevel'; //'';
+            'https://app.oss.yru.ac.th/yrusv/api/json_submit_manage_staff.php?memberId=$memberID&selectId=$selectId&action=edit&user=$txtuser&name=$txtname&contact=$txtcontact&department=$_mySelection&isToggledLevel=$isToggledLevel&passport=$txtpassport'; //'';
         // print('submitURL >> $url');
         await http.get(url).then((value) {
           confirmSubmit();

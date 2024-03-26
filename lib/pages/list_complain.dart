@@ -889,7 +889,7 @@ class _ListComplainState extends State<ListComplain> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(
+              SelectableText(
                 'หมายเลขเรื่อง :   ${filterComplainAllModels[index].id}',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -897,7 +897,7 @@ class _ListComplainState extends State<ListComplain> {
                   color: Color.fromARGB(0xff, 16, 149, 161),
                 ),
               ),
-              Text(
+              SelectableText(
                 'ผู้แจ้ง :   ${filterComplainAllModels[index].ps_fullname}',
                 style: TextStyle(
                   fontSize: 13.0,
@@ -905,7 +905,7 @@ class _ListComplainState extends State<ListComplain> {
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
-              Text(
+              SelectableText(
                 'วันที่รับแจ้ง :   ${filterComplainAllModels[index].postdate}',
                 style: TextStyle(
                   fontSize: 13.0,
@@ -913,7 +913,7 @@ class _ListComplainState extends State<ListComplain> {
                   color: Color.fromARGB(0xff, 0, 0, 0),
                 ),
               ),
-              Text(
+              SelectableText(
                 'วันที่นัดหมาย :   ${selectedDate}   ${filterComplainAllModels[index].appointtime} ',
                 style: TextStyle(
                   fontSize: 16.0,
@@ -935,7 +935,7 @@ class _ListComplainState extends State<ListComplain> {
           padding: const EdgeInsets.all(3.0),
           child: Container(
             width: MediaQuery.of(context).size.width * 0.75, //0.7 - 50,
-            child: Text(
+            child: SelectableText(
               filterComplainAllModels[index].detail,
               style: MyStyle().h3bStyle,
             ),
@@ -957,8 +957,8 @@ class _ListComplainState extends State<ListComplain> {
           child: Column(
             children: [
               // Icon(Icons.restaurant, color: Colors.green[500]),
-              Text('หมวดหมู่'),
-              Text(
+              SelectableText('หมวดหมู่'),
+              SelectableText(
                 filterComplainAllModels[index].problem,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -974,8 +974,8 @@ class _ListComplainState extends State<ListComplain> {
           child: Column(
             children: [
               // Icon(Icons.timer, color: Colors.green[500]),
-              Text('แผนกรับผิดชอบ'),
-              Text(
+              SelectableText('แผนกรับผิดชอบ'),
+              SelectableText(
                 filterComplainAllModels[index].department,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -991,8 +991,8 @@ class _ListComplainState extends State<ListComplain> {
           child: Column(
             children: [
               // Icon(Icons.kitchen, color: Colors.green[500]),
-              Text('ผู้รับผิดชอบ'),
-              Text(
+              SelectableText('ผู้รับผิดชอบ'),
+              SelectableText(
                 filterComplainAllModels[index].staff_name,
                 style: TextStyle(
                   fontSize: 16.0,

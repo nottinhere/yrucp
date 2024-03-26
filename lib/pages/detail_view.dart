@@ -49,7 +49,7 @@ class _DetailState extends State<DetailView> {
       var result = json.decode(response.body);
       // print('result = $result');
 
-      var itemProducts = result['itemsData'];
+      var itemProducts = result['data'];
       for (var map in itemProducts) {
         // print('map = $map');
 

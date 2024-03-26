@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:html' as html;
+
 import 'dart:io';
 import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
@@ -36,6 +38,9 @@ class _SideBarState extends State<SideBar> {
   }
 
   Future<void> logOut() async {
+    html.window.location.href =
+        "https://app.oss.yru.ac.th/yrusv/api/yrupassport-logout.php"; // or any website your want
+
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
     // exit(0);
@@ -181,8 +186,13 @@ class _AdminSideBarState extends State<AdminSideBar> {
   }
 
   Future<void> logOut() async {
+    print('Admin logout');
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.clear();
+
+    html.window.location.href =
+        "https://app.oss.yru.ac.th/yrusv/api/yrupassport-logout.php"; // or any website your want
+
     Navigator.of(context, rootNavigator: true)
         .pushReplacement(MaterialPageRoute(builder: (context) => MyApp()));
 

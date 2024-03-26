@@ -8,6 +8,7 @@ class UserModel {
   String personContact;
   String personLineid;
   String personFacebook;
+  String yRUpassport;
   int department;
   String departmentName;
   int level;
@@ -25,6 +26,7 @@ class UserModel {
       this.personContact,
       this.personLineid,
       this.personFacebook,
+      this.yRUpassport,
       this.department,
       this.departmentName,
       this.level,
@@ -42,6 +44,7 @@ class UserModel {
     personContact = json['person_contact'];
     personLineid = json['person_lineid'];
     personFacebook = json['person_facebook'];
+    yRUpassport = json['YRUpassport'];
     department = json['department'];
     departmentName = json['departmentName'];
     level = json['level'];
@@ -61,6 +64,7 @@ class UserModel {
     data['person_contact'] = this.personContact;
     data['person_lineid'] = this.personLineid;
     data['person_facebook'] = this.personFacebook;
+    data['YRUpassport'] = this.yRUpassport;
     data['department'] = this.department;
     data['departmentName'] = this.departmentName;
     data['level'] = this.level;

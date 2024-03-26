@@ -237,8 +237,9 @@ class _DetailState extends State<Detail> {
             selectedDate = dateApt;
           }
 
-          selectedTime = (complainAllModel.appointtime == '-')
-              ? '00:00'
+          selectedTime = (complainAllModel.appointtime == '-' ||
+                  complainAllModel.appointtime == '00:00')
+              ? DateFormat.Hm().format(DateTime.now())
               : complainAllModel.appointtime;
         });
       } // for
@@ -908,7 +909,7 @@ class _DetailState extends State<Detail> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Text(
+                    SelectableText(
                       'หมายเลขเรื่อง :${complainAllModel.id}',
                       style: TextStyle(
                         fontSize: 20.0,
@@ -922,8 +923,8 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('หมวดหมู่'),
-                    Text(
+                    SelectableText('หมวดหมู่'),
+                    SelectableText(
                       complainAllModel.problem,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -936,8 +937,8 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('งานที่รับผิดชอบ'),
-                    Text(
+                    SelectableText('งานที่รับผิดชอบ'),
+                    SelectableText(
                       complainAllModel.department,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -952,7 +953,7 @@ class _DetailState extends State<Detail> {
                   children: [
                     Column(
                       children: <Widget>[
-                        Text(
+                        SelectableText(
                           'วันที่รับแจ้ง : ${complainAllModel.postdate} ',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -967,7 +968,7 @@ class _DetailState extends State<Detail> {
                     Column(
                       children: [
                         // Icon(Icons.restaurant, color: Colors.green[500]),
-                        Text(
+                        SelectableText(
                           'ผู้แจ้ง : ' + complainAllModel.postby,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -980,7 +981,7 @@ class _DetailState extends State<Detail> {
                     Column(
                       children: [
                         // Icon(Icons.restaurant, color: Colors.green[500]),
-                        Text(
+                        SelectableText(
                           'เบอร์ติดต่อ : ' + complainAllModel.contactnumber,
                           style: TextStyle(
                             fontSize: 16.0,
@@ -1022,8 +1023,8 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('ชื่อผู้แจ้ง'),
-                    Text(
+                    SelectableText('ชื่อผู้แจ้ง'),
+                    SelectableText(
                       complainAllModel.ps_fullname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -1036,8 +1037,8 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('Position'),
-                    Text(
+                    SelectableText('Position'),
+                    SelectableText(
                       complainAllModel.ps_positionname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -1050,8 +1051,8 @@ class _DetailState extends State<Detail> {
 
                 Column(
                   children: <Widget>[
-                    Text('Department'),
-                    Text(
+                    SelectableText('Department'),
+                    SelectableText(
                       complainAllModel.ps_deptname,
                       style: TextStyle(
                         fontSize: 16.0,
@@ -1089,7 +1090,7 @@ class _DetailState extends State<Detail> {
                       Container(
                         width: MediaQuery.of(context).size.width *
                             0.90, //0.7 - 50,
-                        child: Text(
+                        child: SelectableText(
                           'สถานที่ : ' + complainAllModel.location,
                           style: MyStyle().h3bStyle,
                         ),
@@ -1100,7 +1101,7 @@ class _DetailState extends State<Detail> {
                           // Icon(Icons.timer, color: Colors.green[500]),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
+                            child: SelectableText(
                               'รายละเอียด',
                               style: TextStyle(
                                 fontSize: 18.0,
@@ -1110,7 +1111,7 @@ class _DetailState extends State<Detail> {
                           ),
                           Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
+                            child: SelectableText(
                               complainAllModel.detail,
                               style: TextStyle(
                                 fontSize: 18.0,

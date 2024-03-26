@@ -55,6 +55,7 @@ class _RoutePageState extends State<RoutePage> {
     setState(() {
       myUserModel = widget.userModel;
       initialURL = widget.gotoURL;
+      // print('initialURL >> $initialURL');
     });
   }
 

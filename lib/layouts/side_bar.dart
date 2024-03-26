@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:html' as html;
 import 'dart:io';
 import 'package:yrusv/main.dart';
 import 'package:yrusv/models/user_model.dart';
@@ -52,6 +53,10 @@ class _SideBarState extends State<SideBar> {
         MaterialPageRoute(builder: (BuildContext buildContext) {
       return MyApp();
     });
+
+    html.window.location.href =
+        "https://app.oss.yru.ac.th/yrusv/api/yrupassport-logout.php"; // or any website your want
+
     // Navigator.of(context).push(materialPageRoute);
     // exit(0);
     Navigator.of(context).pushAndRemoveUntil(
@@ -242,6 +247,8 @@ class _AdminSideBarState extends State<AdminSideBar> {
     await sharedPreferences.clear();
     Navigator.of(context, rootNavigator: true)
         .pushReplacement(MaterialPageRoute(builder: (context) => MyApp()));
+    html.window.location.href =
+        "https://app.oss.yru.ac.th/yrusv/api/yrupassport-logout.php"; // or any website your want
 
     exit(0);
     // MaterialPageRoute materialPageRoute =

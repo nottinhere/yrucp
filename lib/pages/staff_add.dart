@@ -35,7 +35,11 @@ class _AddUserState extends State<AddUser> {
   UserModel myUserModel;
   String id; // productID
 
-  String txtuser = '', txtname = '', txtcontact = '', txtdiv = '';
+  String txtuser = '',
+      txtname = '',
+      txtcontact = '',
+      txtpassport = '',
+      txtdiv = '';
   String memberID;
   String strhelperID;
 
@@ -102,40 +106,40 @@ class _AddUserState extends State<AddUser> {
             children: [
               Column(
                 children: <Widget>[
-                  Text('User :'),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.3,
-                    child: TextFormField(
-                      style: TextStyle(color: Colors.black),
-                      // initialValue: complainAllModel.postby, // set default value
-                      onChanged: (string) {
-                        txtuser = string.trim();
-                      },
-                      decoration: InputDecoration(
-                        fillColor: Colors.grey.shade200,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
-                        enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                          borderSide:
-                              const BorderSide(color: Colors.white, width: 0.0),
-                        ),
+                  // Text('User :'),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * 0.3,
+                  //   child: TextFormField(
+                  //     style: TextStyle(color: Colors.black),
+                  //     // initialValue: complainAllModel.postby, // set default value
+                  //     onChanged: (string) {
+                  //       txtuser = string.trim();
+                  //     },
+                  //     decoration: InputDecoration(
+                  //       fillColor: Colors.grey.shade200,
+                  //       filled: true,
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //         borderSide:
+                  //             const BorderSide(color: Colors.white, width: 0.0),
+                  //       ),
+                  //       enabledBorder: const OutlineInputBorder(
+                  //         borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                  //         borderSide:
+                  //             const BorderSide(color: Colors.white, width: 0.0),
+                  //       ),
 
-                        contentPadding: EdgeInsets.only(
-                          top: 6.0,
-                        ),
-                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
-                        // border: InputBorder.none,
-                        hintText: 'User',
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                  mySizebox(),
+                  //       contentPadding: EdgeInsets.only(
+                  //         top: 6.0,
+                  //       ),
+                  //       prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                  //       // border: InputBorder.none,
+                  //       hintText: 'User',
+                  //       hintStyle: TextStyle(color: Colors.grey),
+                  //     ),
+                  //   ),
+                  // ),
+                  // mySizebox(),
                   Text('ชื่อ - นามสกุล :'),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.3,
@@ -165,6 +169,39 @@ class _AddUserState extends State<AddUser> {
                         prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
                         // border: InputBorder.none,
                         hintText: 'ชื่อ - นามสกุล',
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                  ),
+                  mySizebox(),
+                  Text('YRUpassport :'),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.3,
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.black),
+                      onChanged: (string) {
+                        txtpassport = string.trim();
+                      },
+                      decoration: InputDecoration(
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderSide:
+                              const BorderSide(color: Colors.white, width: 0.0),
+                        ),
+
+                        contentPadding: EdgeInsets.only(
+                          top: 6.0,
+                        ),
+                        prefixIcon: Icon(Icons.mode_edit, color: Colors.grey),
+                        // border: InputBorder.none,
+                        hintText: 'YRUpassport',
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -243,7 +280,7 @@ class _AddUserState extends State<AddUser> {
   }
 
   Future<void> submitThread() async {
-    if (txtuser.isEmpty ||
+    if (txtpassport.isEmpty ||
         txtname.isEmpty ||
         txtcontact.isEmpty ||
         _mySelection == null) {
